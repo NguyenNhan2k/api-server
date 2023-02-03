@@ -4,7 +4,7 @@ const sequelize = new Sequelize('Web_Food', 'root', null, {
     host: 'localhost',
     dialect:'mysql'
   });
-const connectDatabase = async() => {
+const connectDB = async() => {
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
@@ -12,4 +12,4 @@ const connectDatabase = async() => {
         console.error('Unable to connect to the database:', error);
       }
 }
-module.exports = {connectDatabase}
+module.exports = {connectDB}
