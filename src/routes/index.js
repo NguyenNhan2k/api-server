@@ -1,8 +1,7 @@
-const homeRoute = require('./home.js')
-const authRoute = require('./auth.js')
-function route (app) {
-    app.use('/home', homeRoute)
-    app.use('/home', authRoute)
+const homeRoute = require('./home.js');
+const authRoute = require('./auth.js');
+function route(app) {
+    app.use('/', homeRoute);
 }
 
-module.exports = route
+module.exports = route;

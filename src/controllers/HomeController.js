@@ -1,6 +1,6 @@
 class HomeController {
     async index(req,res,next){
-        res.send("Home")
+        res.render("home")
     }
 }
 module.exports = new HomeController()
