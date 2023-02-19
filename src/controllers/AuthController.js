@@ -1,9 +1,19 @@
 class AuthController {
-    async login(req,res,next){
-        res.send("Login")
+    async indexLogin(req, res, next) {
+        try {
+            return res.render('auth/login', {
+                layout: 'main',
+            });
+        } catch (error) {}
     }
-    async register(req,res,next){
-        res.send("register")
+    async indexRegister(req, res, next) {
+        try {
+            return res.render('auth/register', {
+                layout: 'main',
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
-module.exports = new AuthController()
+module.exports = new AuthController();
