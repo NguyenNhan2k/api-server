@@ -1,1 +1,50 @@
-<h1>Login</h1>
+<link rel='stylesheet' href='/css/login.css' />
+<form class='form-login' id='form-login' method='post'>
+    <div class='form-group'>
+        <p class='form-login__title'>Login</p>
+    </div>
+    <div class='form-group'>
+        <label for='' class='label-group'>Email</label>
+        <input
+            type='email'
+            name='email'
+            rules='require|email'
+            id='email'
+            placeholder='Example@gmail.com'
+            aria-autocomplete='none'
+        />
+        <span class='span-message'></span>
+    </div>
+    <div class='form-group'>
+        <label for='' class='label-group'>Password</label>
+        <input type='password' name='password' rules='require' id='password' placeholder='Your password' />
+        <i class='fa-solid fa-eye icon-hidden'></i>
+        <span class='span-message'></span>
+    </div>
+    <div class='check-remember'>
+        <div class='box-remember'>
+            <input type='checkbox' name='remember' id='remember' />
+            <label for='remember'>Remember me</label>
+        </div>
+        <a href='/' class='forgot-password'>Forgot password !</a>
+    </div>
+    <div class='form-group'>
+        <button class='submit' type='submit'>Login</button>
+    </div>
+    <div class='form-signup'>
+        <p>Don't have an account?<a href='/auth/register'>Register</a></p>
+    </div>
+    <div class='line'>
+        <p class='line-gg'></p>
+    </div>
+    <div class='media-options'>
+        <a href='' class='media-options__gg'>
+            <img src='/img/google.png' alt='Loading...' />
+            <p>Login with Google</p>
+        </a>
+    </div>
+</form>
+<script src='/js/validate.js'></script>
+<script>
+    validator('#form-login')
+</script>
