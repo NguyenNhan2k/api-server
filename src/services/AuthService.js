@@ -1,17 +1,19 @@
+const { hashPassword } = require('../helpers/hashPwd');
+const { internalServer } = require('../middlewares/handleError');
+const { registerSchema } = require('../helpers/validateInput');
 const db = require('../models');
-const bcrypt = require('bcrypt');
-const salt = 10;
-const hashPwd = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(salt));
-
 class AuthService {
-    async register({ fullName, password, email }) {
+    async register(req, res) {
         try {
+            const { fullName, password, email, confirmPwd } = await req.body;
+            const checkInput = await registerSchema.validate({ fullName, password, email, confirmPwd });
+            console.log(checkInput);
             const [user, created] = await db.Users.findOrCreate({
                 where: { email },
                 default: {
                     fullName,
                     email,
-                    password: hashPwd(password),
+                    password: hashPassword(password),
                 },
             });
             const message = await {
@@ -19,10 +21,9 @@ class AuthService {
                 mes: created ? 'Register successfully! ' : 'Email is already registered!',
                 ...(created ? user : {}),
             };
-            console.log(message);
             return message;
         } catch (error) {
-            console.log(error);
+            return internalServer(req, res);
         }
     }
 }

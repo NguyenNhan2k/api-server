@@ -1,5 +1,5 @@
-const authService = require('../services/AuthService');
-
+const AuthService = require('../services/AuthService');
+const { internalServer } = require('../middlewares/handleError');
 class AuthController {
     async indexLogin(req, res, next) {
         try {
@@ -21,9 +21,13 @@ class AuthController {
     }
     async register(req, res, next) {
         try {
-            const valueUser = authService.register(req.body);
+            const valueUser = await AuthService.register(req, res);
+            console.log(valueUser);
+            return res.status(200).render('home', {
+                layout: 'main',
+            });
         } catch (error) {
-            console.log(error);
+            return internalServer(req, res);
         }
     }
 }

@@ -21,7 +21,7 @@
             type='email'
             name='email'
             id='email'
-            rules='require'
+            rules='require|isEmail'
             placeholder='Example@gmail.com'
             aria-autocomplete='none'
         />
@@ -35,7 +35,13 @@
     </div>
     <div class='form-group'>
         <label for='' class='label-group'>Confirm</label>
-        <input type='password' name='confirm-pwd' rules='require' id='confirm-pwd' placeholder='Your password' />
+        <input
+            type='password'
+            name='confirmPwd'
+            rules='require|isConfirmed'
+            id='confirm-pwd'
+            placeholder='Your password'
+        />
         <i class='fa-solid fa-eye icon-hidden'></i>
         <span class='span-message'></span>
     </div>

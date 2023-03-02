@@ -18,10 +18,11 @@ function validator(formSelector) {
         + Nếu không thì trả undefined
     */
     var validateRules = {
-        require: (value, rulesName) => {
+        require: (value) => {
+            console.log(value);
             return value ? undefined : 'Vui lòng nhập trường này!';
         },
-        email: (value, rulesName) => {
+        isEmail: (value) => {
             const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             return regex.test(value) ? undefined : 'Trường này phải là email !';
         },
@@ -29,6 +30,11 @@ function validator(formSelector) {
             return (value) => {
                 return value.length >= min ? undefined : `Trường này phải tối đa ${min} ký tự!`;
             };
+        },
+        isConfirmed: (value) => {
+            const passwordConfirmation = document.querySelector('#password').value.split('').join('');
+            console.log(value === passwordConfirmation);
+            return value === passwordConfirmation ? undefined : 'Mật khẩu nhập lại không chính xác!';
         },
     };
     const formElement = document.querySelector(formSelector);
@@ -59,12 +65,12 @@ function validator(formSelector) {
             input.oninput = handleClearErr;
         }
         function handleValidate(event) {
+            var errMsg;
             const ruleName = event.target.name;
             const rules = formRules[ruleName];
-            const ruleValue = event.target.value;
-            var errMsg;
+            const ruleValue = event.target.value.split(' ').join('');
             for (let i = 0; i < rules.length; i++) {
-                errMsg = rules[i](ruleValue, ruleName);
+                errMsg = rules[i](ruleValue);
                 if (errMsg !== undefined) {
                     break;
                 }
@@ -93,7 +99,6 @@ function validator(formSelector) {
             }
         }
     }
-    // Xử lý submit form
     if (formElement) {
         formElement.onsubmit = (event) => {
             event.preventDefault();
