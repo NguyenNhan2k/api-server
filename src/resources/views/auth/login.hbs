@@ -1,5 +1,5 @@
 <link rel='stylesheet' href='/css/login.css' />
-<form class='form-login' id='form-login' method='post'>
+<form class='form-login' id='form-login' method='post' action='/auth/v1/login'>
     <div class='form-group'>
         <p class='form-login__title'>Login</p>
     </div>
@@ -8,7 +8,7 @@
         <input
             type='email'
             name='email'
-            rules='require|email'
+            rules='require|isEmail'
             id='email'
             placeholder='Example@gmail.com'
             aria-autocomplete='none'
@@ -17,7 +17,14 @@
     </div>
     <div class='form-group'>
         <label for='' class='label-group'>Password</label>
-        <input type='password' name='password' rules='require' id='password' placeholder='Your password' />
+        <input
+            type='password'
+            name='password'
+            rules='require'
+            id='password'
+            placeholder='Your password'
+            autocomplete=''
+        />
         <i class='fa-solid fa-eye icon-hidden'></i>
         <span class='span-message'></span>
     </div>

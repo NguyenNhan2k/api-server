@@ -1,6 +1,7 @@
 const createError = require('http-errors');
-const badRequest = (req, res) => {
-    const error = createError.BadRequest();
+const badRequest = (err, res) => {
+    const error = createError.BadRequest(err, res);
+    return res.status(error.statusCode).redirect('back');
 };
 const notFound = (req, res) => {
     const error = createError.NotFound('This route is not defined!');

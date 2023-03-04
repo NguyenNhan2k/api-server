@@ -1,0 +1,37 @@
+<!--
+<div class='toast success'>
+    <div class='toast__icon'>
+        <i class='fa-solid fa-circle-check'></i>
+    </div>
+    <div class='toast__body'>
+        <div class='toast__body--type'>
+            <b>Success</b>
+        </div>
+        <div class='tost__body--content'>
+            Đăng ký thành công !
+        </div>
+    </div>
+    <div class='toast__close'>
+        <i class='fa-solid fa-xmark'></i>
+    </div>
+</div>
+-->
+{{#if message}}
+
+    <div class='toast {{message.type}}'>
+        <div class='toast__icon'>
+            <i class='fa-solid fa-triangle-exclamation'></i>
+        </div>
+        <div class='toast__body'>
+            <div class='toast__body--type'>
+                <b>{{message.type}}</b>
+            </div>
+            <div class='tost__body--content'>
+                {{message.mes}}
+            </div>
+        </div>
+        <div class='toast__close'>
+            <i class='fa-solid fa-xmark icon-close'></i>
+        </div>
+    </div>
+{{/if}}

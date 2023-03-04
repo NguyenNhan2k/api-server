@@ -1,6 +1,6 @@
 class HomeController {
-    async index(req,res,next){
-        res.render("home")
+    async index(req, res, next) {
+        res.render('customer/home');
     }
 }
-module.exports = new HomeController()
+module.exports = new HomeController();

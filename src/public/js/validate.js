@@ -19,7 +19,6 @@ function validator(formSelector) {
     */
     var validateRules = {
         require: (value) => {
-            console.log(value);
             return value ? undefined : 'Vui lòng nhập trường này!';
         },
         isEmail: (value) => {
@@ -69,6 +68,7 @@ function validator(formSelector) {
             const ruleName = event.target.name;
             const rules = formRules[ruleName];
             const ruleValue = event.target.value.split(' ').join('');
+            console.log(ruleValue);
             for (let i = 0; i < rules.length; i++) {
                 errMsg = rules[i](ruleValue);
                 if (errMsg !== undefined) {

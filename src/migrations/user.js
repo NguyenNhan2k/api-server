@@ -13,20 +13,27 @@ module.exports = {
             },
             email: {
                 type: Sequelize.STRING,
+                require: true,
             },
             password: {
                 type: Sequelize.STRING,
+                require: true,
             },
             address: {
                 type: Sequelize.STRING,
             },
             url_img: {
                 type: Sequelize.STRING,
+                defaultValue: '/img/user.png',
             },
             phone: {
                 type: Sequelize.INTEGER,
             },
             id_role: {
+                type: Sequelize.STRING,
+                defaultValue: 'R3',
+            },
+            refresh_token: {
                 type: Sequelize.STRING,
             },
             createdAt: {

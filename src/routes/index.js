@@ -1,4 +1,5 @@
 const { notFound } = require('../middlewares/handleError.js');
+
 const homeRoute = require('./home.js');
 const authRoute = require('./auth.js');
 function route(app) {
