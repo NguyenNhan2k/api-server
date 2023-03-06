@@ -26,9 +26,34 @@ class AuthController {
             return internalServer(req, res);
         }
     }
+    async indexAuthGg(req, res) {
+        try {
+            const user = await req.user[0];
+            const response = await AuthService.loginGoogle(user, res);
+            const message = {
+                type: response.type,
+                mes: response.mes,
+            };
+            res.cookie('access_token', 'Bearer ' + response.accessToken, {
+                expires: new Date(Date.now() + 8 * 3600000),
+                httpOnly: true,
+                secure: true,
+            });
+            res.cookie('refreshToken', 'Bearer ' + response.refreshToken, {
+                expires: new Date(Date.now() + 8 * 3600000),
+                httpOnly: true,
+                secure: true,
+            });
+
+            req.flash('message', message);
+            res.redirect('/home');
+        } catch (error) {
+            return internalServer(req, res);
+        }
+    }
     async register(req, res, next) {
         try {
-            const { error, value } = await registerSchema.validate(req.body);
+            const { error } = await registerSchema.validate(req.body);
             if (error) {
                 const messageError = await error.details[0].message;
                 return badRequest(messageError, res);

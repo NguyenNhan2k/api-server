@@ -61,10 +61,37 @@ class AuthService {
                 accessToken,
                 refreshToken,
             };
-
             return massage;
         } catch (error) {
-            return internalServer(req, res);
+            return {
+                err: 1,
+                type: 'warning',
+                mes: error,
+            };
+        }
+    }
+    async loginGoogle(user, res) {
+        try {
+            var message;
+            const accessToken = await signAccessToken(user.dataValues.id, user.dataValues.id_role);
+            const refreshToken = await signRefreshToken(user.dataValues.id, user.dataValues.id_role);
+            user.refresh_token = await refreshToken;
+            await user.save();
+            message = await {
+                err: 0,
+                type: 'success',
+                mes: 'Logged in successfully!',
+                role: user.dataValues.id_role,
+                accessToken,
+                refreshToken,
+            };
+            return message;
+        } catch (error) {
+            return {
+                err: 1,
+                type: 'warning',
+                mes: error,
+            };
         }
     }
 }

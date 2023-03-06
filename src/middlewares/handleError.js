@@ -5,9 +5,14 @@ const badRequest = (err, res) => {
 };
 const notFound = (req, res) => {
     const error = createError.NotFound('This route is not defined!');
-    return res.status(error.status).render('auth/login', {
-        layout: 'main',
-    });
+    const errMessage = [
+        {
+            type: 'warning',
+            mes: error.message,
+        },
+    ];
+    req.flash('message', errMessage);
+    return res.status(error.status).redirect('/auth/login');
 };
 const internalServer = (req, res) => {
     const error = createError.InternalServerError();

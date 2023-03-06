@@ -15,6 +15,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 //
+require('./middlewares/passport');
 app.use(express.static(path.join(__dirname, 'public')));
 // Template Engine Handlebar
 app.engine(
