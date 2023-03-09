@@ -1,6 +1,6 @@
 const { hashPassword, matchPwd } = require('../helpers/hashPwd');
 const { internalServer } = require('../middlewares/handleError');
-const { signAccessToken, signRefreshToken } = require('../middlewares/jwt');
+const { signAccessToken, signRefreshToken } = require('../middlewares/verifyToken');
 const db = require('../models');
 class AuthService {
     async register(req, res) {
@@ -26,7 +26,7 @@ class AuthService {
             return internalServer(req, res);
         }
     }
-    async login(user, res) {
+    async login(user) {
         try {
             var massage;
             const { email, password } = await user;
@@ -49,8 +49,8 @@ class AuthService {
                 };
                 return massage;
             }
-            const accessToken = await signAccessToken(dataValues.id, dataValues.id_role);
-            const refreshToken = await signRefreshToken(dataValues.id, dataValues.id_role);
+            const accessToken = await signAccessToken(dataValues);
+            const refreshToken = await signRefreshToken(dataValues);
             userModel.refresh_token = await refreshToken;
             await userModel.save();
             massage = await {
@@ -70,7 +70,7 @@ class AuthService {
             };
         }
     }
-    async loginGoogle(user, res) {
+    async loginGoogle(user) {
         try {
             var message;
             const accessToken = await signAccessToken(user.dataValues.id, user.dataValues.id_role);
@@ -92,6 +92,20 @@ class AuthService {
                 type: 'warning',
                 mes: error,
             };
+        }
+    }
+    async getAccessToken(token) {
+        var message;
+        try {
+            const getRefreshToken = await token.split(' ')[1];
+            console.log(getRefreshToken);
+        } catch (error) {
+            message = {
+                err: 1,
+                type: 'warning',
+                mes: error,
+            };
+            return message;
         }
     }
 }

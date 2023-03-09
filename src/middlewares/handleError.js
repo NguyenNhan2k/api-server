@@ -1,8 +1,17 @@
 const createError = require('http-errors');
-const badRequest = (err, res) => {
-    const error = createError.BadRequest(err, res);
-    return res.status(error.statusCode).redirect('back');
+
+const badRequest = (req, res, err) => {
+    const error = createError.BadRequest(err);
+    const errMessage = [
+        {
+            type: 'warning',
+            mes: error.message,
+        },
+    ];
+    req.flash('message', errMessage);
+    res.redirect('/auth/login');
 };
+
 const notFound = (req, res) => {
     const error = createError.NotFound('This route is not defined!');
     const errMessage = [
@@ -12,14 +21,36 @@ const notFound = (req, res) => {
         },
     ];
     req.flash('message', errMessage);
-    return res.status(error.status).redirect('/auth/login');
+    return res.redirect('/auth/login');
 };
+
+const unauthorized = (req, res, err) => {
+    const error = createError.Unauthorized(err, res);
+    const response = [
+        {
+            type: 'warning',
+            mes: error.message,
+        },
+    ];
+    req.flash('message', response);
+    return res.redirect('/auth/login');
+};
+
 const internalServer = (req, res) => {
     const error = createError.InternalServerError();
-    return res.status(error.status).redirect('back');
+    const response = [
+        {
+            type: 'warning',
+            mes: error.message,
+        },
+    ];
+    req.flash('message', response);
+    res.redirect('back');
 };
+
 module.exports = {
     badRequest,
     notFound,
     internalServer,
+    unauthorized,
 };

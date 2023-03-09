@@ -3,10 +3,9 @@ const { internalServer, badRequest } = require('../middlewares/handleError');
 const { registerSchema, loginSchema } = require('../helpers/validateInput');
 
 class AuthController {
-    async indexLogin(req, res, next) {
+    async indexLogin(req, res) {
         try {
             const mes = await req.flash('message')[0];
-            console.log(mes);
             return res.status(200).render('auth/login', {
                 layout: 'main',
                 message: mes,
@@ -15,7 +14,7 @@ class AuthController {
             return internalServer(req, res);
         }
     }
-    async indexRegister(req, res, next) {
+    async indexRegister(req, res) {
         try {
             const mes = await req.flash('message')[0];
             return res.render('auth/register', {
@@ -34,7 +33,7 @@ class AuthController {
                 type: response.type,
                 mes: response.mes,
             };
-            res.cookie('access_token', 'Bearer ' + response.accessToken, {
+            res.cookie('accessToken', 'Bearer ' + response.accessToken, {
                 expires: new Date(Date.now() + 8 * 3600000),
                 httpOnly: true,
                 secure: true,
@@ -46,17 +45,17 @@ class AuthController {
             });
 
             req.flash('message', message);
-            res.redirect('/home');
+            return res.redirect('/home');
         } catch (error) {
             return internalServer(req, res);
         }
     }
-    async register(req, res, next) {
+    async register(req, res) {
         try {
             const { error } = await registerSchema.validate(req.body);
             if (error) {
                 const messageError = await error.details[0].message;
-                return badRequest(messageError, res);
+                return badRequest(req, res, messageError);
             }
             const response = await AuthService.register(req, res);
             if (response.err == 1) {
@@ -74,14 +73,15 @@ class AuthController {
             const { error, value } = await loginSchema.validate(req.body);
             if (error) {
                 const messageError = await error.details[0].message;
-                return badRequest(messageError, res);
+                return badRequest(req, res, messageError);
             }
             const response = await AuthService.login({ ...value }, res);
             const message = {
                 type: response.type,
                 mes: response.mes,
             };
-            res.cookie('access_token', 'Bearer ' + response.accessToken, {
+
+            res.cookie('accessToken', 'Bearer ' + response.accessToken, {
                 expires: new Date(Date.now() + 8 * 3600000),
                 httpOnly: true,
                 secure: true,
@@ -93,13 +93,10 @@ class AuthController {
             });
             if (response.role == 'R3' && response.err == 0) {
                 req.flash('message', message);
-                res.redirect('/auth/register');
-            } else if (response.err == 1) {
-                req.flash('message', message);
-                res.redirect('back');
+                return res.redirect('/');
             }
             req.flash('message', message);
-            res.redirect('/home');
+            return res.redirect('/home');
         } catch (error) {
             return internalServer(req, res);
         }
