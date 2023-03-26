@@ -1,11 +1,11 @@
 const { hashPassword, matchPwd } = require('../helpers/hashPwd');
 const { internalServer } = require('../middlewares/handleError');
-const { signAccessToken, signRefreshToken } = require('../middlewares/verifyToken');
+const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../middlewares/verifyToken');
 const db = require('../models');
 class AuthService {
     async register(req, res) {
         try {
-            const { fullName, password, email, confirmPwd } = await req.body;
+            const { fullName, password, email } = await req.body;
             const [user, created] = await db.Users.findOrCreate({
                 where: { email },
                 defaults: {
@@ -14,6 +14,7 @@ class AuthService {
                     password: hashPassword(password),
                 },
             });
+
             const message = await {
                 err: created ? 0 : 1,
                 type: created ? 'success' : 'warning',
@@ -22,7 +23,6 @@ class AuthService {
             };
             return message;
         } catch (error) {
-            console.log(error);
             return internalServer(req, res);
         }
     }
@@ -51,12 +51,14 @@ class AuthService {
             }
             const accessToken = await signAccessToken(dataValues);
             const refreshToken = await signRefreshToken(dataValues);
+
             userModel.refresh_token = await refreshToken;
             await userModel.save();
             massage = await {
                 err: 0,
                 type: 'success',
                 mes: 'Logged in successfully!',
+                nameUser: userModel.fullName,
                 role: userModel.id_role,
                 accessToken,
                 refreshToken,
@@ -71,10 +73,18 @@ class AuthService {
         }
     }
     async loginGoogle(user) {
+        var message = {
+            err: 1,
+            type: 'warning',
+            mes: 'Đăng nhập thất bại!',
+        };
         try {
-            var message;
-            const accessToken = await signAccessToken(user.dataValues.id, user.dataValues.id_role);
-            const refreshToken = await signRefreshToken(user.dataValues.id, user.dataValues.id_role);
+            if (!user) {
+                return message;
+            }
+            const accessToken = await signAccessToken(user.dataValues);
+            const refreshToken = await signRefreshToken(user.dataValues);
+            console.log();
             user.refresh_token = await refreshToken;
             await user.save();
             message = await {
@@ -82,29 +92,29 @@ class AuthService {
                 type: 'success',
                 mes: 'Logged in successfully!',
                 role: user.dataValues.id_role,
+                nameUser: user.dataValues.fullName,
                 accessToken,
                 refreshToken,
             };
             return message;
         } catch (error) {
-            return {
-                err: 1,
-                type: 'warning',
-                mes: error,
-            };
+            console.log(error);
+            return message;
         }
     }
-    async getAccessToken(token) {
-        var message;
+    async createAccessToken(token) {
+        let message = {
+            type: 'warning',
+            err: 0,
+        };
         try {
-            const getRefreshToken = await token.split(' ')[1];
-            console.log(getRefreshToken);
+            // const refreshToken = await verifyRefreshToken(token);
+            // if (!refreshToken) message;
+            // const { dataValues: user } = await db.Users.findOne({ where: { id: refreshToken.user.id } });
+            // if (!refreshToken.token === user.refresh_token) return message;
+            // const accessToken = await signAccessToken(user);
+            // return accessToken;
         } catch (error) {
-            message = {
-                err: 1,
-                type: 'warning',
-                mes: error,
-            };
             return message;
         }
     }

@@ -27,7 +27,7 @@ class AuthController {
     }
     async indexAuthGg(req, res) {
         try {
-            const user = await req.user[0];
+            const user = await req.user;
             const response = await AuthService.loginGoogle(user, res);
             const message = {
                 type: response.type,
@@ -37,6 +37,9 @@ class AuthController {
                 expires: new Date(Date.now() + 8 * 3600000),
                 httpOnly: true,
                 secure: true,
+            });
+            res.cookie('user', response.nameUser, {
+                expires: new Date(Date.now() + 8 * 3600000),
             });
             res.cookie('refreshToken', 'Bearer ' + response.refreshToken, {
                 expires: new Date(Date.now() + 8 * 3600000),
@@ -71,6 +74,7 @@ class AuthController {
     async login(req, res) {
         try {
             const { error, value } = await loginSchema.validate(req.body);
+
             if (error) {
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
@@ -80,25 +84,42 @@ class AuthController {
                 type: response.type,
                 mes: response.mes,
             };
-
-            res.cookie('accessToken', 'Bearer ' + response.accessToken, {
-                expires: new Date(Date.now() + 8 * 3600000),
-                httpOnly: true,
-                secure: true,
-            });
-            res.cookie('refreshToken', 'Bearer ' + response.refreshToken, {
-                expires: new Date(Date.now() + 8 * 3600000),
-                httpOnly: true,
-                secure: true,
-            });
-            if (response.role == 'R3' && response.err == 0) {
+            if (response.err === 0) {
+                res.cookie('accessToken', 'Bearer ' + response.accessToken, {
+                    expires: new Date(Date.now() + 8 * 3600000),
+                    httpOnly: true,
+                    secure: true,
+                });
+                res.cookie('user', response.nameUser, {
+                    expires: new Date(Date.now() + 8 * 3600000),
+                });
+                res.cookie('refreshToken', 'Bearer ' + response.refreshToken, {
+                    expires: new Date(Date.now() + 8 * 3600000),
+                    httpOnly: true,
+                    secure: true,
+                });
                 req.flash('message', message);
-                return res.redirect('/');
+
+                if (response.role == 'R3' && response.err == 0) {
+                    return res.redirect('/');
+                }
+                if (response.role == 'R2' || (response.role == 'R1' && response.err == 0)) {
+                    return res.redirect('/manage');
+                }
             }
             req.flash('message', message);
             return res.redirect('/home');
         } catch (error) {
             return internalServer(req, res);
+        }
+    }
+    async refreshToken(req, res, next) {
+        try {
+            const refreshToken = await req.body.refreshToken;
+            const response = await AuthService.createAccessToken(refreshToken);
+            return res.json('test');
+        } catch (error) {
+            console.log(error);
         }
     }
 }

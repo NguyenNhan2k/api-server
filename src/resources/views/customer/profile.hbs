@@ -1,1 +1,37 @@
-<h1>Profile User :{{user}}</h1>
+<form action='/customer/update?_method=PATCH' method='post' class='profile form-update' enctype="multipart/form-data">
+   {{> nav.user}}
+    <div class='profile-info'>
+        <h2 class='title'>Account Setting</h2>
+        <div class='form-profile'>
+            <div class='form-group'>
+                <input type='text' id='fullName' name='fullName' value='{{customer.fullName}}' rules='require' />
+                <label for='fullName'>Full Name</label>
+                <span class='span-message'></span>
+            </div>
+            <div class='form-group'>
+                <input type='text' id='email' name='email' rules='require|isEmail' value='{{customer.email}}' />
+                <label for='email'>Email</label>
+                <span class='span-message'></span>
+            </div>
+            <div class='form-group'>
+                <input type='text' id='phone' name='phone' rules='require' value='{{customer.phone}}' />
+                <label for='phone'>Phone</label>
+                <span class='span-message'></span>
+            </div>
+            <div class='form-group'>
+                <input type='text' id='address' name='address' rules='require' value='{{customer.address}}' />
+                <label for='address'>Address</label>
+                <span class='span-message'></span>
+
+            </div>
+            <div class='buttons'>
+                <button class='form-ground__update' type='submit'>Update</button>
+                <div class='form-ground__cancel'>Cancel</div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src='/js/main.js'></script>
+<script src='/js/validate.js'></script>
+<script>handleImage(); 
+</script>

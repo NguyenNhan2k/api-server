@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
-const SALT = process.env.SATL_HASHPWD;
 
 function hashPassword(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(SALT));
+    const SALT = 10;
+    const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT));
+    return hash;
 }
 const matchPwd = async (password, hashPwd) => {
     const isMatch = await bcrypt.compareSync(password, hashPwd);

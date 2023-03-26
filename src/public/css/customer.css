@@ -1,0 +1,176 @@
+@import './main.css';
+.container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.profile {
+    width: 110rem;
+    margin-top: 5rem;
+    min-height: 60rem;
+    border-radius: 0.5rem;
+    display: flex;
+    background-color: #ffff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.form-ground__img {
+    width: 50%;
+    margin-left: 8rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    height: 4rem;
+    background-color: var(--btn-submit);
+    color: #ffff;
+}
+.form-ground__img input {
+    display: none;
+}
+.form-ground__img > label > i {
+    font-size: 2rem;
+    margin-left: 1rem;
+    line-height: 4rem;
+}
+.form-ground__img > label {
+    padding: 1.5rem;
+    cursor: pointer;
+
+    margin-left: 1.5rem;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 1.6rem;
+}
+.profile-nav {
+    height: 60rem;
+    width: 35rem;
+    border-right: 0.05rem solid rgba(78, 76, 76, 0.205);
+}
+.profile-nav img {
+    margin-top: 2.5rem;
+    margin-left: 5rem;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 50%;
+}
+.profile-nav_user {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.profile-nav__name {
+    color: var(--profile-color);
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin: 3rem 0;
+    text-align: center;
+}
+.profile-nav_category {
+    margin-top: 3rem;
+}
+.profile-nav_category ul li {
+    width: 100%;
+    height: 5rem;
+    text-align: center;
+    font-size: 1.8rem;
+    border-top: 0.05rem solid rgba(78, 76, 76, 0.205);
+    line-height: 5rem;
+}
+.upload_img > input {
+    display: none;
+}
+.upload_img > label {
+    font-size: 1.6rem;
+    padding: 1rem;
+    margin-left: 3rem;
+    background-color: aqua;
+    border: 0.1rem solid #3f3c3c;
+}
+
+.form-profile {
+    width: 90rem;
+    height: 80;
+    margin-left: 18rem;
+}
+.form-group {
+    width: 100%;
+    height: 5rem;
+    margin-top: 5rem;
+    position: relative;
+}
+.form-group > label {
+    position: absolute;
+    top: -2.5rem;
+    font-weight: 400;
+    font-size: 1.8rem;
+    left: 0;
+}
+
+.form-group > span {
+    position: absolute;
+    bottom: 1rem;
+    left: 2rem;
+    font-size: 1.4rem;
+}
+.form-group > input {
+    width: 45%;
+    padding-left: 2.5rem;
+    height: 4.5rem;
+    outline: none;
+    border-radius: 0.5rem;
+    border: 0.1rem solid rgba(75, 71, 71, 0.582);
+    font-size: 1.6rem;
+}
+.form-group > input:focus {
+    border: none;
+    outline: 0.1rem solid var(--outline-input);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.active > span {
+    color: red;
+}
+.active > input {
+    border: 0.1rem solid red;
+}
+.profile-info {
+    width: 80rem;
+}
+.profile-info .title {
+    width: 100%;
+    margin: 5rem 0;
+    text-align: center;
+    font-size: 2.4rem;
+    line-height: 100%;
+    font-weight: 500;
+}
+.buttons {
+    display: flex;
+    width: 100%;
+    margin-top: 2rem;
+}
+.buttons .form-ground__update {
+    width: 10rem;
+    height: 4.5rem;
+    color: var(--background);
+    line-height: 4rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+    text-align: center;
+    background-color: var(--btn-submit);
+}
+.form-ground__update:hover {
+    background-color: blue;
+}
+.buttons .form-ground__cancel {
+    width: 10rem;
+    height: 4.5rem;
+    margin-left: 2rem;
+    color: var(--profile-color);
+    line-height: 4rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+    text-align: center;
+}
+.form-ground__cancel:hover {
+    background-color: #978f8f88;
+}

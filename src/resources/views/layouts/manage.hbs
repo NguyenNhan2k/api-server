@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Manage</title>
+        <link
+            rel='stylesheet'
+            href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css'
+            integrity='sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=='
+            crossorigin='anonymous'
+            referrerpolicy='no-referrer'
+        />
+        <link rel='stylesheet' href='/css/manage.css' />
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css' />
+    </head>
+    <body>
+        {{!-- SIDE BAR --}}
+        {{> sidebar}}
+        {{!-- SIDE BAR --}}
+        {{!-- Content --}}
+        <section id="content">
+            {{!-- Navbar --}}
+                {{> navbar}}
+                {{{body}}}    
+        </section>
+       
+
+        
+        {{!-- Content --}}
+
+    </body>
+    <script src="/js/manage.js"></script>
+</html>

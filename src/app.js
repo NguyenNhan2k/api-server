@@ -1,27 +1,31 @@
-const path = require('path');
+const cors = require('cors');
 const express = require('express');
-const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
-const route = require('./routes');
-const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const session = require('express-session');
-const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
+
+const dotenv = require('dotenv');
 const handlebars = require('express-handlebars');
-const { connectDB } = require('./config/connect_database');
+dotenv.config();
 
 const app = express();
-dotenv.config();
+const path = require('path');
 const port = process.env.PORT;
+const bodyParser = require('body-parser');
 
-//
+const route = require('./routes');
+const { connectDB } = require('./config/connect_database');
+const { userName } = require('./middlewares/verifyToken');
+
 require('./middlewares/passport');
+
 app.use(express.static(path.join(__dirname, 'public')));
-// Template Engine Handlebar
 app.engine(
     'hbs',
     handlebars.engine({
         extname: '.hbs',
+        helpers: require('./helpers/handlebar'),
     }),
 );
 app.set('view engine', 'hbs');
@@ -34,12 +38,17 @@ app.use(
         cookie: { maxAge: 60000 },
     }),
 );
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
+
 // use routes
+
 route(app);
 // Connect database
 connectDB();

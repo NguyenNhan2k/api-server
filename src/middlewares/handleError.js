@@ -9,7 +9,7 @@ const badRequest = (req, res, err) => {
         },
     ];
     req.flash('message', errMessage);
-    res.redirect('/auth/login');
+    res.redirect('back');
 };
 
 const notFound = (req, res) => {

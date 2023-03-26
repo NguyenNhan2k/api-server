@@ -20,5 +20,6 @@ router.get(
 
 router.post('/v1/register', authController.register);
 router.post('/v1/login', authController.login);
+router.post('/v1/refresh-token', authController.refreshToken);
 
 module.exports = router;

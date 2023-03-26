@@ -12,8 +12,8 @@ passport.use(
         async function (accessToken, refreshToken, profile, cb) {
             try {
                 const { id, displayName, emails, provider } = await profile;
-                const user = await db.Users.findOrCreate({
-                    where: { id_google: id, email: emails[0].value },
+                const [user, created] = await db.Users.findOrCreate({
+                    where: { email: emails[0].value },
                     defaults: {
                         fullName: displayName,
                         email: emails[0].value,
@@ -21,6 +21,10 @@ passport.use(
                         id_google: id,
                     },
                 });
+                if (!created) {
+                    user.id_google = await id;
+                    await user.save();
+                }
                 return cb(null, user);
             } catch (error) {
                 console.log(error);

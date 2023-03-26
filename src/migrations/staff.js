@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Users', {
+        await queryInterface.createTable('Staffs', {
             id: {
                 allowNull: false,
                 primaryKey: true,
@@ -17,13 +17,6 @@ module.exports = {
             password: {
                 type: Sequelize.STRING,
             },
-            login_type: {
-                type: Sequelize.STRING,
-                defaultValue: 'local',
-            },
-            id_google: {
-                type: Sequelize.STRING,
-            },
             address: {
                 type: Sequelize.STRING,
             },
@@ -36,7 +29,7 @@ module.exports = {
             },
             id_role: {
                 type: Sequelize.STRING,
-                defaultValue: 'R3',
+                defaultValue: 'R2',
             },
             refresh_token: {
                 type: Sequelize.STRING,
@@ -54,6 +47,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Users');
+        await queryInterface.dropTable('Staffs');
     },
 };
