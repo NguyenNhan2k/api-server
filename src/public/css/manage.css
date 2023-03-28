@@ -6,6 +6,7 @@
     --dark: #342e37;
     --red: #db504a;
     --blue: #007bff;
+    --light-blue: #007bff8a;
     --yellow: #ffce26;
     --light-yellow: #fff2c6;
     --orange: #fd7283;
@@ -296,6 +297,221 @@ a {
     color: var(--dark);
 }
 
+/* MAIN  */
+#content main .table {
+    width: 95%;
+    height: 80%;
+    margin-left: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-radius: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: relative;
+    background-color: rgb(226, 225, 225);
+}
+
+#content main .table .table_sidebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 10px;
+
+    /*  */
+}
+#content main .table .table_sidebar .table_sidebar--search {
+    margin-right: 20px;
+    position: relative;
+}
+.table_sidebar--search .search-contain {
+    margin-top: 5px;
+    overflow-y: scroll;
+
+    background-color: #a7a1a1;
+    width: 110%;
+    left: -10px;
+    border-radius: 5px;
+    position: absolute;
+}
+.header-search {
+    position: relative;
+}
+.header-search i {
+    margin-right: 5px;
+    font-size: 24px;
+    color: #4f4f4f;
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+}
+.search-input {
+    height: 35px;
+    width: 300px;
+    padding-left: 15px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    outline: none;
+    color: #4f4f4f;
+    border-radius: 5px;
+}
+.table_sidebar--add {
+    display: flex;
+}
+.table_sidebar--add button {
+    position: relative;
+    background-color: var(--blue);
+    height: 35px;
+    width: 12rem;
+    cursor: pointer;
+    border: none;
+    margin-left: 2rem;
+    border-radius: 5px;
+}
+.table_sidebar--add button a {
+    color: var(--grey);
+    font-size: 16px;
+    margin-right: 10px;
+    line-height: 35px;
+    margin-left: 5px;
+    text-decoration: none;
+}
+
+.table_sidebar--add button .add,
+.trash {
+    font-size: 1.6rem;
+    color: var(--grey);
+    line-height: 2.5rem;
+    align-items: center;
+}
+
+.table_sidebar--add button p {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    background-color: #ee481a;
+    height: 17px;
+    width: 17px;
+    line-height: 16px;
+    border-radius: 50%;
+    color: var(--grey);
+}
+/* MAIN --- SELECT ACTION */
+.selectAction {
+    display: flex;
+    margin-top: 3rem;
+    height: 3.5rem;
+    margin-left: 2rem;
+    width: 40rem;
+    justify-content: space-around;
+}
+.selectAction .form-checkAll .label-form-checkAll {
+    line-height: 35px;
+    padding-bottom: 10px;
+    color: black;
+    font-size: 1.4rem;
+}
+.selectAction .select-Action {
+    width: 14rem;
+    font-size: 1.4rem;
+    border-radius: 1rem;
+}
+.selectAction .select-Action option {
+    font-size: 1.4rem;
+    color: black;
+    text-align: center;
+}
+.selectAction .submit {
+    background-color: var(--blue);
+    color: var(--grey);
+    border: none;
+    padding: 0 1rem;
+    height: 100%;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1.8rem;
+}
+.selectAction .submit:hover {
+    background-color: var(--light-blue);
+}
+.selectAction .submit:disabled {
+    background-color: var();
+}
+/* MAIN ---- TABLE */
+.table table {
+    border-collapse: collapse;
+    margin-top: 2rem;
+    margin-left: 3%;
+    width: 93%;
+}
+.table table .test {
+    color: #050505;
+}
+
+.table table th {
+    color: #fff;
+    text-align: center;
+    font-size: 1.6rem;
+    border-left: 0.1rem solid rgba(204, 204, 204, 0.651);
+    background-color: var(--blue);
+    font-weight: 300;
+}
+.table table th a i {
+    color: var(--grey);
+}
+.table table tr {
+    height: 4.5rem;
+}
+.table table td {
+    color: black;
+    background-color: rgb(226, 225, 225);
+    text-align: center;
+    border-bottom: 0.1rem solid rgb(172, 167, 167);
+    font-size: 1.5rem;
+}
+.table table td a {
+    text-align: center;
+    line-height: 35px;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--grey);
+    text-decoration: none;
+}
+.table table td a i {
+    color: var(--blue);
+}
+.table table td a .remove {
+    cursor: pointer;
+    color: #f87c59;
+}
+.table table td button {
+    text-align: center;
+    line-height: 35px;
+    font-size: 16px;
+    cursor: pointer;
+
+    border: none;
+}
+.table table td button i {
+}
+.table table td button .remove {
+    color: var(--orange);
+}
+/* Main -- PAGING */
+
+.pagination {
+    width: 100%;
+    margin-top: 3rem;
+    position: absolute;
+    left: 40%;
+}
+
+.pagination a {
+    color: var(--grey);
+    font-size: 1.4rem;
+    border-radius: 0.5rem;
+    padding: 8px 16px;
+    background-color: #007bff;
+    text-decoration: none;
+}
 /* CONTENT */
 
 @media screen and (max-width: 768px) {

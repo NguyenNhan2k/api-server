@@ -2,6 +2,7 @@ const customerService = require('../services/CustomerService');
 
 const { internalServer, badRequest } = require('../middlewares/handleError');
 const { userSchema } = require('../helpers/validateInput');
+const { request } = require('express');
 
 class CustomerController {
     async index(req, res) {
@@ -26,13 +27,16 @@ class CustomerController {
     }
     async getAll(req, res) {
         try {
-            const response = await customerService.getAll();
+            const { type, column, page } = await req.query;
+            const order = type && column ? [column, type] : [];
+            const response = await customerService.getAll({ page, order });
             return res.render('customer/manageCustomers', {
                 layout: 'manage',
                 customers: response.customers,
                 active: 'customers',
             });
         } catch (error) {
+            console.log(error);
             return internalServer(req, res);
         }
     }

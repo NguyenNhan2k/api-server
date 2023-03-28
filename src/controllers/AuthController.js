@@ -68,6 +68,7 @@ class AuthController {
             req.flash('message', response);
             return res.redirect('/auth/login');
         } catch (error) {
+            console.log(error);
             return internalServer(req, res);
         }
     }

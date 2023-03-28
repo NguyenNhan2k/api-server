@@ -14,7 +14,6 @@ class AuthService {
                     password: hashPassword(password),
                 },
             });
-
             const message = await {
                 err: created ? 0 : 1,
                 type: created ? 'success' : 'warning',
@@ -23,6 +22,7 @@ class AuthService {
             };
             return message;
         } catch (error) {
+            console.log(error);
             return internalServer(req, res);
         }
     }

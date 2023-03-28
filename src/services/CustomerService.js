@@ -2,6 +2,7 @@ const db = require('../models');
 
 const fs = require('fs-extra');
 const { where } = require('sequelize');
+const { boolean } = require('joi');
 
 class CustomerService {
     async update({ id, ...body }, file) {
@@ -91,13 +92,22 @@ class CustomerService {
             return message;
         }
     }
-    async getAll(id) {
+    async getAll({ page, order }) {
         let message = {
             err: 1,
             mes: 'Hành động thất bại!',
             type: 'warning',
         };
         try {
+            const queries = await { raw: true, nest: true };
+            const offset = (await !page) || +page < 1 ? 0 : +page - 1;
+            const limit = await process.env.QUERY_LIMIT;
+
+            queries.offset = (await offset) * limit;
+            queries.limit = await +limit;
+
+            console.log(order && 'test');
+            if (order.length > 0) queries.order = await [order];
             const customers = await db.Users.findAll({
                 attributes: {
                     exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
@@ -110,8 +120,7 @@ class CustomerService {
                         exclude: ['createdAt', 'updatedAt'],
                     },
                 },
-                raw: true,
-                nest: true,
+                ...queries,
             });
             if (customers) {
                 return (message = {
@@ -123,6 +132,7 @@ class CustomerService {
             }
             return message;
         } catch (error) {
+            console.log(error);
             return message;
         }
     }
