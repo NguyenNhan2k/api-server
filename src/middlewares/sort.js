@@ -7,13 +7,14 @@ module.exports = function SortMiddleWare(req, res, next) {
         enable: false,
         index: 1,
     };
-    if (req.query.hasOwnProperty('_page')) {
+    if (req.query.hasOwnProperty('page')) {
         Object.assign(res.locals._page, {
             enable: true,
-            index: req.query.index,
+            index: req.query.page,
         });
+        console.log(req.query.page);
         Object.assign(res.locals._sort, {
-            index: req.query.index,
+            index: req.query.page,
         });
     }
     if (req.query.hasOwnProperty('_sort')) {

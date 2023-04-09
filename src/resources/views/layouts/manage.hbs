@@ -9,15 +9,19 @@
             crossorigin='anonymous'
             referrerpolicy='no-referrer'
         />
+      
         <link rel='stylesheet' href='/css/manage.css' />
+        <link rel='stylesheet' href='/css/message.css' />
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css' />
     </head>
     <body>
         {{!-- SIDE BAR --}}
         {{> sidebar}}
+         {{> modalBox}}
         {{!-- SIDE BAR --}}
         {{!-- Content --}}
         <section id="content">
+        {{> message}}
             {{!-- Navbar --}}
                 {{> navbar}}
                 {{{body}}}    
@@ -29,4 +33,5 @@
 
     </body>
     <script src="/js/manage.js"></script>
+ 
 </html>

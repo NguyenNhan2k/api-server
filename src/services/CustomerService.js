@@ -1,9 +1,7 @@
-const db = require('../models');
-
 const fs = require('fs-extra');
-const { where } = require('sequelize');
-const { boolean } = require('joi');
 
+const db = require('../models');
+const { hashPassword } = require('../helpers/hashPwd');
 class CustomerService {
     async update({ id, ...body }, file) {
         let message;
@@ -99,37 +97,85 @@ class CustomerService {
             type: 'warning',
         };
         try {
-            const queries = await { raw: true, nest: true };
             const offset = (await !page) || +page < 1 ? 0 : +page - 1;
             const limit = await process.env.QUERY_LIMIT;
-
+            const queries = await {
+                raw: true,
+                nest: true,
+            };
+            if (order.length > 0) queries.order = await [order];
             queries.offset = (await offset) * limit;
             queries.limit = await +limit;
 
-            console.log(order && 'test');
-            if (order.length > 0) queries.order = await [order];
-            const customers = await db.Users.findAll({
+            const { count, rows } = await db.Users.findAndCountAll({
                 attributes: {
                     exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
                 },
                 include: {
                     model: db.Role,
                     as: 'role',
-                    raw: true,
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                     },
                 },
                 ...queries,
             });
-            if (customers) {
+            const countDelete = await db.Users.findAll({
+                attributes: {
+                    exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
+                },
+                paranoid: true,
+                raw: true,
+            });
+            const countPage = count / limit;
+            if (rows) {
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    customers: customers,
+                    customers: rows,
+                    countPage,
                 });
             }
+            return message;
+        } catch (error) {
+            return message;
+        }
+    }
+    async create(payload) {
+        const option = {
+            raw: true,
+            nest: true,
+            attributes: {
+                exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
+            },
+        };
+        var message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            const { email, password, phone, fullName, address, url_img } = await payload;
+            const [user, created] = await db.Users.findOrCreate({
+                where: { email },
+                defaults: {
+                    fullName,
+                    email,
+                    phone,
+                    address,
+                    url_img,
+                    password: hashPassword(password),
+                },
+                ...option,
+            });
+            if (!created) {
+                message.mes = await 'Customers is already registered!';
+                return message;
+            }
+            message.err = await 0;
+            message.mes = await 'Create customers successfully';
+            message.type = await 'success';
             return message;
         } catch (error) {
             console.log(error);

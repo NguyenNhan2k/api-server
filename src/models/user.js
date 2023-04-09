@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             paranoid: true,
-            deletedAt: 'deletedAt',
+            deletedAt: 'destroyTime',
             modelName: 'Users',
         },
     );

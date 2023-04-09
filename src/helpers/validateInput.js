@@ -25,8 +25,21 @@ const userSchema = joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         .required(),
 });
+const customerJoi = joi.object({
+    fullName: joi.string().min(3).max(30).required(),
+    password: joi.string().min(6).required(),
+    phone: joi.string().required(),
+    address: joi.string().required(),
+    url_img: joi.string(),
+    email: joi
+        .string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .required(),
+    confirmPwd: joi.ref('password'),
+});
 module.exports = {
     registerSchema,
     loginSchema,
     userSchema,
+    customerJoi,
 };

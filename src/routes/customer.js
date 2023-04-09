@@ -19,7 +19,11 @@ router.get('/logout', customerController.logOut);
 router.get('/profile', customerController.index);
 router.get('/account', customerController.indexAccount);
 
+router.get('/create', authStaff, customerController.indexCreate);
+router.get('/:id', authStaff, customerController.indexInfoCustomer);
 router.get('/', authStaff, customerController.getAll);
-router.patch('/update', upload.single('avatar_user'), customerController.update);
+
+router.post('/create', upload.single('url_img'), authStaff, customerController.create);
+router.patch('/update', upload.single('url_img'), customerController.update);
 
 module.exports = router;
