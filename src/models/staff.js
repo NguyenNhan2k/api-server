@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Staff.belongsTo(models.Role, { foreignKey: 'id_role', targetKey: 'code', as: 'role' });
         }
     }
     Staff.init(
@@ -26,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             password: DataTypes.STRING,
             address: DataTypes.STRING,
-            phone: DataTypes.NUMBER,
+            phone: DataTypes.STRING,
             url_img: DataTypes.STRING,
             refresh_token: DataTypes.STRING,
             id_role: DataTypes.STRING,
@@ -38,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'Staffs',
         },
     );
-    Staff.beforeCreate((staff, _) => {
-        return (staff.id = uuid());
+    Staff.beforeCreate((user, _) => {
+        return (user.id = uuid());
     });
     return Staff;
 };

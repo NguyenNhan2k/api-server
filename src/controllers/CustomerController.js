@@ -1,7 +1,8 @@
 const { request } = require('express');
-const { customerJoi, userSchema } = require('../helpers/validateInput');
+const { customerUpdateJoi, userJoi, customerJoi } = require('../helpers/validateInput');
 const customerService = require('../services/CustomerService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
+const { equal, defaults } = require('joi');
 
 class CustomerController {
     async index(req, res) {
@@ -44,7 +45,6 @@ class CustomerController {
             internalServer(req, res);
         }
     }
-
     async indexInfoCustomer(req, res) {
         try {
             const idCustomer = await req.params.id;
@@ -72,54 +72,87 @@ class CustomerController {
             return internalServer(req, res);
         }
     }
-    async getAll(req, res) {
+    async indexTrash(req, res) {
         try {
             const { type, column, page } = await req.query;
             const order = type && column ? [column, type] : [];
-            const response = await customerService.getAll({ page, order });
-            return res.render('customer/manageCustomers', {
+            const deleted = false;
+            const response = await customerService.getAll({ page, order, deleted });
+            const message = await req.flash('message')[0];
+            return res.render('customer/trashCustomers', {
                 layout: 'manage',
                 active: 'customers',
                 customers: response.customers,
                 countPage: response.countPage,
+                message,
             });
         } catch (error) {
             console.log(error);
             return internalServer(req, res);
         }
     }
-    async update(req, res) {
+    async indexCustomers(req, res) {
+        try {
+            const { type, column, page } = await req.query;
+            const order = type && column ? [column, type] : [];
+            const response = await customerService.getAll({ page, order });
+            const message = await req.flash('message')[0];
+            return res.render('customer/manageCustomers', {
+                layout: 'manage',
+                active: 'customers',
+                customers: response.customers,
+                countPage: response.countPage,
+                countDeleted: response.countDeleted,
+                message,
+            });
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async updateProfile(req, res) {
         try {
             const { id } = await req.user;
-
-            const { error, value } = await userSchema.validate(req.body);
+            const { error, value } = await customerUpdateJoi.validate(req.body);
             const imgUpload = await req.file;
             if (error) {
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await customerService.update({ id, ...req.body }, imgUpload);
-            const message = {
-                type: response.type,
-                mes: response.message,
-            };
-            req.flash('message', message);
+            const response = await customerService.update({ id, value }, imgUpload);
+            req.flash('message', response);
             res.redirect('back');
         } catch (error) {
             console.log(error);
+            return internalServer(req, res);
         }
     }
-    async create(req, res) {
+    async updateByStaff(req, res) {
         try {
-            const { id } = await req.user;
-            const { error, value } = await customerJoi.validate(req.body);
+            const { error, value } = await userJoi.validate(req.body);
+            const imgUpload = await req.file;
             if (error) {
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-
-            const response = await customerService.create(req.body);
-            console.log(response);
+            const response = await customerService.updateByStaff(value, imgUpload);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async create(req, res) {
+        try {
+            const img = await await req.file;
+            const { error, value } = await customerJoi.validate(req.body);
+            console.log(img);
+            if (error) {
+                const messageError = await error.details[0].message;
+                return badRequest(req, res, messageError);
+            }
+            const response = await customerService.create(value, img);
             req.flash('message', response);
             return res.status(200).redirect('back');
         } catch (error) {
@@ -130,7 +163,9 @@ class CustomerController {
     async logOut(req, res) {
         try {
             const { id } = await req.user;
-            console.log(id);
+            if (!id) {
+                return badRequest(req, res, 'Bad Reqauest!');
+            }
             const response = await customerService.logout(id);
             if (response.err === 0) {
                 res.clearCookie('accessToken');
@@ -141,6 +176,68 @@ class CustomerController {
             }
             req.flash('message', response);
             return res.redirect('/auth/login');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async destroy(req, res) {
+        const message = {};
+        try {
+            const customerId = await req.params.id;
+            console.log(customerId);
+            const response = await customerService.destroy(customerId);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async force(req, res) {
+        const message = {};
+        try {
+            const customerId = await req.params.id;
+            console.log(customerId);
+            const response = await customerService.force(customerId);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async restore(req, res) {
+        const message = {};
+        try {
+            const customerId = await req.params.id;
+            console.log(customerId);
+            const response = await customerService.restore(customerId);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async handelAction(req, res) {
+        const message = {};
+        try {
+            const { actions, customers } = await req.body;
+            switch (actions) {
+                case 'delete':
+                    const resDeleted = await customerService.destroyMutiple(customers);
+                    req.flash('message', resDeleted);
+                    res.redirect('back');
+                    break;
+                case 'restore':
+                    const resRestore = await customerService.restoreMutiple(customers);
+                    req.flash('message', resRestore);
+                    res.redirect('back');
+                    break;
+                    defaults: message.mes = 'Action invalid !';
+            }
+            console.log(req.body);
         } catch (error) {
             console.log(error);
             return internalServer(req, res);

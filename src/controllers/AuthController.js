@@ -111,6 +111,7 @@ class AuthController {
             req.flash('message', message);
             return res.redirect('/home');
         } catch (error) {
+            console.log(error);
             return internalServer(req, res);
         }
     }
@@ -121,6 +122,19 @@ class AuthController {
             return res.json('test');
         } catch (error) {
             console.log(error);
+        }
+    }
+    async logout(req, res) {
+        try {
+            const response = await AuthService.logout(req, res);
+            req.flash('message', response);
+            if (response.err === 1) {
+                res.redirect('back');
+            }
+            res.redirect('/');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
         }
     }
 }

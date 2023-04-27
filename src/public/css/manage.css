@@ -421,11 +421,13 @@ a {
     width: 14rem;
     font-size: 1.4rem;
     border-radius: 1rem;
+    cursor: pointer;
 }
-.selectAction .select-Action option {
+.selectAction .select-Action > option {
     font-size: 1.4rem;
     color: black;
     text-align: center;
+    cursor: pointer;
 }
 .selectAction .submit {
     background-color: var(--blue);
@@ -511,7 +513,9 @@ a {
     position: absolute;
     left: 40%;
 }
-
+.selectAction .submit:disabled {
+    opacity: 0.6;
+}
 .pagination a {
     color: var(--grey);
     font-size: 1.4rem;
@@ -524,13 +528,12 @@ a {
 
 /* MODAL BOX START*/
 #modal {
+    display: none;
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 1001;
-    display: flex;
     justify-content: center;
-
     background: rgb(0, 0, 0, 0.6);
 }
 #modal .modal-content {

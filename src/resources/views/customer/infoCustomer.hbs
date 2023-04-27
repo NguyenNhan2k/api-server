@@ -35,7 +35,7 @@
             class='form'
             enctype='multipart/form-data'
             id='form-create_customer'
-            action='/customers/update?_method=PATCH'
+            action='/customers/updateByStaff?_method=PATCH'
             method='post'
         >
             <div class='form-group'>
@@ -46,7 +46,7 @@
                     <img src='/img/user/{{customer.url_img}}' alt='Loading...' class='img' />
                 </div>
                 <div class='form-ground__img'>
-                    <input type='file' id='url_img' name='url_img' value='user.png' class='image' accept='png' />
+                    <input type='file' id='url_img' name='url_img' value='user.png' class='image' />
                     <label for='url_img'>Avatar
                         <i class='fa-solid fa-upload'></i>
                     </label>
@@ -64,6 +64,7 @@
                             value='{{customer.fullName}}'
                             aria-autocomplete='none'
                         />
+                        <input type='text' id='id' name='id' value='{{customer.id}}' hidden />
                         <span class='span-message'></span>
                     </div>
                     <div class='form-group'>

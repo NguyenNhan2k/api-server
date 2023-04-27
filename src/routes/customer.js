@@ -20,10 +20,15 @@ router.get('/profile', customerController.index);
 router.get('/account', customerController.indexAccount);
 
 router.get('/create', authStaff, customerController.indexCreate);
+router.get('/trash', authStaff, customerController.indexTrash);
+router.get('/restore/:id', authStaff, customerController.restore);
 router.get('/:id', authStaff, customerController.indexInfoCustomer);
-router.get('/', authStaff, customerController.getAll);
+router.get('/', authStaff, customerController.indexCustomers);
 
+router.post('/handel-form-actions', authStaff, customerController.handelAction);
 router.post('/create', upload.single('url_img'), authStaff, customerController.create);
-router.patch('/update', upload.single('url_img'), customerController.update);
-
+router.patch('/update', upload.single('url_img'), customerController.updateProfile);
+router.patch('/updateByStaff', upload.single('url_img'), customerController.updateByStaff);
+router.delete('/destroy/:id', customerController.destroy);
+router.delete('/force/:id', customerController.force);
 module.exports = router;

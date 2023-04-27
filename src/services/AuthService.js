@@ -30,7 +30,10 @@ class AuthService {
         try {
             var massage;
             const { email, password } = await user;
-            const userModel = await db.Users.findOne({ where: { email } });
+            let userModel = await db.Users.findOne({ where: { email, login_type: 'local' } });
+            if (!userModel) {
+                userModel = await db.Staffs.findOne({ where: { email } });
+            }
             if (!userModel) {
                 massage = await {
                     err: 1,
@@ -39,8 +42,7 @@ class AuthService {
                 };
                 return massage;
             }
-            const { dataValues } = await userModel;
-            const isPwd = await matchPwd(password, dataValues.password);
+            const isPwd = await matchPwd(password, userModel.dataValues.password);
             if (!isPwd) {
                 massage = await {
                     err: 1,
@@ -49,9 +51,8 @@ class AuthService {
                 };
                 return massage;
             }
-            const accessToken = await signAccessToken(dataValues);
-            const refreshToken = await signRefreshToken(dataValues);
-
+            const accessToken = await signAccessToken(userModel.dataValues);
+            const refreshToken = await signRefreshToken(userModel.dataValues);
             userModel.refresh_token = await refreshToken;
             await userModel.save();
             massage = await {
@@ -65,10 +66,11 @@ class AuthService {
             };
             return massage;
         } catch (error) {
+            console.log(error);
             return {
                 err: 1,
                 type: 'warning',
-                mes: error,
+                mes: 'Loggin fail!',
             };
         }
     }
@@ -115,6 +117,37 @@ class AuthService {
             // const accessToken = await signAccessToken(user);
             // return accessToken;
         } catch (error) {
+            return message;
+        }
+    }
+    async logout(req, res) {
+        let message = {
+            type: 'warning',
+            err: 1,
+            mes: 'Logout Fail !',
+        };
+        try {
+            const { id } = await req.user;
+            let user = await db.Users.findOne({ where: { id } });
+            if (!user) {
+                user = await db.Staffs.findOne({ where: { id } });
+            }
+            if (!user) {
+                return message;
+            }
+            console.log(user);
+            user.refresh_token = await null;
+            await user.save();
+            res.clearCookie('accessToken', { path: '/' });
+            res.clearCookie('refreshToken', { path: '/' });
+            res.clearCookie('user', { path: '/' });
+            return (message = {
+                type: 'success',
+                err: 0,
+                mes: 'Logout in success !',
+            });
+        } catch (error) {
+            console.log(error);
             return message;
         }
     }

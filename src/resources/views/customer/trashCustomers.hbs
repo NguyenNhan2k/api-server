@@ -1,0 +1,101 @@
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Customers</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='#'>Customers</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='#'>Trash</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class="fa-solid fa-arrow-left add"></i>
+                    <a href='/customers'>Quay lại</a>
+                </button>
+            </div>
+            <div class='table_sidebar--search'>
+                <form method="get" action="/customers" class='header-search'>
+                    <input type='text' class='search-input' id='search' name="search" placeholder='Searching...' />
+                    <button type="submit"> <i  class='fa-solid fa-magnifying-glass'></i></button>
+                </form>
+            </div>
+        </div>
+        <form method="post" action="/customers/handel-form-actions">
+            <div class='selectAction'>
+                <div class='form-checkAll'>
+                    <input type='checkbox' id='checkAll' class='form-checkAll-input' />
+                    <label for='checkAll' class='label-form-checkAll'>Chọn tất cả</label>
+                </div>
+                <select name='actions' class='select-Action' id='action' required>
+                    <option value=''>-- Hành động --</option>
+                    <option value='restore'>Khôi phục</option>
+                    <option value='force'>Xóa</option>
+                </select>
+                <button type='submit' class='submit' disabled>Thực hiện</button>
+            </div>  
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>STT</th>
+                    <th>Name {{{sortable 'fullName' _sort _page}}}</th>
+                    <th>Phone  {{{sortable 'phone' _sort _page}}}</th>
+                    <th>Email  {{{sortable 'email' _sort _page}}}</th>
+                    <th>Address {{{sortable 'address' _sort _page}}}</th>
+                     <th>Ngày xóa {{{sortable 'destroyTime' _sort _page}}}</th>
+                    <th>Khôi phục</th>
+                    <th>Xóa</th>
+                </tr>
+                {{#if customers}}
+                    {{#each customers}}
+                    <tr>
+                        <td>
+                            <div class='form-checkAll'>
+                                <input type='checkbox' id='' value='{{this.id}}' name='customers[]' class='form-check-input' />
+                            </div>
+                        </td>
+                        <td>{{autoIncrement @index 1}}</td>
+                        <td>{{this.fullName}}</td>
+                        <td>{{#if this.phone}} {{this.phone}}{{else}}null{{/if}}</td>
+                        <td>{{ this.email}}</td>
+                        <td>{{{this.address}}}</td>
+                        <td>{{{this.destroyTime}}}</td>
+                        <td>
+                            <a href='/customers/restore/{{this.id}}'><i class="fa-solid fa-rotate-left"></i></a>
+                        </td>
+                        <td>
+                            <button id='delete-customer' data-table="customers" data-actions="force" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                {{else}}
+                    <td colspan='10'>Bạn chưa có khách nào?</t>
+                {{/if}}
+            </table>        
+            <div class='pagination'>    
+            {{{pageView _page countPage}}}
+            </div>
+        </form>
+    </div>
+</main>
+<form id="deleteOne" method="post"></form>
+<script src="/js/manage.js"></script>                           
+<script>
+    closeModal('.close','.btn-secondary','#delete-customer', 'Xóa vĩnh viễn','Bạn có chắc chắn muốn xóa trường này?');
+    handelCheckedBox('input[name="customers[]"]:checked');
+</script>

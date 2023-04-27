@@ -16,7 +16,7 @@ function route(app) {
     app.use(authAccessToken);
     app.use('/customers', customerRoute);
     app.use('/manage', authStaff, manageRoute);
-    app.use('/staff', authStaff, staffRoute);
+    app.use('/staffs', authStaff, staffRoute);
     //  app.use('/customer', authStaff, customerRoute);
 
     app.use(notFound);

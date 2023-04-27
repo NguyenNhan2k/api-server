@@ -13,6 +13,7 @@ module.exports = {
             email: {
                 type: Sequelize.STRING,
                 require: true,
+                unique: true,
             },
             password: {
                 type: Sequelize.STRING,
@@ -25,7 +26,7 @@ module.exports = {
                 defaultValue: 'user.png',
             },
             phone: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING,
             },
             id_role: {
                 type: Sequelize.STRING,

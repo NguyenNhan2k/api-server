@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 const { v4: uuid } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model {
+    class Customer extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            User.belongsTo(models.Role, { foreignKey: 'id_role', targetKey: 'code', as: 'role' });
+            Customer.belongsTo(models.Role, { foreignKey: 'id_role', targetKey: 'code', as: 'role' });
         }
     }
-    User.init(
+    Customer.init(
         {
             fullName: DataTypes.STRING,
             email: {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             password: DataTypes.STRING,
             address: DataTypes.STRING,
-            phone: DataTypes.NUMBER,
+            phone: DataTypes.STRING,
             login_type: DataTypes.STRING,
             id_google: DataTypes.STRING,
             url_img: DataTypes.STRING,
@@ -38,11 +38,11 @@ module.exports = (sequelize, DataTypes) => {
             sequelize,
             paranoid: true,
             deletedAt: 'destroyTime',
-            modelName: 'Users',
+            modelName: 'Customers',
         },
     );
-    User.beforeCreate((user, _) => {
+    Customer.beforeCreate((user, _) => {
         return (user.id = uuid());
     });
-    return User;
+    return Customer;
 };

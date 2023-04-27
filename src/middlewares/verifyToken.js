@@ -18,9 +18,7 @@ const signRefreshToken = async (payload) => {
 const authAccessToken = async (req, res, next) => {
     try {
         const token = await req.cookies.accessToken;
-        const refreshToken = await req.cookies.refreshTokenToken;
         const newToken = (await token) ? token.split(' ')[1] : undefined;
-        const newRefreshToken = (await token) ? token.split(' ')[1] : undefined;
         if (!newToken) return res.redirect('back');
         jwt.verify(newToken, process.env.KEY_ACCESS_TOKEN, async (err, decode) => {
             // if (err.name === 'TokenExpiredError' && err.message === 'jwt expired') {

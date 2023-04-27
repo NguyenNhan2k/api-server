@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { authAccessToken } = require('../middlewares/verifyToken');
 const authController = require('../controllers/AuthController');
-const { verifyRefreshToken } = require('../middlewares/verifyToken');
+
 const passport = require('passport');
 
 router.get('/login', authController.indexLogin);
@@ -17,7 +18,7 @@ router.get(
     },
     authController.indexAuthGg,
 );
-
+router.get('/v1/logout', authAccessToken, authController.logout);
 router.post('/v1/register', authController.register);
 router.post('/v1/login', authController.login);
 router.post('/v1/refresh-token', authController.refreshToken);
