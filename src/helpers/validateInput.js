@@ -1,6 +1,8 @@
 const joi = require('joi');
-
+const staffs = joi.array().required();
+const actions = joi.string().required();
 const fullName = joi.string().min(3).max(30).required();
+const name = joi.string().min(3).max(30).required();
 const url_img = joi.string();
 const password = joi.string().min(6).required();
 const phone = joi.string().required();
@@ -38,11 +40,20 @@ const userJoi = joi.object({
     id,
 });
 const customerJoi = joi.object({ password, phone, fullName, address, email, confirmPwd });
+const storeJoi = joi.object({ phone, name, email });
+const storeUpdateJoi = joi.object({ phone, name, email, id });
 const customerUpdateJoi = joi.object({ phone, fullName, address, email });
+const handelAction = joi.object({
+    staffs,
+    actions,
+});
 module.exports = {
     registerSchema,
     loginSchema,
     userJoi,
     customerJoi,
     customerUpdateJoi,
+    handelAction,
+    storeJoi,
+    storeUpdateJoi,
 };

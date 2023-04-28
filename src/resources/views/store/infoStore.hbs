@@ -1,0 +1,97 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Customers</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/staffs'>Stores</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/Staffs'>Info</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/customers'>Trở về</a>
+                </button>
+            </div>
+        </div>
+        <form class='form' id='form-create_customer' action='/stores/update?_method=PATCH' method='post'>
+            <div class='form-group'>
+                <p class='form-login__title'>Info Store</p>
+            </div>
+            <div class='form-input'>
+                <div class='form-first'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Full Name</label>
+                        <input
+                            type='text'
+                            name='name'
+                            id='name'
+                            rules='require'
+                            value='{{store.name}}'
+                            aria-autocomplete='none'
+                        />
+                        <input
+                            type='text'
+                            name='id'
+                            id='id'
+                            rules='require'
+                            value='{{store.id}}'
+                            aria-autocomplete='none'
+                            hidden
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Email</label>
+                        <input
+                            type='email'
+                            name='email'
+                            id='email'
+                            rules='require|isEmail'
+                            value='{{store.email}}'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Phone</label>
+                        <input
+                            type='phone'
+                            name='phone'
+                            id='phone'
+                            rules='require'
+                            value='{{store.phone}}'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <button class='submit' type='submit'>Submit</button>
+            </div>
+        </form>
+    </div>
+</main>
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script>
+    validator('#form-create_customer'); handleImage();
+</script>

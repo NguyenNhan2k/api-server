@@ -6,7 +6,7 @@ class AuthService {
     async register(req, res) {
         try {
             const { fullName, password, email } = await req.body;
-            const [user, created] = await db.Users.findOrCreate({
+            const [user, created] = await db.Customers.findOrCreate({
                 where: { email },
                 defaults: {
                     fullName,
@@ -30,7 +30,7 @@ class AuthService {
         try {
             var massage;
             const { email, password } = await user;
-            let userModel = await db.Users.findOne({ where: { email, login_type: 'local' } });
+            let userModel = await db.Customers.findOne({ where: { email, login_type: 'local' } });
             if (!userModel) {
                 userModel = await db.Staffs.findOne({ where: { email } });
             }
@@ -112,7 +112,7 @@ class AuthService {
         try {
             // const refreshToken = await verifyRefreshToken(token);
             // if (!refreshToken) message;
-            // const { dataValues: user } = await db.Users.findOne({ where: { id: refreshToken.user.id } });
+            // const { dataValues: user } = await db.Customers.findOne({ where: { id: refreshToken.user.id } });
             // if (!refreshToken.token === user.refresh_token) return message;
             // const accessToken = await signAccessToken(user);
             // return accessToken;
@@ -128,7 +128,7 @@ class AuthService {
         };
         try {
             const { id } = await req.user;
-            let user = await db.Users.findOne({ where: { id } });
+            let user = await db.Customers.findOne({ where: { id } });
             if (!user) {
                 user = await db.Staffs.findOne({ where: { id } });
             }

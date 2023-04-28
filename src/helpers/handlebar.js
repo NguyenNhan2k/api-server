@@ -46,4 +46,8 @@ module.exports = {
     autoIncrement: (preIndex, index) => {
         return preIndex + index;
     },
+    convertToDate: (date) => {
+        const result = new Date(date);
+        return result.toLocaleString();
+    },
 };

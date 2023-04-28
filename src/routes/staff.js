@@ -14,10 +14,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 router.get('/create', staffController.indexCreate);
+router.get('/trash', staffController.indexTrash);
+router.get('/restore/:id', staffController.restore);
 router.get('/:id', staffController.indexInfoStaff);
 router.get('/', staffController.indexStaff);
 
+router.post('/handel-form-actions', staffController.handelAction);
 router.post('/create', upload.single('url_img'), staffController.create);
 router.patch('/update', upload.single('url_img'), staffController.update);
 router.delete('/destroy/:id', staffController.destroy);
+router.delete('/force/:id', staffController.force);
 module.exports = router;

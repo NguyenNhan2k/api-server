@@ -2,14 +2,14 @@
 <main>
     <div class='head-title'>
         <div class='left'>
-            <h1>Customers</h1>
+            <h1>Stores</h1>
             <ul class='breadcrumb'>
                 <li>
                     <a href='#'>Dashboard</a>
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
-                    <a href='/customers'>Staffs</a>
+                    <a href='/stores'>Stores</a>
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
@@ -27,35 +27,25 @@
             <div class='table_sidebar--add'>
                 <button>
                     <i class='fa-solid fa-arrow-left add'></i>
-                    <a href='/staff'>Trở về</a>
+                    <a href='/store'>Trở về</a>
+
                 </button>
             </div>
         </div>
-        <form class='form' id='form-create_customer' method='post' action='/staffs/create'>
+        <form class='form' id='form-create_customer' method='post' action='/stores/create'>
             <div class='form-group'>
-                <p class='form-login__title'>Add staffs</p>
-            </div>
-            <div class='profile-nav'>
-                <div class='profile-nav_user'>
-                    <img src='/img/google.png' alt='Loading...' class='img' />
-                </div>
-                <div class='form-ground__img'>
-                    <input type='file' id='url_img' name='url_img' class='image' accept='png' />
-                    <label for='url_img'>Avatar
-                        <i class='fa-solid fa-upload'></i>
-                    </label>
-                </div>
+                <p class='form-login__title'>ADD STORE</p>
             </div>
             <div class='form-input'>
                 <div class='form-first'>
                     <div class='form-group'>
-                        <label for='' class='label-group'>Full Name</label>
+                        <label for='' class='label-group'>Name</label>
                         <input
                             type='text'
-                            name='fullName'
-                            id='fullName'
+                            name='name'
+                            id='name'
                             rules='require'
-                            placeholder='NGUYEN VAN A'
+                            placeholder='Tên Quán Ăn...'
                             aria-autocomplete='none'
                         />
                         <span class='span-message'></span>
@@ -84,45 +74,6 @@
                         />
                         <span class='span-message'></span>
                     </div>
-                </div>
-                <div class='form-second'>
-                    <div class='form-group'>
-                        <label for='' class='label-group'>Address</label>
-                        <input
-                            type='address'
-                            name='address'
-                            id='address'
-                            rules='require'
-                            placeholder='Nhập địa chỉ hiện tại'
-                            aria-autocomplete='none'
-                        />
-                        <span class='span-message'></span>
-                    </div>
-                    <div class='form-group'>
-                        <label for='' class='label-group'>Password</label>
-                        <input
-                            type='password'
-                            name='password'
-                            rules='require'
-                            id='password'
-                            placeholder='Your password'
-                        />
-                        <i class='fa-solid fa-eye icon-hidden'></i>
-                        <span class='span-message'></span>
-                    </div>
-                    <div class='form-group'>
-                        <label for='' class='label-group'>Confirm</label>
-                        <input
-                            type='password'
-                            name='confirmPwd'
-                            rules='require|isConfirmed'
-                            id='confirm-pwd'
-                            placeholder='Your password'
-                        />
-                        <i class='fa-solid fa-eye icon-hidden'></i>
-                        <span class='span-message'></span>
-                    </div>
-
                 </div>
             </div>
             <div class='form-group'>

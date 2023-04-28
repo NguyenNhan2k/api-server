@@ -4,40 +4,31 @@ const op = Sequelize.Op;
 const db = require('../models');
 const { hashPassword } = require('../helpers/hashPwd');
 const { object } = require('joi');
-class StaffService {
+class StoreService {
     async create(payload) {
-        const option = {
-            raw: true,
-            nest: true,
-            attributes: {
-                exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
-            },
-        };
         var message = {
             err: 1,
             mes: 'Hành động thất bại!',
             type: 'warning',
         };
         try {
-            const { email, password, phone, fullName, address, url_img } = await payload;
-            const [user, created] = await db.Staffs.findOrCreate({
-                where: { email },
+            const { email, phone, name } = await payload;
+            const [user, created] = await db.Stores.findOrCreate({
+                where: { email, phone, name },
                 defaults: {
-                    fullName,
+                    name,
                     email,
                     phone,
-                    address,
-                    url_img,
-                    password: hashPassword(password),
                 },
-                ...option,
+                raw: true,
+                nest: true,
             });
             if (!created) {
-                message.mes = await 'Staff is already registered!';
+                message.mes = await 'Store is already created!';
                 return message;
             }
             message.err = await 0;
-            message.mes = await 'Create Staff successfully';
+            message.mes = await 'Create store successfully';
             message.type = await 'success';
             return message;
         } catch (error) {
@@ -55,28 +46,17 @@ class StaffService {
             if (!id) {
                 return message;
             }
-            const staff = await db.Staffs.findOne({
+            const store = await db.Stores.findOne({
                 where: { id },
-                attributes: {
-                    exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
-                },
-                include: {
-                    model: db.Role,
-                    as: 'role',
-                    raw: true,
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt'],
-                    },
-                },
                 raw: true,
                 nest: true,
             });
-            if (staff) {
+            if (store) {
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    staff: staff,
+                    store,
                 });
             }
             return message;
@@ -95,16 +75,6 @@ class StaffService {
             const offset = (await !page) || +page < 1 ? 0 : +page - 1;
             const limit = await process.env.QUERY_LIMIT;
             const queries = await {
-                attributes: {
-                    exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
-                },
-                include: {
-                    model: db.Role,
-                    as: 'role',
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt'],
-                    },
-                },
                 raw: true,
                 nest: true,
             };
@@ -122,17 +92,14 @@ class StaffService {
             }
             queries.offset = (await offset) * limit;
             queries.limit = await +limit;
-            const { count, rows } = await db.Staffs.findAndCountAll({
+            const { count, rows } = await db.Stores.findAndCountAll({
                 ...queries,
             });
-            const countDeleted = await db.Staffs.findAndCountAll({
+            const countDeleted = await db.Stores.findAndCountAll({
                 where: {
                     destroyTime: {
                         [op.not]: null,
                     },
-                },
-                attributes: {
-                    exclude: ['password', 'refresh_token', 'createdAt', 'updatedAt', 'id_role'],
                 },
                 paranoid: false,
                 raw: true,
@@ -143,7 +110,7 @@ class StaffService {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    staffs: rows,
+                    stores: rows,
                     countPage,
                     countDeleted: countDeleted.count,
                 });
@@ -161,7 +128,7 @@ class StaffService {
             type: 'warning',
         };
         try {
-            const deletedCustomers = await db.Staffs.destroy({
+            const deletedCustomers = await db.Stores.destroy({
                 where: {
                     id,
                 },
@@ -177,31 +144,25 @@ class StaffService {
             return message;
         }
     }
-    async update({ id, ...body }, file) {
-        let message;
+    async update({ id, ...payload }) {
+        let message = {
+            err: 1,
+            type: 'warning',
+            mes: 'Update store fail !',
+        };
         try {
-            const user = await {
-                ...body,
-                ...(file ? { url_img: file.filename } : {}),
-            };
-            if (file) {
-                const getImgUser = await db.Staffs.findByPk(id);
-                const pathUrlImg = await `${file.destination}/${getImgUser.dataValues.url_img}`;
-                await fs.remove(pathUrlImg);
+            const userUpdate = await db.Stores.update(payload, { where: { id }, returning: true });
+            if (!userUpdate) {
+                return message;
             }
-            const userUpdate = await db.Staffs.update(user, { where: { id }, returning: true });
             return (message = {
                 err: 0,
                 type: 'success',
-                mes: 'Update user successfully!',
+                mes: 'Update store successfully!',
             });
         } catch (error) {
             console.log(error);
-            return (message = {
-                err: 1,
-                type: 'warning',
-                mes: 'Update staff fail !',
-            });
+            return message;
         }
     }
     async restore(id) {
@@ -212,7 +173,7 @@ class StaffService {
         };
         try {
             console.log(id);
-            const deletedCustomers = await db.Staffs.restore({
+            const deletedCustomers = await db.Stores.restore({
                 where: {
                     id,
                 },
@@ -235,7 +196,7 @@ class StaffService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Staffs.destroy({
+            const deleted = await db.Stores.destroy({
                 where: {
                     id,
                 },
@@ -259,7 +220,7 @@ class StaffService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Staffs.destroy({
+            const deleted = await db.Stores.destroy({
                 where: {
                     id: arrId,
                 },
@@ -282,7 +243,7 @@ class StaffService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Staffs.destroy({
+            const deleted = await db.Stores.destroy({
                 where: {
                     id: arrId,
                 },
@@ -306,7 +267,7 @@ class StaffService {
             type: 'warning',
         };
         try {
-            const restored = await db.Staffs.restore({
+            const restored = await db.Stores.restore({
                 where: {
                     id: arrId,
                 },
@@ -324,4 +285,4 @@ class StaffService {
     }
 }
 
-module.exports = new StaffService();
+module.exports = new StoreService();

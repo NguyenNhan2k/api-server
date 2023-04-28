@@ -1,4 +1,4 @@
-const { customerJoi, userJoi } = require('../helpers/validateInput');
+const { customerJoi, userJoi, handelAction } = require('../helpers/validateInput');
 const staffService = require('../services/StaffService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
 const { equal, defaults } = require('joi');
@@ -56,6 +56,25 @@ class StaffController {
             return internalServer(req, res);
         }
     }
+    async indexTrash(req, res) {
+        try {
+            const { type, column, page } = await req.query;
+            const order = type && column ? [column, type] : [];
+            const deleted = false;
+            const response = await staffService.getAll({ page, order, deleted });
+            const message = await req.flash('message')[0];
+            return res.render('staff/trashStaff', {
+                layout: 'manage',
+                active: 'staff',
+                staffs: response.staffs,
+                countPage: response.countPage,
+                message,
+            });
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
     async create(req, res) {
         try {
             const { id } = await req.user;
@@ -99,6 +118,61 @@ class StaffController {
             const response = await staffService.destroy(customerId);
             req.flash('message', response);
             res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async restore(req, res) {
+        const message = {};
+        try {
+            const staffId = await req.params.id;
+            const response = await staffService.restore(staffId);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async force(req, res) {
+        const message = {};
+        try {
+            const staffId = await req.params.id;
+            const response = await staffService.force(staffId);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async handelAction(req, res) {
+        const message = {};
+        try {
+            const { actions, staffs } = await req.body;
+
+            if (!actions || staffs.length < 0) {
+                return badRequest(req, res, 'Input invalid !');
+            }
+            switch (actions) {
+                case 'delete':
+                    const resDeleted = await staffService.destroyMutiple(staffs);
+                    req.flash('message', resDeleted);
+                    res.redirect('back');
+                    break;
+                case 'restore':
+                    const resRestore = await staffService.restoreMutiple(staffs);
+                    req.flash('message', resRestore);
+                    res.redirect('back');
+                    break;
+                case 'force':
+                    const resForce = await staffService.forceMutiple(staffs);
+                    req.flash('message', resForce);
+                    res.redirect('back');
+                    break;
+                    defaults: message.mes = 'Action invalid !';
+            }
         } catch (error) {
             console.log(error);
             return internalServer(req, res);
