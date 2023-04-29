@@ -1,0 +1,66 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Categories</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/categories'>Categories</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/categories'>Create</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/categories'>Trở về</a>
+                </button>
+            </div>
+        </div>
+        <form class='form' id='form-create_customer' method='post' action='/categories/create'>
+            <div class='form-group'>
+                <p class='form-login__title'>ADD NEW</p>
+            </div>
+
+            <div class='form-input'>
+                
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Name</label>
+                        <input
+                            type='text'
+                            name='name'
+                            id='name'
+                            rules='require'
+                            placeholder='Danh mục...'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+
+            </div>
+            <div class='form-group'>
+                <button class='submit' type='submit'>Submit</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script src='/js/manage.js'></script>
+<script>
+    validator('#form-create_customer'); handleImage();
+</script>

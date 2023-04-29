@@ -7,6 +7,8 @@ const customerRoute = require('./customer.js');
 const manageRoute = require('./manage.js');
 const staffRoute = require('./staff.js');
 const storeRoute = require('./store.js');
+const branchRoute = require('./branch.js');
+const categoryRoute = require('./category.js');
 function route(app) {
     // app.use(userName);
     app.use(sort);
@@ -19,6 +21,9 @@ function route(app) {
     app.use('/manage', authStaff, manageRoute);
     app.use('/staffs', authStaff, staffRoute);
     app.use('/stores', authStaff, storeRoute);
+    app.use('/branchs', authStaff, branchRoute);
+    app.use('/categories', authStaff, categoryRoute);
+
     //  app.use('/customer', authStaff, customerRoute);
 
     app.use(notFound);

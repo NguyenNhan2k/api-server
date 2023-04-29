@@ -84,9 +84,7 @@ class StaffController {
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-
             const response = await staffService.create(req.body);
-            console.log(response);
             req.flash('message', response);
             return res.status(200).redirect('back');
         } catch (error) {

@@ -147,7 +147,6 @@ class CustomerController {
         try {
             const img = await await req.file;
             const { error, value } = await customerJoi.validate(req.body);
-            console.log(img);
             if (error) {
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);

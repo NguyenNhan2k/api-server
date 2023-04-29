@@ -1,0 +1,141 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Customers</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/branchs'>Branchs</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/customers'>Create</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/branchs'>Trở về</a>
+                </button>
+            </div>
+        </div>
+        <form class='form' id='form-create_customer' method='post' action='/branchs/create'   enctype='multipart/form-data'>
+            <div class='form-group'>
+                <p class='form-login__title'>ADD NEW</p>
+            </div>
+            <div class='profile-nav'>
+                <div class='profile-nav_user'>
+                    <img src='/img/google.png' alt='Loading...' class='img' />
+                </div>
+                <div class='form-ground__img'>
+                    <input type='file' id='avatar' name='avatar' class='image' accept='png' />
+                    <label for='avatar'>Avatar
+                        <i class='fa-solid fa-upload'></i>
+                    </label>
+                </div>
+            </div>
+            <div class='form-input'>
+                <div class='form-first'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Branch</label>
+                        <input
+                            type='text'
+                            name='name'
+                            id='name'
+                            rules='require'
+                            placeholder='Tên chi nhánh 1'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Start time</label>
+                        <input
+                            type='time'
+                            name='startTime'
+                            class='startTime'
+                            id='startTime'
+                            rules='require'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                    <label for='' class='label-group'>Tỉnh</label>
+                    <select name='province' id='province' >
+                        <option value='Thành phố Cần thơ'>Thành phố Cần thơ</option>
+                    </select>
+                </div>
+                <div class='form-group'>
+                    <label for='' class='label-group'>Tên đường</label>
+                    <input type="text" name='street' id='street'>
+
+                    </input>
+                    <span class='span-message'></span>
+                </div>
+                </div>
+                <div class='form-second'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Stores</label>
+                        <select name='store' id='store'>
+                            {{#if stores}}
+                                {{#each stores}}
+                                    <option value='{{this.name}}'>{{this.name}}</option>
+                                {{/each}}
+                            {{/if}}
+                        </select>
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>End time</label>
+                        <input
+                            type='time'
+                            class='endTime'
+                            name='endTime'
+                            id='endTime'
+                            rules='require'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                      <div class='form-group'>
+                    <label for='' class='label-group' rules='require'>Quận/Huyện</label>
+                    <select name='districts' id='districts'>
+                        <option value="-------">-------Chọn-------</option>
+                    </select>
+                   
+                </div>
+                  <div class='form-group'>
+                    <label for='' class='label-group'>Phường/xã</label>
+                    <select name='wards' id='wards' rules='require'>
+                        <option value="-------">-------Chọn-------</option>
+                    </select> 
+                </div>
+                </div>
+            </div>
+            
+            <div class='form-group'>
+                <button class='submit' type='submit'>Submit</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script src='/js/manage.js'></script>
+<script>
+    getAddress(); validator('#form-create_customer'); handleImage();
+</script>

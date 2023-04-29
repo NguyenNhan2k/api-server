@@ -13,7 +13,13 @@ const email = joi
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required();
 const confirmPwd = joi.ref('password');
-
+const province = joi.string().required();
+const districts = joi.string().required();
+const wards = joi.string().required();
+const street = joi.string().required();
+const store = joi.string().required();
+const startTime = joi.string().required();
+const endTime = joi.string().required();
 const registerSchema = joi.object({
     fullName: joi.string().min(3).max(30).required(),
     password: joi.string().min(6).required(),
@@ -41,8 +47,12 @@ const userJoi = joi.object({
 });
 const customerJoi = joi.object({ password, phone, fullName, address, email, confirmPwd });
 const storeJoi = joi.object({ phone, name, email });
+const baranchJoi = joi.object({ province, districts, wards, street, store, name, startTime, endTime });
+const branchUpdateJoi = joi.object({ province, districts, wards, street, store, name, startTime, endTime, id });
 const storeUpdateJoi = joi.object({ phone, name, email, id });
 const customerUpdateJoi = joi.object({ phone, fullName, address, email });
+const categoryJoi = joi.object({ name });
+const categoryUpdateJoi = joi.object({ name, id });
 const handelAction = joi.object({
     staffs,
     actions,
@@ -56,4 +66,8 @@ module.exports = {
     handelAction,
     storeJoi,
     storeUpdateJoi,
+    baranchJoi,
+    branchUpdateJoi,
+    categoryJoi,
+    categoryUpdateJoi,
 };

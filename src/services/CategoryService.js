@@ -4,31 +4,32 @@ const op = Sequelize.Op;
 const db = require('../models');
 const { hashPassword } = require('../helpers/hashPwd');
 const { object } = require('joi');
-class StoreService {
+class CategoryService {
     async create(payload) {
+        const option = {
+            raw: true,
+            nest: true,
+        };
         var message = {
             err: 1,
             mes: 'Hành động thất bại!',
             type: 'warning',
         };
         try {
-            const { email, phone, name } = await payload;
-            const [user, created] = await db.Stores.findOrCreate({
-                where: { email, phone, name },
+            const { name } = await payload;
+            const [user, created] = await db.Categories.findOrCreate({
+                where: { name },
                 defaults: {
                     name,
-                    email,
-                    phone,
                 },
-                raw: true,
-                nest: true,
+                ...option,
             });
             if (!created) {
-                message.mes = await 'Store is already created!';
+                message.mes = await 'Categori is already registered!';
                 return message;
             }
             message.err = await 0;
-            message.mes = await 'Create store successfully';
+            message.mes = await 'Create Categori successfully';
             message.type = await 'success';
             return message;
         } catch (error) {
@@ -46,20 +47,20 @@ class StoreService {
             if (!id) {
                 return message;
             }
-            const store = await db.Stores.findOne({
+            const category = await db.Categories.findOne({
                 where: { id },
                 raw: true,
                 nest: true,
             });
-            if (store) {
-                return (message = {
-                    err: 0,
-                    mes: 'Hành động thành công!',
-                    type: 'success',
-                    store,
-                });
+            if (!category) {
+                return message;
             }
-            return message;
+            return (message = {
+                err: 0,
+                mes: 'Hành động thành công!',
+                type: 'success',
+                category,
+            });
         } catch (error) {
             console.log(error);
             return message;
@@ -92,10 +93,10 @@ class StoreService {
             }
             queries.offset = (await offset) * limit;
             queries.limit = await +limit;
-            const { count, rows } = await db.Stores.findAndCountAll({
+            const { count, rows } = await db.Categories.findAndCountAll({
                 ...queries,
             });
-            const countDeleted = await db.Stores.findAndCountAll({
+            const countDeleted = await db.Categories.findAndCountAll({
                 where: {
                     destroyTime: {
                         [op.not]: null,
@@ -110,7 +111,7 @@ class StoreService {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    stores: rows,
+                    categories: rows,
                     countPage,
                     countDeleted: countDeleted.count,
                 });
@@ -128,13 +129,16 @@ class StoreService {
             type: 'warning',
         };
         try {
-            const deletedCustomers = await db.Stores.destroy({
+            const deleted = await db.Categories.destroy({
                 where: {
                     id,
                 },
                 raw: true,
                 nest: true,
             });
+            if (!deleted) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -144,21 +148,21 @@ class StoreService {
             return message;
         }
     }
-    async update({ id, ...payload }) {
+    async update(payload) {
         let message = {
             err: 1,
             type: 'warning',
-            mes: 'Update store fail !',
+            mes: 'Update category fail!',
         };
         try {
-            const userUpdate = await db.Stores.update(payload, { where: { id }, returning: true });
-            if (!userUpdate) {
+            const updated = await db.Categories.update(payload, { where: { id: payload.id }, returning: true });
+            if (!updated) {
                 return message;
             }
             return (message = {
                 err: 0,
                 type: 'success',
-                mes: 'Update store successfully!',
+                mes: 'Update category successfully!',
             });
         } catch (error) {
             console.log(error);
@@ -172,14 +176,16 @@ class StoreService {
             type: 'warning',
         };
         try {
-            console.log(id);
-            const deletedCustomers = await db.Stores.restore({
+            const deleted = await db.Categories.restore({
                 where: {
                     id,
                 },
                 raw: true,
                 nest: true,
             });
+            if (!deleted) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Khôi phục thành công!';
             message.type = await 'success';
@@ -196,7 +202,7 @@ class StoreService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Stores.destroy({
+            const force = await db.Categories.destroy({
                 where: {
                     id,
                 },
@@ -204,6 +210,9 @@ class StoreService {
                 raw: true,
                 nest: true,
             });
+            if (!force) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -220,13 +229,16 @@ class StoreService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Stores.destroy({
+            const deleted = await db.Categories.destroy({
                 where: {
                     id: arrId,
                 },
                 raw: true,
                 nest: true,
             });
+            if (!deleted) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -243,7 +255,7 @@ class StoreService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Stores.destroy({
+            const forced = await db.Categories.destroy({
                 where: {
                     id: arrId,
                 },
@@ -251,6 +263,9 @@ class StoreService {
                 raw: true,
                 nest: true,
             });
+            if (!forced) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -267,13 +282,16 @@ class StoreService {
             type: 'warning',
         };
         try {
-            const restored = await db.Stores.restore({
+            const restored = await db.Categories.restore({
                 where: {
                     id: arrId,
                 },
                 raw: true,
                 nest: true,
             });
+            if (!restored) {
+                return message;
+            }
             message.err = await 0;
             message.mes = await 'Khôi phục thành công!';
             message.type = await 'success';
@@ -285,4 +303,4 @@ class StoreService {
     }
 }
 
-module.exports = new StoreService();
+module.exports = new CategoryService();

@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 const { v4: uuid } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
-    class Branch extends Model {
+    class Category extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,30 +10,21 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Branch.belongsTo(models.Stores, { foreignKey: 'id_store', targetKey: 'name', as: 'store' });
         }
     }
-    Branch.init(
+    Category.init(
         {
             name: DataTypes.STRING,
-            province: DataTypes.STRING,
-            district: DataTypes.STRING,
-            ward: DataTypes.STRING,
-            street: DataTypes.STRING,
-            startTime: DataTypes.STRING,
-            endTime: DataTypes.STRING,
-            avatar: DataTypes.STRING,
-            id_store: DataTypes.STRING,
         },
         {
             sequelize,
             paranoid: true,
             deletedAt: 'destroyTime',
-            modelName: 'Branchs',
+            modelName: 'Categories',
         },
     );
-    Branch.beforeCreate((user, _) => {
+    Category.beforeCreate((user, _) => {
         return (user.id = uuid());
     });
-    return Branch;
+    return Category;
 };

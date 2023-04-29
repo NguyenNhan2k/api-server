@@ -1,0 +1,105 @@
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Categories</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='#'>Categories</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <a href='/categories/create'>Thêm</a>
+                    <i class='fa-solid fa-plus add'></i>
+                </button>
+                <button>
+                    <p class='countTrash'>{{countDeleted}}</p>
+                    <i class='fa-solid fa-trash trash'></i><a href='/categories/trash'>Thùng Rác</a>
+                </button>
+            </div>
+            <div class='table_sidebar--search'>
+                <form method="get" action="/categories" class='header-search'>
+                    <input type='text' class='search-input' id='search' name="search" placeholder='Searching...' />
+                    <button type="submit"> <i  class='fa-solid fa-magnifying-glass'></i></button>
+                </form>
+            </div>
+        </div>
+        <form method="post" action="/categories/handel-form-actions" >
+            <div class='selectAction'>
+                <div class='form-checkAll'>
+                    <input type='checkbox' id='checkAll' class='form-checkAll-input' />
+                    <label for='checkAll' class='label-form-checkAll'>Chọn tất cả</label>
+                </div>
+                <select name='actions' class='select-Action' id='action' required>
+                    <option value=''>-- Hành động --</option>
+                    <option value='delete'>Xóa</option>
+                </select>
+                <button type='submit' class='submit' disabled>Thực hiện</button>
+            </div>  
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>STT</th>
+                    <th>Name {{{sortable 'name' _sort _page}}}</th>
+                    
+                    <th>CreatedAt {{{sortable 'createdAt' _sort _page}}}</th>
+                    <th>UpdatedAt{{{sortable 'updatedAt' _sort _page}}}</th>
+                    <th>Xem</th>
+                    <th>Sửa</th>
+                    <th>Xóa</th>
+                </tr>
+                {{#if categories}}
+                    {{#each categories}}
+                    <tr>
+                        <td>
+                            <div class='form-checkAll'>
+                                <input type='checkbox' id='' value='{{this.id}}' name='categories[]' class='form-check-input' />
+                            </div>
+                        </td>
+                        <td>{{autoIncrement @index 1}}</td>
+                        <td>{{this.name}}</td>
+                      
+                        <td>{{convertToDate this.createdAt}}</td>
+                        <td>{{convertToDate this.updatedAt}}</td>
+                        <td>
+                            <a href='/categories/{{this.id}}'><i class='fa-solid fa-eye'></i></a>
+                        </td>
+                        <td>
+                            <a href='/categories/{{this.id}}'><i class='fa-solid fa-pen'></i></a>
+                        </td>
+                        <td>
+                            <button id='delete-categories' data-table = 'categories' data-actions="destroy" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    
+                {{else}}
+                    <td colspan='10'>Bạn chưa có khách nào?</tr>
+                {{/if}}
+            </table>
+             {{#if categories}}
+            <div class='pagination'>    
+            {{{pageView _page countPage}}}
+            </div>  
+            {{/if}}     
+        </form>
+    </div>
+</main>
+<form id="deleteOne" method="post"></form>
+<script src="/js/manage.js"></script>                           
+<script>
+    closeModal('.close','.btn-secondary','#delete-categories','Xóa chi nhánh','Bạn có chắc chắn muốn xóa trường này?');
+    handelCheckedBox('input[name="categories[]"]:checked');
+</script>

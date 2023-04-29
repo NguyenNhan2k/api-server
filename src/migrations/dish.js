@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Branchs', {
+        await queryInterface.createTable('Dishs', {
             id: {
                 allowNull: false,
                 primaryKey: true,
@@ -9,34 +9,30 @@ module.exports = {
             },
             name: {
                 type: Sequelize.STRING,
+                require: true,
+                unique: true,
+            },
+            id_branch: {
+                type: Sequelize.STRING,
+                require: true,
+            },
+            id_categori: {
+                type: Sequelize.STRING,
+            },
+            price: {
+                type: Sequelize.INTEGER,
+                require: true,
             },
             avatar: {
                 type: Sequelize.STRING,
-            },
-            startTime: {
-                type: Sequelize.TIME,
-            },
-            endTime: {
-                type: Sequelize.TIME,
-            },
-            id_store: {
-                type: Sequelize.STRING,
-            },
-            province: {
-                type: Sequelize.STRING,
-                defaultValue: 'Thành phố Cần thơ',
-            },
-            district: {
-                type: Sequelize.STRING,
                 require: true,
             },
-            ward: {
-                type: Sequelize.STRING,
+            sale: {
+                type: Sequelize.INTEGER,
                 require: true,
             },
-            street: {
+            avatar: {
                 type: Sequelize.STRING,
-                require: true,
             },
             createdAt: {
                 allowNull: false,
@@ -54,6 +50,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Branchs');
+        await queryInterface.dropTable('Dishs');
     },
 };

@@ -71,6 +71,64 @@ const formDelete = () => {
         }
     }
 };
+const addDistricts = (arr) => {
+    const districtEle = document.querySelector('#districts');
+    arr.forEach((item) => {
+        const option = document.createElement('option');
+        option.value = item.name;
+        option.setAttribute('class', 'district');
+        option.innerText = item.name;
+        districtEle.add(option);
+    });
+};
+const handelSelectWard = (district) => {
+    const districtEle = document.querySelector('#districts');
+    const wardsEle = document.querySelector('#wards');
+    districtEle.addEventListener('change', (event) => {
+        const valueDistrict = event.target.value;
+
+        for (let i = 0; i < wardsEle.length; i++) {
+            wardsEle.remove(i);
+        }
+
+        const indexDistrict = district.filter((item) => {
+            return item.name == valueDistrict;
+        });
+        indexDistrict[0].wards.forEach((ward) => {
+            const option = document.createElement('option');
+            option.value = ward;
+            option.innerText = ward;
+            wardsEle.add(option);
+        });
+    });
+};
+const getAddress = async () => {
+    try {
+        const response = await fetch('https://provinces.open-api.vn/api/?depth=3');
+        const jsonData = await response.json();
+        const tinhCanTho = jsonData.filter((item) => {
+            if (item.code == 92) {
+                return item;
+            }
+        });
+        const districts = tinhCanTho[0].districts.map((item) => {
+            const wards = item.wards.map((ward) => {
+                return ward.name;
+            });
+            return {
+                name: item.name,
+                codename: item.codename,
+                wards,
+            };
+        });
+        addDistricts(districts);
+        handelSelectWard(districts);
+        console.log(districts);
+    } catch (error) {
+        console.log(error);
+        return 0;
+    }
+};
 const handelCheckedBox = (nameInput) => {
     var submitElement = document.querySelector('.submit');
     var checkAll = document.querySelector('#checkAll');
