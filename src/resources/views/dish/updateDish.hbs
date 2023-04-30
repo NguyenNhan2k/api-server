@@ -1,0 +1,164 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Dishs</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/stores'>Dishs</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/customers'>Update</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table' style='height: 110rem;'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/dishs'>Trở về</a>
+
+                </button>
+            </div>
+        </div>
+        <form class='form' id='form-create_customer' method='post' action='/dishs/update/{{dish.id}}?_method=PATCH' enctype='multipart/form-data'>
+            <div class='form-group'>
+                <p class='form-login__title'>Update</p>
+            </div>
+            <div class='profile-nav'>
+                <div class='profile-nav_user'>
+                    <img src='/img/dish/{{dish.avatar}}' alt='Loading...' class='img' />
+                </div>
+                <div class='form-ground__img'>
+                    <input type='file' id='avatar' name='avatar' class='image' />
+                    <label for='avatar'>Avatar
+                        <i class='fa-solid fa-upload'></i>
+                    </label>
+                </div>
+            </div>
+            <div class='form-input'>
+                <div class='form-first'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Name</label>
+                        <input type='text' name='name' value='{{dish.name}}' id='name' aria-autocomplete='none' />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Price</label>
+                        <input
+                            type='number'
+                            name='price'
+                            id='price'
+                            value='{{dish.price}}'
+                            placeholder='xxx.xxx VND'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Sale</label>
+                        <input
+                            type='number'
+                            value='{{dish.sale}}'
+                            name='sale'
+                            id='sale'
+                            placeholder='xxx %'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                </div>
+                <div class='form-second'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Categories</label>
+                        <select name='id_category' id='id_category'>
+                            <option value='{{dish.category.id}}' selected = "selected">{{dish.category.name}}</option>
+                            {{#if categories}}
+                                {{#each categories}}
+                                    <option value='{{this.id}}'>{{this.name}}</option>
+                                {{/each}}
+                            {{/if}}
+                        </select>
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Branchs</label>
+                        <select name='id_branch' id='id_branch'>
+                          <option value='{{dish.branch.id}}' selected = "selected">{{dish.branch.name}}</option>
+                            {{#if branchs}}
+                                {{#each branchs}}
+                                    <option value='{{this.id}}' >{{this.name}}</option>
+                                {{/each}}
+                            {{/if}}
+                        </select>
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-groud'>
+                        <label
+                            for='description'
+                            class='label-group'
+                            style='font-size: 1.4rem; padding-top: 0.5rem'
+                        >Description</label>
+                        <textarea
+                            name='description'
+                            style=' padding-top: 0.5rem'
+                            class='description'
+                            id='description'
+                            cols='35'
+                            rows='5'
+                        >{{dish.description}}</textarea>
+                    </div>
+
+                </div>
+            </div>
+            <div class='card'>
+                <div class='top'>
+                    <p>Drag & drop image uploading</p>
+                    <button type='button'>Upload</button>
+                </div>
+                <div class='drag-area'>
+                    <span class='visible'>
+                        Drag & drop image here or
+                        <span class='select' role='button'>Browse</span>
+                    </span>
+                    <span class='on-drop'>Drop images here</span>
+                    <input name='images' type='file' class='images' multiple />
+                </div>
+
+                <!-- IMAGE PREVIEW CONTAINER -->
+                <div class='container'>
+                    {{#if dish.image}}
+                    {{#each dish.image}}
+                    <div class="image">
+                    <img src="/img/dish/{{this.image}}" alt="image">
+                    <span onclick="delImage({{@index}})">&times;</span>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <button class='submit' type='submit'>Submit</button>
+            </div>
+
+        </form>
+    </div>
+    <link rel='stylesheet' href='/css/uploadMutipleImg.css' />
+</main>
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script>
+    validator('#form-create_customer'); handleImage(); handleMutipleImage();
+</script>

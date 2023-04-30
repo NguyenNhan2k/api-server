@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Dish.belongsTo(models.Branchs, { foreignKey: 'id_branch', targetKey: 'id', as: 'branch' });
             Dish.belongsTo(models.Categories, { foreignKey: 'id_category', targetKey: 'id', as: 'category' });
+            Dish.hasMany(models.Images, { foreignKey: 'id_dish', as: 'image' });
         }
     }
     Dish.init(
@@ -22,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             price: DataTypes.INTEGER,
             avatar: DataTypes.STRING,
             sale: DataTypes.INTEGER,
-            discription: DataTypes.STRING,
+            description: DataTypes.STRING,
         },
         {
             sequelize,

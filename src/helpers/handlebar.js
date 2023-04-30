@@ -50,4 +50,20 @@ module.exports = {
         const result = new Date(date);
         return result.toLocaleString();
     },
+    convertToVND: (payload) => {
+        const config = { style: 'currency', currency: 'VND' };
+        const formated = new Intl.NumberFormat('vi-VN', config).format(payload);
+        return formated;
+    },
+    sale: (exportPrice, sale) => {
+        const priceSale = (exportPrice * sale) / 100;
+        const priceExport = exportPrice - priceSale;
+        const config = { style: 'currency', currency: 'VND' };
+        const formated = new Intl.NumberFormat('vi-VN', config).format(priceExport);
+        return formated;
+    },
+    defaultSelect: (firt, second) => {
+        console.log(firt, second);
+        return firt == second ? 'selected="selected"' : '';
+    },
 };

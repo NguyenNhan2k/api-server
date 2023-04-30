@@ -51,7 +51,8 @@
     flex-direction: column;
 }
 .form-group input,
-select {
+select,
+textarea {
     height: 60%;
     width: 100%;
     border: 0.1rem solid var(--dark);
@@ -61,6 +62,7 @@ select {
     font-size: 1.6rem;
     padding-left: 1rem;
     border-radius: 0.8rem;
+    cursor: pointer;
     background-color: var(--light);
 }
 .form-group .startTime,

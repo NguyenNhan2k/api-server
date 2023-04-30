@@ -1,0 +1,72 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Customers</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/staffs'>Dishs</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/Staffs'>Info</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table' style='height: 55rem;'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/customers'>Trở về</a>
+                </button>
+            </div>
+        </div>
+
+        <div class='container'>
+            <div class='product-div'>
+                <div class='product-div-left'>
+                    <div class='img-container'>
+                        <img src='/img/dish/{{dish.avatar}}' alt='watch' />
+                    </div>
+                    <div class='hover-container'>
+
+                        {{#if dish.image}}
+                            {{#each dish.image}}
+                                <div><img src='/img/dish/{{this.image}}' /></div>
+                            {{/each}}
+                        {{/if}}
+                    </div>
+                </div>
+                <div class='product-div-right'>
+                    <span class='product-name'>{{dish.name}}</span>
+                    <span class='product-price'>Price: {{convertToVND dish.price}}</span>
+                    <span class='product-sale'>Sale: {{dish.sale}}%</span>
+                    <span class='product-category'>Category: {{dish.category.name}}</span>
+                    <span class='product-address'>{{dish.branch.street}},{{dish.branch.ward}},
+                        {{dish.branch.district}},
+                        {{dish.branch.province}}</span>
+                    <p class='product-description'>{{dish.description}}</p>
+                    <a href="/dishs/update/{{dish.id}}" class='btn-groups'>
+                        <button type='button' class='add-cart-btn'><i class="fa-solid fa-pen"></i></i>Update</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<link rel='stylesheet' href='/css/detailDish.css' />
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script>
+    slideImg(); validator('#form-create_customer'); handleImage();
+</script>
