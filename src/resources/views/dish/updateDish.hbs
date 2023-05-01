@@ -32,7 +32,13 @@
                 </button>
             </div>
         </div>
-        <form class='form' id='form-create_customer' method='post' action='/dishs/update/{{dish.id}}?_method=PATCH' enctype='multipart/form-data'>
+        <form
+            class='form'
+            id='form-create_customer'
+            method='post'
+            action='/dishs/update/{{dish.id}}?_method=PATCH'
+            enctype='multipart/form-data'
+        >
             <div class='form-group'>
                 <p class='form-login__title'>Update</p>
             </div>
@@ -83,7 +89,7 @@
                     <div class='form-group'>
                         <label for='' class='label-group'>Categories</label>
                         <select name='id_category' id='id_category'>
-                            <option value='{{dish.category.id}}' selected = "selected">{{dish.category.name}}</option>
+                            <option value='{{dish.category.id}}' selected='selected'>{{dish.category.name}}</option>
                             {{#if categories}}
                                 {{#each categories}}
                                     <option value='{{this.id}}'>{{this.name}}</option>
@@ -95,10 +101,10 @@
                     <div class='form-group'>
                         <label for='' class='label-group'>Branchs</label>
                         <select name='id_branch' id='id_branch'>
-                          <option value='{{dish.branch.id}}' selected = "selected">{{dish.branch.name}}</option>
+                            <option value='{{dish.branch.id}}' selected='selected'>{{dish.branch.name}}</option>
                             {{#if branchs}}
                                 {{#each branchs}}
-                                    <option value='{{this.id}}' >{{this.name}}</option>
+                                    <option value='{{this.id}}'>{{this.name}}</option>
                                 {{/each}}
                             {{/if}}
                         </select>
@@ -139,14 +145,13 @@
                 <!-- IMAGE PREVIEW CONTAINER -->
                 <div class='container'>
                     {{#if dish.image}}
-                    {{#each dish.image}}
-                    <div class="image">
-                    <img src="/img/dish/{{this.image}}" alt="image">
-                    <span onclick="delImage({{@index}})">&times;</span>
-                    </div>
-                    {{/each}}
+                        {{#each dish.image}}
+                            <div class='image'>
+                                <img src='/img/dish/{{this.image}}' alt='image' />
+                                <span onclick='delImage({{@index}})'>&times;</span>
+                            </div>
+                        {{/each}}
                     {{/if}}
-                </div>
                 </div>
             </div>
             <div class='form-group'>

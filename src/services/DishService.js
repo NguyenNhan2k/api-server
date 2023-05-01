@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const Sequelize = require('sequelize');
 const op = Sequelize.Op;
+
 const db = require('../models');
-const { hashPassword } = require('../helpers/hashPwd');
-const { object } = require('joi');
+const { removeArrImgInFolder, removeAvatarInFolder } = require('../helpers/manage');
 class DishService {
     async create(payload, files) {
         var message = {
@@ -88,6 +88,105 @@ class DishService {
             return message;
         }
     }
+    async findOne(id, deleted = true) {
+        try {
+            const queries = await {
+                where: { id },
+                include: [
+                    {
+                        model: db.Categories,
+                        as: 'category',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Branchs,
+                        as: 'branch',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Images,
+                        as: 'image',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+                raw: false,
+                nest: true,
+            };
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
+            }
+            const dish = await db.Dishs.findOne({
+                ...queries,
+            });
+            return dish.toJSON();
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+    async findAll(arrId, deleted = true) {
+        try {
+            const queries = await {
+                where: { id: arrId },
+                include: [
+                    {
+                        model: db.Categories,
+                        as: 'category',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Branchs,
+                        as: 'branch',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Images,
+                        as: 'image',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+                raw: false,
+                nest: true,
+            };
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
+            }
+            const dishs = await db.Dishs.findAll({
+                ...queries,
+            });
+            const newDishs = await dishs.map((dish) => {
+                return dish.toJSON();
+            });
+            return newDishs;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
     async getOne(id) {
         let message = {
             err: 1,
@@ -147,7 +246,6 @@ class DishService {
             return message;
         }
     }
-
     async getAll({ page, order, deleted = true }) {
         let message = {
             err: 1,
@@ -272,7 +370,7 @@ class DishService {
             if (files && files.images) {
                 // Xóa hình ảnh trong thực đơn ở folder Dish
                 dish.image.forEach((img) => {
-                    const pathIg = `${process.env.PATH_DISH}/img.image`;
+                    const pathIg = `${process.env.PATH_DISH}/${img.image}`;
                     fs.remove(pathIg);
                     imagesOld.push(img.id);
                 });
@@ -320,13 +418,16 @@ class DishService {
         };
         try {
             console.log(id);
-            const deletedCustomers = await db.Dishs.restore({
+            const restore = await db.Dishs.restore({
                 where: {
                     id,
                 },
                 raw: true,
                 nest: true,
             });
+            if (!restore) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Khôi phục thành công!';
             message.type = await 'success';
@@ -343,7 +444,10 @@ class DishService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Dishs.destroy({
+            const delelted = await false;
+            const dish = await this.findOne(id, delelted);
+            const forceImg = await db.Images.destroy({ where: { id_dish: id }, force: true, raw: true, nest: true });
+            const force = await db.Dishs.destroy({
                 where: {
                     id,
                 },
@@ -351,6 +455,12 @@ class DishService {
                 raw: true,
                 nest: true,
             });
+            if (!force || !forceImg || !dish) {
+                return message;
+            }
+            const removeAvatar = await removeAvatarInFolder(dish.avatar, process.env.PATH_DISH);
+            const removeArrImg = await removeArrImgInFolder(dish.image, process.env.PATH_DISH);
+
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -374,6 +484,9 @@ class DishService {
                 raw: true,
                 nest: true,
             });
+            if (!deleted) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -383,6 +496,46 @@ class DishService {
             return message;
         }
     }
+    async forceDestroy(arrId, deleted = true) {
+        try {
+            const queries = await {
+                where: {
+                    id: arrId,
+                },
+                force: true,
+                raw: true,
+                nest: true,
+            };
+
+            const dishs = await db.Dishs.destroy({
+                ...queries,
+            });
+
+            return dishs;
+        } catch (error) {
+            return false;
+        }
+    }
+    async forceImageForDish(arrId) {
+        try {
+            const queries = await {
+                where: {
+                    id: arrId,
+                },
+                force: true,
+                raw: true,
+                nest: true,
+            };
+
+            const dishs = await db.Images.destroy({
+                ...queries,
+            });
+
+            return dishs;
+        } catch (error) {
+            return false;
+        }
+    }
     async forceMutiple(arrId) {
         const message = {
             err: 1,
@@ -390,14 +543,19 @@ class DishService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Dishs.destroy({
-                where: {
-                    id: arrId,
-                },
-                force: true,
-                raw: true,
-                nest: true,
-            });
+            const deleted = await false;
+            const dishArr = await this.findAll(arrId, deleted);
+            const images = dishArr.reduce((acc, cur) => {
+                return [...acc, ...cur.image];
+            }, []);
+
+            const forcedDishs = await this.forceDestroy(arrId);
+            const forcedImages = await this.forceImageForDish(arrId);
+            await removeArrImgInFolder(images, process.env.PATH_DISH);
+
+            if (!forcedDishs && !forcedImages) {
+                return message;
+            }
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -421,6 +579,9 @@ class DishService {
                 raw: true,
                 nest: true,
             });
+            if (!restored) {
+                return message;
+            }
             message.err = await 0;
             message.mes = await 'Khôi phục thành công!';
             message.type = await 'success';

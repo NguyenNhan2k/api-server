@@ -1,7 +1,7 @@
 const { customerJoi, userJoi, storeJoi, storeUpdateJoi } = require('../helpers/validateInput');
 const storeService = require('../services/StoreService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
-
+const { removeAvatarForController } = require('../helpers/manage');
 class StoreController {
     async indexStore(req, res) {
         try {
@@ -37,13 +37,16 @@ class StoreController {
     }
     async create(req, res) {
         try {
-            const { id } = await req.user;
             const { error, value } = await storeJoi.validate(req.body);
+            const file = await req.file;
             if (error) {
+                if (file) {
+                    await removeAvatarForController(file);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await storeService.create(value);
+            const response = await storeService.create(value, file);
             req.flash('message', response);
             return res.status(200).redirect('back');
         } catch (error) {
@@ -92,13 +95,16 @@ class StoreController {
     }
     async update(req, res) {
         try {
-            console.log(req.body, 'o daay');
             const { error, value } = await storeUpdateJoi.validate(req.body);
+            const file = await req.file;
             if (error) {
+                if (file) {
+                    await removeAvatarForController(file);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await c.update(value);
+            const response = await storeService.update(value, file);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {
@@ -134,8 +140,8 @@ class StoreController {
     async force(req, res) {
         const message = {};
         try {
-            const staffId = await req.params.id;
-            const response = await storeService.force(staffId);
+            const storeId = await req.params.id;
+            const response = await storeService.force(storeId);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {

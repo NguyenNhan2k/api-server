@@ -27,14 +27,31 @@
             <div class='table_sidebar--add'>
                 <button>
                     <i class='fa-solid fa-arrow-left add'></i>
-                    <a href='/store'>Trở về</a>
+                    <a href='/stores'>Trở về</a>
 
                 </button>
             </div>
         </div>
-        <form class='form' id='form-create_customer' method='post' action='/stores/create'>
+        <form
+            class='form'
+            id='form-create_customer'
+            method='post'
+            action='/stores/create'
+            enctype='multipart/form-data'
+        >
             <div class='form-group'>
                 <p class='form-login__title'>ADD STORE</p>
+            </div>
+            <div class='profile-nav'>
+                <div class='profile-nav_user'>
+                    <img src='/img/store/store.png' alt='Loading...' class='img' />
+                </div>
+                <div class='form-ground__img'>
+                    <input type='file' id='avatar' name='avatar' class='image' />
+                    <label for='avatar'>Avatar
+                        <i class='fa-solid fa-upload'></i>
+                    </label>
+                </div>
             </div>
             <div class='form-input'>
                 <div class='form-first'>

@@ -79,7 +79,7 @@
                             <a href='/dishs/{{this.id}}'><i class='fa-solid fa-eye'></i></a>
                         </td>
                         <td>
-                            <a href='/dishs/{{this.id}}'><i class='fa-solid fa-pen'></i></a>
+                            <a href='/dishs/update/{{this.id}}'><i class='fa-solid fa-pen'></i></a>
                         </td>
                         <td>
                             <button id='delete-dishs' data-table = 'dishs' data-actions="destroy" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
@@ -91,7 +91,7 @@
                     <td colspan='10'>Bạn chưa có khách nào?</tr>
                 {{/if}}
             </table>
-             {{#if branchs}}
+             {{#if dishs}}
             <div class='pagination'>    
             {{{pageView _page countPage}}}
             </div>  

@@ -519,10 +519,18 @@ a {
 .pagination a {
     color: var(--grey);
     font-size: 1.4rem;
+    margin-left: 0.5rem;
     border-radius: 0.5rem;
+    cursor: pointer;
     padding: 8px 16px;
-    background-color: #007bff;
+    background-color: var(--black);
     text-decoration: none;
+}
+.pagination a:hover {
+    opacity: 0.8;
+}
+.pagination .active {
+    background-color: var(--blue);
 }
 /* CONTENT */
 

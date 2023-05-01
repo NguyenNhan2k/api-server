@@ -17,6 +17,10 @@ module.exports = {
                 require: true,
                 unique: true,
             },
+            avatar: {
+                type: Sequelize.STRING,
+                defaultValue: 'store',
+            },
             phone: {
                 type: Sequelize.STRING,
                 require: true,

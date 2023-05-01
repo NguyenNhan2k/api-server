@@ -1,7 +1,7 @@
 const { storeJoi, storeUpdateJoi, baranchJoi, branchUpdateJoi } = require('../helpers/validateInput');
 const branchService = require('../services/BranchService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
-
+const { removeAvatarForController } = require('../helpers/manage');
 class BranchController {
     async indexBranch(req, res) {
         try {
@@ -43,12 +43,13 @@ class BranchController {
             delete req.body.avatar;
             const { error, value } = await baranchJoi.validate(req.body);
             const file = await req.file;
-            console.log(value, file);
             if (error) {
+                if (file) {
+                    await removeAvatarForController(file);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-
             const response = await branchService.create(value, file);
             req.flash('message', response);
             return res.status(200).redirect('back');
@@ -103,8 +104,10 @@ class BranchController {
             delete req.body.avatar;
             const { error, value } = await branchUpdateJoi.validate(req.body);
             const avatar = await req.file;
-            console.log(avatar);
             if (error) {
+                if (avatar) {
+                    await removeAvatarForController(file);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }

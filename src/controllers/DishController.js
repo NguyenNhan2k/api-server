@@ -1,7 +1,7 @@
 const { storeJoi, storeUpdateJoi, dishJoi } = require('../helpers/validateInput');
 const dishService = require('../services/DishService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
-
+const { removeArrImgForController, removeAvatarForController } = require('../helpers/manage');
 class DishController {
     async indexDish(req, res) {
         try {
@@ -65,8 +65,15 @@ class DishController {
     async create(req, res) {
         try {
             const files = await req.files;
+
             const { error, value } = await dishJoi.validate(req.body);
             if (error) {
+                if (files.avatar) {
+                    await removeAvatarForController(files.avatar[0]);
+                }
+                if (files.images) {
+                    await removeArrImgForController(files.images);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
@@ -105,10 +112,10 @@ class DishController {
             const deleted = false;
             const response = await dishService.getAll({ page, order, deleted });
             const message = await req.flash('message')[0];
-            return res.render('store/trashStore', {
+            return res.render('dish/trashDish', {
                 layout: 'manage',
-                active: 'stores',
-                stores: response.stores,
+                active: 'dishs',
+                dishs: response.dishs,
                 countPage: response.countPage,
                 message,
             });
@@ -123,6 +130,12 @@ class DishController {
             const files = await req.files;
             const { error, value } = await dishJoi.validate(req.body);
             if (error) {
+                if (files.avatar) {
+                    await removeAvatarForController(files.avatar[0]);
+                }
+                if (files.images) {
+                    await removeArrImgForController(files.images);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
@@ -151,8 +164,8 @@ class DishController {
     async restore(req, res) {
         const message = {};
         try {
-            const storeId = await req.params.id;
-            const response = await dishService.restore(storeId);
+            const dishId = await req.params.id;
+            const response = await dishService.restore(dishId);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {
@@ -161,10 +174,18 @@ class DishController {
         }
     }
     async force(req, res) {
-        const message = {};
+        const message = {
+            err: 1,
+            mes: 'Yêu cầu thất bại!',
+            type: 'warning',
+        };
         try {
-            const staffId = await req.params.id;
-            const response = await dishService.force(staffId);
+            const dishsId = await req.params.id;
+            const files = await req.files;
+            if (!dishsId) {
+                return message;
+            }
+            const response = await dishService.force(dishsId);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {
@@ -175,24 +196,24 @@ class DishController {
     async handelAction(req, res) {
         const message = {};
         try {
-            const { actions, stores } = await req.body;
+            const { actions, dishs } = await req.body;
 
-            if (!actions || !stores) {
+            if (!actions || !dishs) {
                 return badRequest(req, res, 'Input invalid !');
             }
             switch (actions) {
                 case 'delete':
-                    const resDeleted = await dishService.destroyMutiple(stores);
+                    const resDeleted = await dishService.destroyMutiple(dishs);
                     req.flash('message', resDeleted);
                     res.redirect('back');
                     break;
                 case 'restore':
-                    const resRestore = await dishService.restoreMutiple(stores);
+                    const resRestore = await dishService.restoreMutiple(dishs);
                     req.flash('message', resRestore);
                     res.redirect('back');
                     break;
                 case 'force':
-                    const resForce = await dishService.forceMutiple(stores);
+                    const resForce = await dishService.forceMutiple(dishs);
                     req.flash('message', resForce);
                     res.redirect('back');
                     break;

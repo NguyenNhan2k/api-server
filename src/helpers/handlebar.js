@@ -31,7 +31,7 @@ module.exports = {
     pageView: (page, countPage) => {
         const indexPage = [];
         for (let i = 1; i < countPage + 1; i++) {
-            indexPage.push(`<a class${page.index == i ? 'active' : ''} href='?page=${i}'>${i}</a>`);
+            indexPage.push(`<a class =${page.index == i ? '"active"' : '""'} href='?page=${i}'>${i}</a>`);
         }
         const prePage = page.index === 1 ? page.index : page.index - 1;
         const nextPage = page.index === countPage ? 1 : page.index + 1;

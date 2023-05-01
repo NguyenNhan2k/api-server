@@ -2,10 +2,10 @@ const fs = require('fs-extra');
 const Sequelize = require('sequelize');
 const op = Sequelize.Op;
 const db = require('../models');
-const { hashPassword } = require('../helpers/hashPwd');
-const { object } = require('joi');
+
+const { removeArrImgInFolderNew, removeAvatarInFolder } = require('../helpers/manage');
 class StoreService {
-    async create(payload) {
+    async create(payload, file) {
         var message = {
             err: 1,
             mes: 'Hành động thất bại!',
@@ -19,6 +19,7 @@ class StoreService {
                     name,
                     email,
                     phone,
+                    ...(file ? { avatar: file.filename } : {}),
                 },
                 raw: true,
                 nest: true,
@@ -144,17 +145,26 @@ class StoreService {
             return message;
         }
     }
-    async update({ id, ...payload }) {
+    async update({ id, ...payload }, file) {
         let message = {
             err: 1,
             type: 'warning',
             mes: 'Update store fail !',
         };
         try {
-            const userUpdate = await db.Stores.update(payload, { where: { id }, returning: true });
-            if (!userUpdate) {
+            const store = await db.Stores.findOne({ where: { id }, raw: true });
+            const storeUpdate = await db.Stores.update(
+                {
+                    ...payload,
+                    ...(file ? { avatar: file.filename } : {}),
+                },
+                { where: { id }, returning: true },
+            );
+
+            if (!storeUpdate || !store) {
                 return message;
             }
+            await removeAvatarInFolder(store.avatar, process.env.PATH_STORE);
             return (message = {
                 err: 0,
                 type: 'success',
@@ -196,6 +206,7 @@ class StoreService {
             type: 'warning',
         };
         try {
+            const store = await db.Stores.findOne({ where: { id }, raw: true, paranoid: false });
             const deleted = await db.Stores.destroy({
                 where: {
                     id,
@@ -204,6 +215,10 @@ class StoreService {
                 raw: true,
                 nest: true,
             });
+            if (!store && !deleted) {
+                return message;
+            }
+            await removeAvatarInFolder(store.avatar, process.env.PATH_STORE);
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';
@@ -243,6 +258,7 @@ class StoreService {
             type: 'warning',
         };
         try {
+            const stores = await db.Stores.findAll({ where: { id: arrId }, raw: true, paranoid: false });
             const deleted = await db.Stores.destroy({
                 where: {
                     id: arrId,
@@ -251,6 +267,13 @@ class StoreService {
                 raw: true,
                 nest: true,
             });
+            if (!stores && !deleted) {
+                return message;
+            }
+            const storeImgs = await stores.map((img) => {
+                return img.avatar;
+            });
+            await removeArrImgInFolderNew(storeImgs, process.env.PATH_STORE);
             message.errr = await 0;
             message.mes = await 'Xóa thành công!';
             message.type = await 'success';

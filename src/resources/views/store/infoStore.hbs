@@ -31,9 +31,26 @@
                 </button>
             </div>
         </div>
-        <form class='form' id='form-create_customer' action='/stores/update?_method=PATCH' method='post'>
+        <form
+            class='form'
+            id='form-create_customer'
+            action='/stores/update?_method=PATCH'
+            method='post'
+            enctype='multipart/form-data'
+        >
             <div class='form-group'>
                 <p class='form-login__title'>Info Store</p>
+            </div>
+            <div class='profile-nav'>
+                <div class='profile-nav_user'>
+                    <img src='/img/store/{{store.avatar}}' alt='Loading...' class='img' />
+                </div>
+                <div class='form-ground__img'>
+                    <input type='file' id='avatar' name='avatar' class='image' />
+                    <label for='avatar'>Avatar
+                        <i class='fa-solid fa-upload'></i>
+                    </label>
+                </div>
             </div>
             <div class='form-input'>
                 <div class='form-first'>

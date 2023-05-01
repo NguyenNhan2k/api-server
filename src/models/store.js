@@ -10,11 +10,13 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Store.hasMany(models.Branchs, { foreignKey: 'id_store', as: 'branchs' });
         }
     }
     Store.init(
         {
             name: DataTypes.STRING,
+            avatar: DataTypes.STRING,
             email: {
                 type: DataTypes.STRING,
                 validate: {

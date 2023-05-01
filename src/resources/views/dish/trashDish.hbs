@@ -1,14 +1,14 @@
 <main>
     <div class='head-title'>
         <div class='left'>
-            <h1>Staffs</h1>
+            <h1>Dishs</h1>
             <ul class='breadcrumb'>
                 <li>
                     <a href='#'>Dashboard</a>
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
-                    <a href='#'>Stores</a>
+                    <a href='#'>Dishs</a>
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
@@ -26,7 +26,7 @@
             <div class='table_sidebar--add'>
                 <button>
                     <i class="fa-solid fa-arrow-left add"></i>
-                    <a href='/stores'>Quay lại</a>
+                    <a href='/dishs'>Quay lại</a>
                 </button>
             </div>
             <div class='table_sidebar--search'>
@@ -36,7 +36,7 @@
                 </form>
             </div>
         </div>
-        <form method="post" action="/stores/handel-form-actions">
+        <form method="post" action="/dishs/handel-form-actions" >
             <div class='selectAction'>
                 <div class='form-checkAll'>
                     <input type='checkbox' id='checkAll' class='form-checkAll-input' />
@@ -44,7 +44,7 @@
                 </div>
                 <select name='actions' class='select-Action' id='action' required>
                     <option value=''>-- Hành động --</option>
-                    <option value='restore'>Khôi phục</option>
+                     <option value='restore'>Khôi phục</option>
                     <option value='force'>Xóa vĩnh viễn</option>
                 </select>
                 <button type='submit' class='submit' disabled>Thực hiện</button>
@@ -54,48 +54,54 @@
                     <th>#</th>
                     <th>STT</th>
                     <th>Name {{{sortable 'name' _sort _page}}}</th>
-                    <th>Phone  {{{sortable 'phone' _sort _page}}}</th>
-                    <th>Email  {{{sortable 'email' _sort _page}}}</th>
+                    <th>Price  {{{sortable 'price' _sort _page}}}</th>
+                    <th>Sale{{{sortable 'sale' _sort _page}}}</th>
+                    <th>Branch{{{sortable 'id_branch' _sort _page}}}</th>
+                    <th>Category{{{sortable 'id_category' _sort _page}}}</th>
                      <th>Ngày xóa {{{sortable 'destroyTime' _sort _page}}}</th>
                     <th>Khôi phục</th>
-                    <th>Xóa</th>
+                   <th>Xóa vĩnh viễn</th>
                 </tr>
-                {{#if stores}}
-                    {{#each stores}}
+                {{#if dishs}}
+                    {{#each dishs}}
                     <tr>
                         <td>
                             <div class='form-checkAll'>
-                                <input type='checkbox' id='' value='{{this.id}}' name='stores[]' class='form-check-input' />
+                                <input type='checkbox' id='' value='{{this.id}}' name='dishs[]' class='form-check-input' />
                             </div>
                         </td>
                         <td>{{autoIncrement @index 1}}</td>
                         <td>{{this.name}}</td>
-                        <td>{{#if this.phone}} {{this.phone}}{{else}}null{{/if}}</td>
-                        <td>{{ this.email}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.sale}}%</td>
+                        <td>{{this.branch.name}}</td>
+                        <td>{{this.category.name}}</td>
                         <td>{{{ convertToDate this.destroyTime}}}</td>
-                        <td>
-                            <a href='/stores/restore/{{this.id}}'><i class="fa-solid fa-rotate-left"></i></a>
+                       <td>
+                            <a href='/dishs/restore/{{this.id}}'><i class="fa-solid fa-rotate-left"></i></a>
                         </td>
+                     
                         <td>
-                            <button id='delete-stores' data-table="stores" data-actions="force" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
+                            <button id='delete-dishs' data-table = 'dishs' data-actions="force" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
                         </td>
                     </tr>
                     {{/each}}
+                    
                 {{else}}
-                    <td colspan='10'>Thùng rác trống ?</t>
+                    <td colspan='10'>Thùng rác trống !</tr>
                 {{/if}}
-            </table> 
-            {{#if stores}}       
+            </table>
+             {{#if branchs}}
             <div class='pagination'>    
             {{{pageView _page countPage}}}
-            </div>
-            {{/if}}
+            </div>  
+            {{/if}}     
         </form>
     </div>
 </main>
 <form id="deleteOne" method="post"></form>
 <script src="/js/manage.js"></script>                           
 <script>
-    closeModal('.close','.btn-secondary','#delete-stores', 'Xóa vĩnh viễn','Bạn có chắc chắn muốn xóa trường này?');
-    handelCheckedBox('input[name="stores[]"]:checked');
+    closeModal('.close','.btn-secondary','#delete-dishs', 'Xóa vĩnh viễn','Bạn có chắc chắn muốn xóa trường này?');
+    handelCheckedBox('input[name="dishs[]"]:checked');
 </script>

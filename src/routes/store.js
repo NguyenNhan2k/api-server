@@ -4,7 +4,7 @@ const multer = require('multer');
 const storeController = require('../controllers/StoreController');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'E:/WorkSpaces/TieuLuan-WebFood/server/src/public/img/user');
+        cb(null, 'E:/WorkSpaces/TieuLuan-WebFood/server/src/public/img/store');
     },
     filename: function (req, file, cb) {
         const arrFileName = file.originalname.split('.');
@@ -20,8 +20,8 @@ router.get('/:id', storeController.indexInfoStore);
 router.get('/', storeController.indexStore);
 
 router.post('/handel-form-actions', storeController.handelAction);
-router.post('/create', storeController.create);
-router.patch('/update', storeController.update);
+router.post('/create', upload.single('avatar'), storeController.create);
+router.patch('/update', upload.single('avatar'), storeController.update);
 router.delete('/destroy/:id', storeController.destroy);
 router.delete('/force/:id', storeController.force);
 module.exports = router;
