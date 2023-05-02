@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Branch.belongsTo(models.Stores, { foreignKey: 'id_store', targetKey: 'name', as: 'store' });
+            Branch.belongsTo(models.Stores, { foreignKey: 'id_store', targetKey: 'id', as: 'store' });
+            Branch.hasMany(models.Rates, { foreignKey: 'id_branch', as: 'rates' });
         }
     }
     Branch.init(

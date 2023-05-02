@@ -101,8 +101,8 @@ class BranchController {
     }
     async update(req, res) {
         try {
-            delete req.body.avatar;
             const { error, value } = await branchUpdateJoi.validate(req.body);
+            console.log(value);
             const avatar = await req.file;
             if (error) {
                 if (avatar) {

@@ -67,6 +67,7 @@ class StoreController {
                 layout: 'manage',
                 store: response.err !== 1 ? response.store : {},
                 active: 'stores',
+                countImg: response.countImg,
                 message,
             });
         } catch (error) {

@@ -37,6 +37,56 @@ class StoreService {
             return message;
         }
     }
+    async findOne(id, deleted = true) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            const queries = await {
+                where: { id },
+                raw: false,
+                nest: true,
+                include: [
+                    {
+                        model: db.Branchs,
+                        as: 'branchs',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Rates,
+                            as: 'rates',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                            include: {
+                                model: db.RateImgs,
+                                as: 'images',
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt'],
+                                },
+                            },
+                        },
+                    },
+                ],
+            };
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
+            }
+            const store = await db.Stores.findOne({ ...queries });
+            return store.toJSON();
+        } catch (error) {
+            console.log(error);
+            return message;
+        }
+    }
     async getOne(id) {
         let message = {
             err: 1,
@@ -47,20 +97,31 @@ class StoreService {
             if (!id) {
                 return message;
             }
-            const store = await db.Stores.findOne({
-                where: { id },
-                raw: true,
-                nest: true,
-            });
-            if (store) {
-                return (message = {
-                    err: 0,
-                    mes: 'Hành động thành công!',
-                    type: 'success',
-                    store,
+
+            const store = await this.findOne(id);
+            const idRate = await store.branchs
+                .filter((branch) => {
+                    if (branch.rates.length > 0) {
+                        return branch;
+                    }
+                })
+                .map((branch) => {
+                    return branch.rates.map((rate) => {
+                        return rate.images;
+                    });
                 });
+            const countImg = idRate.flat(Infinity).length;
+
+            if (!store) {
+                return message;
             }
-            return message;
+            return (message = {
+                err: 0,
+                mes: 'Hành động thành công!',
+                type: 'success',
+                store,
+                countImg,
+            });
         } catch (error) {
             console.log(error);
             return message;

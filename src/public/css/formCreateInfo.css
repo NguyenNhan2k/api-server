@@ -1,8 +1,9 @@
 @import './login.css';
 @import './manage.css';
 #content main .table {
-    height: 90rem;
+    height: auto;
     position: relative;
+    padding-bottom: 2rem;
 }
 #content main .table .form {
     width: 70rem;
@@ -265,3 +266,125 @@ textarea {
     line-height: 4rem;
     font-size: 1.6rem;
 }
+
+/*START Detail Store */
+.contain-store {
+    width: 95%;
+    margin-top: 2rem;
+    height: auto;
+}
+.contain-store .contain-store__imgs {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+.contain-store__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(0.5rem);
+}
+
+.contain-store__title {
+    font-size: 2.4rem;
+    color: var(--light);
+    padding: 1rem 2rem;
+    text-align: center;
+}
+.contain-store__detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    color: var(--light);
+}
+.contain-store .contain-store__imgs img {
+    width: 85%;
+    height: 30rem;
+}
+.contain-store__card {
+    width: 40rem;
+    margin-top: 2rem;
+
+    background-color: var(--background);
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(70, 74, 78, 0.15) 0px 0px 0px 1px;
+}
+.contain-store__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 7.1rem;
+}
+.card_second {
+    display: flex;
+    margin-top: 1rem;
+    padding: 0 2rem;
+}
+.card_first img {
+    width: 100%;
+    height: 27rem;
+    cursor: pointer;
+}
+.card_comment {
+    display: flex;
+    padding: 0 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+.card_comment img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+.card-total {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--blue);
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--light);
+    line-height: 4rem;
+}
+.card_rate {
+    width: 100%;
+    margin-left: 1rem;
+}
+.card-store {
+    margin-left: 1rem;
+    width: 90%;
+}
+.card-store-name {
+    width: 90%;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+.card-store-name:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.card-store_address {
+    font-size: 1.3rem;
+    margin-top: 0.5rem;
+}
+.card_rate .content {
+    width: 90%;
+    display: flex;
+}
+.card_rate .content p {
+    font-size: 1.3rem;
+    color: var(--dark);
+}
+.card_rate .title {
+    font-size: 1.3rem;
+}
+.card_rate .title:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/*END Detail Store */

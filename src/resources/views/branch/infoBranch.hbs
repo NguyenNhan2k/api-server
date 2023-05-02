@@ -92,10 +92,10 @@
                 <div class='form-second'>
                     <div class='form-group'>
                         <label for='' class='label-group'>Stores</label>
-                        <select name='store' id='store'>
+                        <select name='id_store' id='id_store'>
                             {{#if stores}}
                                 {{#each stores}}
-                                    <option value='{{this.name}}'>{{this.name}}</option>
+                                    <option value='{{this.id}}'>{{this.name}}</option>
                                 {{/each}}
                             {{/if}}
                         </select>

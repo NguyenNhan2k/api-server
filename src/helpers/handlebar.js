@@ -66,4 +66,29 @@ module.exports = {
         console.log(firt, second);
         return firt == second ? 'selected="selected"' : '';
     },
+    count: (payload) => {
+        return payload ? payload.length : 0;
+    },
+    countTwoArr: (payloads) => {
+        if (payloads) {
+            console.log(payloads);
+            const quantity = payloads.reduce((acc, cur) => {
+                return acc + cur.rates.length;
+            }, 0);
+            return quantity;
+        } else {
+            return 0;
+        }
+    },
+    countImgs: (payloads) => {
+        if (payloads) {
+            console.log(payloads.images);
+            const quantity = payloads.reduce((acc, cur) => {
+                return acc + cur.rates.length;
+            }, 0);
+            return quantity;
+        } else {
+            return 0;
+        }
+    },
 };
