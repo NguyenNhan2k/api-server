@@ -1,13 +1,13 @@
 @import './login.css';
 @import './manage.css';
 #content main .table {
-    height: auto;
+    height: 90rem;
     position: relative;
     padding-bottom: 2rem;
 }
 #content main .table .form {
     width: 70rem;
-    display: inline-block;
+    height: auto;
     position: absolute;
     background-color: var(--light);
     padding: 0 2rem;

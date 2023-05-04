@@ -30,6 +30,9 @@ module.exports = {
                 type: Sequelize.STRING,
                 require: true,
             },
+            link: {
+                type: Sequelize.STRING(1234),
+            },
             ward: {
                 type: Sequelize.STRING,
                 require: true,

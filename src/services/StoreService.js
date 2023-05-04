@@ -61,13 +61,22 @@ class StoreService {
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt'],
                             },
-                            include: {
-                                model: db.RateImgs,
-                                as: 'images',
-                                attributes: {
-                                    exclude: ['createdAt', 'updatedAt'],
+                            include: [
+                                {
+                                    model: db.RateImgs,
+                                    as: 'images',
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt'],
+                                    },
                                 },
-                            },
+                                {
+                                    model: db.Customers,
+                                    as: 'customer',
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt'],
+                                    },
+                                },
+                            ],
                         },
                     },
                 ],
@@ -110,8 +119,8 @@ class StoreService {
                         return rate.images;
                     });
                 });
-            const countImg = idRate.flat(Infinity).length;
 
+            const countImg = idRate.flat(Infinity).length;
             if (!store) {
                 return message;
             }

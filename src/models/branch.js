@@ -1,6 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const { v4: uuid } = require('uuid');
+
 module.exports = (sequelize, DataTypes) => {
     class Branch extends Model {
         /**
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
             endTime: DataTypes.STRING,
             avatar: DataTypes.STRING,
             id_store: DataTypes.STRING,
+            link: DataTypes.STRING(1234),
         },
         {
             sequelize,

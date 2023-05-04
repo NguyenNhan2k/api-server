@@ -230,12 +230,17 @@ a {
     grid-gap: 16px;
     list-style: none;
 }
+
+.breadcrumb li a:hover {
+    text-decoration: underline;
+    color: var(--blue);
+}
 #content main .head-title .left .breadcrumb li {
     color: var(--dark);
 }
 #content main .head-title .left .breadcrumb li a {
     color: var(--dark-grey);
-    pointer-events: none;
+    cursor: pointer;
     font-size: 1.6rem;
 }
 #content main .head-title .left .breadcrumb li a.active {

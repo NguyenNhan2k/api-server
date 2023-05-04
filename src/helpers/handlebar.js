@@ -82,13 +82,35 @@ module.exports = {
     },
     countImgs: (payloads) => {
         if (payloads) {
-            console.log(payloads.images);
             const quantity = payloads.reduce((acc, cur) => {
                 return acc + cur.rates.length;
             }, 0);
             return quantity;
         } else {
             return 0;
+        }
+    },
+    getName: (rate) => {
+        if (rate) {
+            return rate[0].customer.fullName;
+        }
+        return 'NoE';
+    },
+    getContent: (rate) => {
+        if (rate) {
+            return rate[0].content;
+        }
+        return 'Trống!';
+    },
+    getAvatar: (rate) => {
+        if (rate) {
+            return rate[0].customer.url_img;
+        }
+        return 'Trống!';
+    },
+    map: (address) => {
+        if (address) {
+            return new Handlebars.SafeString(address);
         }
     },
 };

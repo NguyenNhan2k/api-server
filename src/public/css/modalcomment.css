@@ -1,0 +1,252 @@
+/* MODAL BOX START*/
+#modal-comment {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(0, 0, 0, 0.6);
+}
+#modal-comment .modal-body {
+    width: 100%;
+    display: flex;
+}
+#modal-comment .modal-content {
+    width: 90rem;
+    height: 60rem;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+    background-color: var(--light);
+}
+#modal-comment .modal-content .info-branch {
+    flex: 1;
+}
+
+#modal-comment .modal-content .modal-header {
+    width: 100%;
+    padding: 0 3rem;
+    height: 6rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.1rem solid var(--grey);
+    align-items: center;
+    background-color: var(--grey);
+}
+#modal-comment .modal-content .modal-header .modal-title {
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+#modal-comment .modal-header .close span {
+    font-size: 3rem;
+    background-color: var(--grey);
+    cursor: pointer;
+}
+
+/* MODAL BOX  END*/
+.rating {
+    width: 100%;
+    background-color: var(--light);
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(70, 74, 78, 0.15) 0px 0px 0px 1px;
+    height: 26.8rem;
+    padding-bottom: 2rem;
+}
+
+.rating .total-conment {
+    font-size: 1.6rem;
+    font-weight: 400;
+    text-align: center;
+    height: 5rem;
+    line-height: 5rem;
+    border-bottom: 0.1rem solid var(--grey);
+}
+.bar-evaluate li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    padding: 0 2rem;
+}
+/* .rows .row {
+    display: flex;
+    align-items: center;
+} */
+.detail-row {
+    display: flex;
+    width: 100%;
+    padding: 0 1rem;
+    margin-top: 2rem;
+}
+#rating .bar-container {
+    content: '';
+    text-align: center;
+}
+.side {
+    flex: 2;
+}
+.side p {
+    text-align: center;
+    font-size: 1.4rem;
+}
+.middle {
+    flex: 3;
+}
+.right {
+    flex: 1;
+}
+.right p {
+    font-weight: 700;
+}
+.heading {
+    font-size: 1.6rem;
+    margin-right: 1.5rem;
+}
+.user-rating {
+    padding: 1rem 2rem;
+    border-bottom: 0.2rem solid var(--grey);
+}
+.user-rating p {
+    margin-top: 1.5rem;
+}
+.fa {
+    font-size: 1.6rem;
+}
+
+.checked {
+    color: orange;
+}
+
+#modal-comment .detail-branch {
+    margin-bottom: 1rem;
+}
+#modal-comment .detail-branch img {
+    width: 100%;
+    height: 20rem;
+    margin-bottom: 1rem;
+}
+#modal-comment .detail-branch .wrap-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#modal-comment .detail-branch .wrap-detail .total {
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--blue);
+    border-radius: 50%;
+    margin: 0 1rem;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 1.4rem;
+    color: var(--light);
+}
+#modal-comment .detail-content .name {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+#modal-comment .detail-content .address p {
+    color: var(--dark);
+    font-size: 1.2rem;
+}
+
+#modal-comment .modal-content .content-comment {
+    flex: 2;
+    height: 100%;
+    width: 100%;
+}
+#modal-comment .content-comment .title {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    color: 1.4rem;
+    font-size: 1.4rem;
+    outline: none;
+}
+#modal-comment .content-comment .comment-title {
+    border-bottom: 0.2rem solid var(--grey);
+    margin-bottom: 1.5rem;
+}
+#modal-comment .content-comment textarea {
+    outline: none;
+    border: none;
+    height: 30rem;
+}
+#modal-comment .content-comment .image-comment {
+    width: 100%;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+#modal-comment .image-comment .upload-img label {
+    padding: 3rem 1rem;
+    background-color: var(--grey);
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(70, 74, 78, 0.15) 0px 0px 0px 1px;
+}
+#modal-comment .image-comment .list-img {
+    display: flex;
+}
+#modal-comment .image-comment .detail-img {
+    position: relative;
+}
+#modal-comment .image-comment .detail-img span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2rem;
+    width: 1.8rem;
+    text-align: center;
+    line-height: 2rem;
+    cursor: pointer;
+    color: white;
+    background-color: red;
+    font-size: 2.5rem;
+}
+#modal-comment .image-comment .detail-img img {
+    height: 9rem;
+    width: 10rem;
+    margin-left: 1.5rem;
+}
+#modal-comment .option-comment {
+    display: flex;
+    margin-top: 3rem;
+    height: 5rem;
+    width: 100%;
+    padding: 0 2rem;
+    align-items: center;
+}
+
+#modal-comment .option-comment li {
+    flex: 1;
+    border-left: 0.1rem solid var(--dark);
+    padding: 1.8rem 1rem;
+    background-color: var(--grey);
+    text-align: center;
+    cursor: pointer;
+}
+
+#modal-comment .option-comment li:hover {
+    opacity: 0.9;
+    background-color: var(--light);
+}
+.submmit-comment {
+    background-color: var(--blue);
+    color: var(--light);
+    height: 5rem;
+    width: 12rem;
+    margin-top: 2.4rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    margin-right: 2rem;
+}
+.submmit-comment:hover {
+    opacity: 0.8;
+}
+.wrap-option__comment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

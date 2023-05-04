@@ -1,0 +1,149 @@
+<div class='modal-comment' id='modal-comment' role='dialog'>
+    <div class='modal-content'>
+        <div class='modal-header'>
+            <p class='modal-title'>Viết bình luận</p>
+            <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button>
+        </div>
+        <div class='modal-body'>
+            <div class='info-branch'>
+                <div class='detail-branch'>
+                    <img src='/img/store/store.png' alt='' />
+                    <div class='wrap-detail'>
+                        <div class='total'>
+                            7.6
+                        </div>
+                        <div class='detail-content'>
+                            <div class='name'>
+                                <h3>Pizza Hut - Big C Cần Thơ</h3>
+                            </div>
+                            <div class='address'>
+                                <p>Lô 1 KDC Hưng Phú 1, P. Hưng Phú, Quận Cá</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='rating'>
+                    <h3 class='total-conment'>
+                        175 bình luận đã chia sẻ
+                    </h3>
+                    <div class='rating-parameter'>
+                        <div class='row'>
+                            <div class='detail-row'>
+                                <div class='side'>
+                                    <p>Vị trí</p>
+                                </div>
+                                <div class='middle'>
+                                    <div class='bar-container'>
+                                        <input type='range' />
+                                    </div>
+                                </div>
+                                <div class='side right'>
+                                    <p>8.5</p>
+                                </div>
+                            </div>
+                            <div class='detail-row'>
+                                <div class='side'>
+                                    <p>Giá cả</p>
+                                </div>
+                                <div class='middle'>
+                                    <div class='bar-container'>
+                                        <input type='range' />
+                                    </div>
+                                </div>
+                                <div class='side right'>
+                                    <p>8.6</p>
+                                </div>
+                            </div>
+                            <div class='detail-row'>
+                                <div class='side'>
+                                    <p>Chất lượng</p>
+                                </div>
+                                <div class='middle'>
+                                    <div class='bar-container'>
+                                        <input type='range' />
+                                    </div>
+                                </div>
+                                <div class='side right'>
+                                    <p>8.6</p>
+                                </div>
+                            </div>
+                            <div class='detail-row'>
+                                <div class='side'>
+                                    <p>Phục vụ</p>
+                                </div>
+                                <div class='middle'>
+                                    <div class='bar-container'>
+                                        <input type='range' />
+                                    </div>
+                                </div>
+                                <div class='side right'>
+                                    <p>8.6</p>
+                                </div>
+                            </div>
+                            <div class='detail-row'>
+                                <div class='side'>
+                                    <p>Không gian</p>
+                                </div>
+                                <div class='middle'>
+                                    <div class='bar-container'>
+                                        <input type='range' value='50' />
+                                    </div>
+                                </div>
+                                <div class='side right'>
+                                    <p>8.6</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='content-comment'>
+                <div class='comment-title'>
+                    <input
+                        type='text'
+                        name='title'
+                        class='title'
+                        placeholder='"Nhập tiêu đề: Món ăn ở đây thật tuyệt vời!"'
+                    />
+                </div>
+                <textarea name='content' id='' cols='30' rows='10'></textarea>
+                <div class='image-comment'>
+                    <div class='upload-img'>
+                        <input type='file' name='image' id='image' multiple hidden />
+                        <label for='image' onclick='handleImgComment()'> + Thêm hình ảnh</label>
+                    </div>
+                    <div class='list-img'>
+
+                    </div>
+                </div>
+                <div class='wrap-option__comment'>
+                    <ul class='option-comment'>
+                        <li>
+                            <i class='fa-solid fa-camera'></i>
+                            <a href=''>Hình ảnh</a>
+                        </li>
+                        <li>
+                            <i class='fa-solid fa-video'></i>
+                            <a href=''>Video</a>
+                        </li>
+                        <li>
+                            <i class='fa-regular fa-comment'></i>
+                            <a href=''>Bình luận</a>
+                        </li>
+                        <li>
+                            <i class='fa-solid fa-share'></i>
+                            <a href=''>Chia sẻ</a>
+                        </li>
+                    </ul>
+                    <button type='submit' class='submmit-comment'>Hoàn tất</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel='stylesheet' href='/css/modalcomment.css' />

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Rate.belongsTo(models.Branchs, { foreignKey: 'id_branch', targetKey: 'id', as: 'branch' });
             Rate.hasMany(models.RateImgs, { foreignKey: 'id_rate', as: 'images' });
+            Rate.belongsTo(models.Customers, { foreignKey: 'id_customer', as: 'customer' });
         }
     }
     Rate.init(

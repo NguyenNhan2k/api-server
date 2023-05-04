@@ -12,48 +12,44 @@
         </div>
     </div>
     <div class='contain-store__list'>
-        <div class='contain-store__card'>
-            <div class='card_first'>
-                <img src='/img/store/' alt='Loading...' />
-            </div>
-            <div class='card_second'>
-                <div class='card-total'>7.7</div>
-                <div class='card-store'>
-                    <a class='card-store-name'> Bún đậu mắm tôm 3 phải - Mậu thân</a>
-                    <div class='card-store_address'>58A Mậu Thân, P. An Hòa, Quận Ninh Kiều, Cần Thơ</div>
-                </div>
-            </div>
-            <div class='card_comment'>
-                <img src='/img/store/store.png' class='avatar' />
-                <div class='card_rate'>
-                    <b class='title'>Rachel Mile</b>
-                    <div class='content'>
-                        <p>Bún đậu mắm tôm 3 phải - Mậu thân Bún đậu mắm tôm 3 phải - Mậu thân</p>
+        {{#if store}}
+            {{#each store.branchs}}
+                <div class='contain-store__card'>
+                    <div class='card_first'>
+                        <img src='/img/branch/{{this.avatar}}' alt='Loading...' />
+                    </div>
+                    <div class='card_second'>
+                        <div class='card-total'>7.7</div>
+                        <div class='card-store'>
+                            <a class='card-store-name'> {{this.name}}</a>
+                            <div class='card-store_address'>{{this.street}},
+                                {{this.ward}},
+                                {{this.district}},
+                                {{this.province}}</div>
+                        </div>
+                    </div>
+                    <div class='card_comment'>
+                        {{#if this.rates}}
+                            <img src='/img/user/{{getAvatar this.rates}}' class='avatar' />
+                            <div class='card_rate'>
+                                <b class='title'>{{getName this.rates}}</b>
+                                <div class='content'>
+                                    <p>{{getContent this.rates}}</p>
+                                </div>
+                            </div>
+                        {{else}}
+                            <img src='/img/store/store.png' class='avatar' />
+                            <div class='card_rate'>
+                                <b class='title'>Noe</b>
+                                <div class='content'>
+                                    <p>Chưa có bình luận nào! Hãy trở thành người đầu tiên.</p>
+                                </div>
+                            </div>
+                        {{/if}}
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class='contain-store__card'>
-            <div class='card_first'>
-                <img src='/img/store/' alt='Loading...' />
-            </div>
-            <div class='card_second'>
-                <div class='card-total'>7.7</div>
-                <div class='card-store'>
-                    <a class='card-store-name'> Bún đậu mắm tôm 3 phải - Mậu thân</a>
-                    <div class='card-store_address'>58A Mậu Thân, P. An Hòa, Quận Ninh Kiều, Cần Thơ</div>
-                </div>
-            </div>
-            <div class='card_comment'>
-                <img src='/img/store/store.png' class='avatar' />
-                <div class='card_rate'>
-                    <b class='title'>Rachel Mile</b>
-                    <div class='content'>
-                        <p>Bún đậu mắm tôm 3 phải - Mậu thân Bún đậu mắm tôm 3 phải - Mậu thân</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {{/each}}
+        {{/if}}
 
     </div>
 </div>

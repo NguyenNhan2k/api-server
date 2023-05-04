@@ -172,3 +172,35 @@ function main() {
     // }
 }
 main();
+
+function handleImgComment() {
+    let files = [],
+        input = document.querySelector('.image-comment input'),
+        container = document.querySelector('.list-img');
+    input.addEventListener('change', () => {
+        let file = input.files;
+        // if user select no image
+        if (file.length == 0) return;
+
+        for (let i = 0; i < file.length; i++) {
+            if (file[i].type.split('/')[0] != 'image') continue;
+            if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
+        }
+        input.files = null;
+        showImgcomment(files, container);
+    });
+}
+function showImgcomment(files, container) {
+    let images = files.reduce(function (prev, file, index) {
+        return (prev += `<div class='detail-img'>
+            <img src='${URL.createObjectURL(file)}' alt='' />
+            <span onclick="delImg(${index})" aria-hidden='true'>&times;</span>
+        </div>`);
+    }, '');
+    container.innerHTML = images;
+}
+function delImg(index) {
+    let container = document.querySelector('.list-img');
+    files.splice(index, 1);
+    showImgcomment(files, container);
+}
