@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Dish.belongsTo(models.Branchs, { foreignKey: 'id_branch', targetKey: 'id', as: 'branch' });
-            Dish.belongsTo(models.Categories, { foreignKey: 'id_category', targetKey: 'id', as: 'category' });
+            Dish.belongsTo(models.Branchs, { foreignKey: 'id_branch', as: 'branch' });
+            Dish.belongsTo(models.Categories, { foreignKey: 'id_category', as: 'category' });
             Dish.hasMany(models.Images, { foreignKey: 'id_dish', as: 'image' });
         }
     }

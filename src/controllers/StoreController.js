@@ -35,6 +35,25 @@ class StoreController {
             internalServer(req, res);
         }
     }
+    async indexUpdate(req, res) {
+        try {
+            const message = await req.flash('message')[0];
+            const id = await req.params.id;
+            if (!id) {
+                badRequest(req, res, 'Yêu cầu thất bại!');
+            }
+            const response = await storeService.getOne(id);
+            return res.status(200).render('store/updateStore', {
+                layout: 'manage',
+                active: 'stores',
+                store: response.store,
+                message,
+            });
+        } catch (error) {
+            console.log(error);
+            internalServer(req, res);
+        }
+    }
     async create(req, res) {
         try {
             const { error, value } = await storeJoi.validate(req.body);
@@ -98,14 +117,15 @@ class StoreController {
         try {
             const { error, value } = await storeUpdateJoi.validate(req.body);
             const file = await req.file;
-            if (error) {
+            const id = await req.params.id;
+            if (error || !id) {
                 if (file) {
                     await removeAvatarForController(file);
                 }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await storeService.update(value, file);
+            const response = await storeService.update({ id, ...value }, file);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {

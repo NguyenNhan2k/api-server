@@ -67,13 +67,14 @@ class BranchController {
             }
             const response = await branchService.getOne(idBranch);
             const message = await req.flash('message')[0];
-            console.log(response);
             return res.render('branch/infoBranch', {
                 layout: 'manage',
                 branch: response.err !== 1 ? response.branch : {},
                 active: 'branchs',
                 message,
                 stores: response.stores,
+                categories: response.categories,
+                price: response.price,
             });
         } catch (error) {
             console.log(error);
@@ -102,7 +103,6 @@ class BranchController {
     async update(req, res) {
         try {
             const { error, value } = await branchUpdateJoi.validate(req.body);
-            console.log(value);
             const avatar = await req.file;
             if (error) {
                 if (avatar) {

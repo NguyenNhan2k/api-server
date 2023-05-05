@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 router.get('/create', storeController.indexCreate);
+router.get('/update/:id', storeController.indexUpdate);
 router.get('/trash', storeController.indexTrash);
 router.get('/restore/:id', storeController.restore);
 router.get('/:id', storeController.indexInfoStore);
@@ -21,7 +22,7 @@ router.get('/', storeController.indexStore);
 
 router.post('/handel-form-actions', storeController.handelAction);
 router.post('/create', upload.single('avatar'), storeController.create);
-router.patch('/update', upload.single('avatar'), storeController.update);
+router.patch('/update/:id', upload.single('avatar'), storeController.update);
 router.delete('/destroy/:id', storeController.destroy);
 router.delete('/force/:id', storeController.force);
 module.exports = router;

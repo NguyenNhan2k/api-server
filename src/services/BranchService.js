@@ -63,6 +63,66 @@ class BranchService {
             return message;
         }
     }
+    async findOne(id, deleted = true) {
+        try {
+            const queries = await {
+                where: { id },
+                include: [
+                    {
+                        model: db.Stores,
+                        as: 'store',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Dishs,
+                        as: 'dishs',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Categories,
+                            as: 'category',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.Rates,
+                        as: 'rates',
+
+                        include: {
+                            model: db.Customers,
+                            as: 'customer',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                ],
+                raw: false,
+                nest: true,
+            };
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
+            }
+            const dish = await db.Branchs.findOne({
+                ...queries,
+            });
+            return dish.toJSON();
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
     async getOne(id) {
         let message = {
             err: 1,
@@ -73,22 +133,28 @@ class BranchService {
             if (!id) {
                 return message;
             }
-            const branch = await db.Branchs.findOne({
-                where: { id },
-                raw: true,
-                nest: true,
-            });
+            const branch = await this.findOne(id);
+
             const stores = await db.Stores.findAll({
                 raw: true,
                 nest: true,
             });
             if (branch) {
+                const price = await db.Dishs.findAll({
+                    where: { id_branch: id },
+                    attributes: [
+                        [Sequelize.fn('max', Sequelize.col('price')), 'maxPrice'],
+                        [Sequelize.fn('min', Sequelize.col('price')), 'minPrice'],
+                    ],
+                    raw: true,
+                });
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
                     branch,
                     stores,
+                    price,
                 });
             }
             return message;

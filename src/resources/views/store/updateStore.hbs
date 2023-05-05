@@ -1,0 +1,111 @@
+<link rel='stylesheet' href='/css/formCreateInfo.css' />
+<main>
+    <div class='head-title'>
+        <div class='left'>
+            <h1>Stores</h1>
+            <ul class='breadcrumb'>
+                <li>
+                    <a href='#'>Dashboard</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a href='/stores'>Stores</a>
+                </li>
+                <li><i class='fa-solid fa-chevron-right'></i></li>
+                <li>
+                    <a class='active' href='/customers'>Update</a>
+                </li>
+            </ul>
+        </div>
+        <a href='#' class='btn-download'>
+            <i class='fa-solid fa-download'></i>
+            <span class='text'>Download PDF</span>
+        </a>
+    </div>
+    <div class='table' style='height: 90rem;'>
+        <div class='table_sidebar'>
+            <div class='table_sidebar--add'>
+                <button>
+                    <i class='fa-solid fa-arrow-left add'></i>
+                    <a href='/stores'>Trở về</a>
+
+                </button>
+            </div>
+        </div>
+        <form
+            class='form'
+            id='form-create_customer'
+            method='post'
+            action='/stores/update/{{store.id}}?_method=PATCH'
+            enctype='multipart/form-data'
+        >
+            <div class='form-group'>
+                <p class='form-login__title'>ADD STORE</p>
+            </div>
+            <div class='profile-nav'>
+                <div class='profile-nav_user'>
+                    <img src='/img/store/{{store.avatar}}' alt='Loading...' class='img' />
+                </div>
+                <div class='form-ground__img'>
+                    <input type='file' id='avatar' name='avatar' class='image' />
+                    <label for='avatar'>Avatar
+                        <i class='fa-solid fa-upload'></i>
+                    </label>
+                </div>
+            </div>
+            <div class='form-input'>
+                <div class='form-first'>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Name</label>
+                        <input
+                            type='text'
+                            name='name'
+                            id='name'
+                            value='{{store.name}}'
+                            rules='require'
+                            placeholder='Tên Quán Ăn...'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Email</label>
+                        <input
+                            type='email'
+                            name='email'
+                            value='{{store.email}}'
+                            id='email'
+                            rules='require|isEmail'
+                            placeholder='Example@gmail.com'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label for='' class='label-group'>Phone</label>
+                        <input
+                            type='phone'
+                            name='phone'
+                            value='{{store.phone}}'
+                            id='phone'
+                            rules='require'
+                            placeholder='0123.456.789'
+                            aria-autocomplete='none'
+                        />
+                        <span class='span-message'></span>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <button class='submit' type='submit'>Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+</main>
+<script src='/js/validate.js'></script>
+<script src='/js/main.js'></script>
+<script>
+    validator('#form-create_customer'); handleImage();
+</script>

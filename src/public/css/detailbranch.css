@@ -49,22 +49,23 @@
 }
 #contain-branch .branch-content .list-rate {
     display: flex;
-    width: auto;
     margin-bottom: 2rem;
     height: 5rem;
     justify-content: space-between;
     align-items: center;
 }
 .branch-content .list-rate li {
-    width: auto;
     margin-left: 1rem;
+    width: 7.5rem;
 }
 .branch-content .list-rate li h3 {
     color: var(--blue);
-    text-align: center;
+    text-align: left;
+    margin-left: 0.5rem;
+    font-size: 2rem;
 }
 .branch-content .list-rate li p {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 .branch-content .list-rate .total {
     margin-right: 1rem;
@@ -96,8 +97,13 @@
     margin-right: 0.5rem;
 }
 .activities p {
-    color: var(--color--success);
     margin-right: 1rem;
+}
+.activities .open {
+    color: var(--color--success);
+}
+.activities .close {
+    color: var(--color--warning);
 }
 .price i {
     font-size: 1.5rem;
@@ -294,13 +300,18 @@ i {
 }
 #parameter-rate .bar-container {
     content: '';
-    background-color: #f1f1f1;
+    background-color: #9b9797;
     text-align: center;
     color: white;
 }
 .side {
     flex: 2;
 }
+.user-raing {
+    margin: 2rem;
+    text-align: center;
+}
+
 .side p {
     text-align: center;
     font-size: 1.4rem;
@@ -317,6 +328,7 @@ i {
 .heading {
     font-size: 1.6rem;
     margin-right: 1.5rem;
+    margin-bottom: 1rem;
 }
 .user-rating {
     padding: 1rem 2rem;

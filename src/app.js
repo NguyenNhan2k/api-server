@@ -13,7 +13,7 @@ const app = express();
 const path = require('path');
 const port = process.env.PORT;
 const bodyParser = require('body-parser');
-
+const handlebar = require('./helpers/handlebar');
 const route = require('./routes');
 const { connectDB } = require('./config/connect_database');
 const { userName } = require('./middlewares/verifyToken');
@@ -25,7 +25,7 @@ app.engine(
     'hbs',
     handlebars.engine({
         extname: '.hbs',
-        helpers: require('./helpers/handlebar'),
+        helpers: { ...handlebar },
     }),
 );
 app.set('view engine', 'hbs');

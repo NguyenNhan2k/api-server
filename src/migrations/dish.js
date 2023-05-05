@@ -10,7 +10,6 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
                 require: true,
-                unique: true,
             },
             id_branch: {
                 type: Sequelize.STRING,

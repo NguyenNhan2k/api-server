@@ -9,11 +9,11 @@
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
-                    <a href='/staffs'>Stores</a>
+                    <a href='/stores'>Stores</a>
                 </li>
                 <li><i class='fa-solid fa-chevron-right'></i></li>
                 <li>
-                    <a class='active' href='/Staffs'>Info</a>
+                    <a class='active' href='/stores'>Info</a>
                 </li>
             </ul>
         </div>
@@ -27,11 +27,13 @@
             <div class='table_sidebar--add'>
                 <button>
                     <i class='fa-solid fa-arrow-left add'></i>
-                    <a href='/customers'>Trở về</a>
+                    <a href='/stores'>Trở về</a>
                 </button>
             </div>
         </div>
-        {{> detailStore}}
+        <div class="wrap-store">
+            {{> detailStore}}
+        </div>
     </div>
 </main>
 <script src='/js/validate.js'></script>

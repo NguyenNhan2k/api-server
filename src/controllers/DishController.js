@@ -65,7 +65,6 @@ class DishController {
     async create(req, res) {
         try {
             const files = await req.files;
-
             const { error, value } = await dishJoi.validate(req.body);
             if (error) {
                 if (files.avatar) {

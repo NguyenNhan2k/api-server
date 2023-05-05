@@ -1,66 +1,40 @@
 <div class='branch'>
     <div class='branch-avatar'>
-        <img src='/img/store/store.png' alt='' />
+        <img src='/img/branch/{{branch.avatar}}' alt='Loading...' />
     </div>
     <div class='branch-content'>
         <div class='group-address'>
             <a href=''>Cần thơ </a>>>
-            <a href=''>Quận ninh kiều</a>
+            <a href=''>{{branch.district}}</a>
         </div>
         <div class='dish'>
-            <p>Pizza Hut - Big C Cần Thơ</p>
+            <p>{{branch.name}}</p>
         </div>
         <div class='categories'>
-            <a href=''>Quán ăn </a>-
-            <a href=''>Quán lẩu </a>-
-            <a href=''>Món hàn</a>
-            -
+            {{#if categories}}
+                {{#each categories}}
+                <a href=''>{{this}} </a>-
+                {{/each}}
+                {{else}}
+             <a href=''>Trống!</a>
+             {{/if}}
             <a href='' class='branchs'>Chi nhanh</a>
         </div>
-
         <ul class='list-rate'>
-            <li class='total'>
-                <p>6.8</p>
-            </li>
-            <li>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
-
-            <li>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
-            <li>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
-            <li>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
-            <li>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
-            <li class='total-comment'>
-                <h3>7.5</h3>
-                <p>Phục vụ</p>
-            </li>
+            {{displayUiTotalBranch branch.rates}}
         </ul>
         <div class='detail-address'>
             <i class='fa-solid fa-location-dot'></i>
-            <a>287 Nguyễn Văn Cừ, P. An Hòa, Quận Ninh Kiều, Cần Thơ</a>
+           {{getAddresForUiBranch branch}}
         </div>
-
         <div class='activities'>
             <i class='fa-solid fa-clock'></i>
-            <p>Đang mở cửa</p>
-            <a>08:00 - 23:00 </a>
+            {{getStatusTime branch.startTime  branch.endTime}}
+            <a>{{displayTimeBranch branch.startTime branch.endTime}}</a>
         </div>
         <div class='price'>
             <i class='fa-solid fa-tag'></i>
-            <a>20.000đ - 50.000đ </a>
+            <a>{{getPrice price}} </a>
         </div>
     </div>
 </div>
@@ -104,29 +78,29 @@
         <div class='filter'>
             <div class='detail'>
                 <b>Mới nhất</b>
-                <p>175</p>
+                <p>{{getComment branch.rates}}</p>
             </div>
         </div>
         <div class='list-comment'>
+            {{#if branch.rates}}
+            {{#each branch.rates}}
             <div class='detail'>
                 <div class='infomation'>
                     <div class='infomation-customer'>
-                        <img src='/img/store/store.png' alt='' />
+                        <img src='/img/user/{{this.customer.url_img}}' alt='Loading' />
                         <div class='customer-detail'>
-                            <b> Thanh toan</b>
-                            <p class='time'> <i class='fa-solid fa-clock'></i>9/12/2021 21:44</p>
+                            <b>{{this.customer.fullName}}</b>
+                            <p class='time'> <i class='fa-solid fa-clock'></i>{{convertToDate this.createdAt}}</p>
                         </div>
                     </div>
-                    <div class='total-rate'>2.6</div>
+                    <div class='total-rate'>{{getTotalOneRate this}}</div>
                 </div>
                 <div class='wrap-content'>
                     <h3 class='title'>
-                        Đây la tiêu đề
+                       {{this.title}}
                     </h3>
                     <p class='content'>
-
-                        Đồ ăn trên line chuyền đa dạng lại tươi ngon, từ bò tới hải sản... không gian sang trọng thoải
-                        mái lại còn đc bonus sự phục vụ tận tâm tình của các b phục vụ :)) nói chung là 10/10
+                            {{this.content}}
                     </p>
                 </div>
                 <ul class='like'>
@@ -144,42 +118,10 @@
                     </li>
                 </ul>
             </div>
-            <div class='detail'>
-                <div class='infomation'>
-                    <div class='infomation-customer'>
-                        <img src='/img/store/store.png' alt='' />
-                        <div class='customer-detail'>
-                            <b> Thanh toan</b>
-                            <p class='time'> <i class='fa-solid fa-clock'></i>9/12/2021 21:44</p>
-                        </div>
-                    </div>
-                    <div class='total-rate'>2.6</div>
-                </div>
-                <div class='wrap-content'>
-                    <h3 class='title'>
-                        Đây la tiêu đề
-                    </h3>
-                    <p class='content'>
-
-                        Đồ ăn trên line chuyền đa dạng lại tươi ngon, từ bò tới hải sản... không gian sang trọng thoải
-                        mái lại còn đc bonus sự phục vụ tận tâm tình của các b phục vụ :)) nói chung là 10/10
-                    </p>
-                </div>
-                <ul class='like'>
-                    <li>
-                        <i class='fa-solid fa-heart'></i>
-                        <p>Like</p>
-                    </li>
-                    <li>
-                        <i class='fa-solid fa-comment'></i>
-                        <p>Bình luận</p>
-                    </li>
-                    <li>
-                        <i class='fa-solid fa-triangle-exclamation'></i>
-                        <p>Cảnh báo</p>
-                    </li>
-                </ul>
-            </div>
+            {{/each}}
+            {{else}}
+             <div class='detail'><h2>Chưa có bình luận nào. Hãy trở thành người đầu tiên.</h2></div>
+             {{/if}}
         </div>
         <div class='load-more'>
             <a href=''>Xem Thêm bình luận</a>
@@ -187,91 +129,13 @@
     </div>
     <div class='parameter-rate'>
         <h3 class='total-conment'>
-            175 bình luận đã chia sẻ
+            {{getCountComment branch.rates}} bình luận đã đánh giá
         </h3>
         <div class='rating-parameter'>
-            <div class='user-rating'>
-                <span class='heading'>User Rating</span>
-                <span class='fa fa-star checked'></span>
-                <span class='fa fa-star checked'></span>
-                <span class='fa fa-star checked'></span>
-                <span class='fa fa-star checked'></span>
-                <span class='fa fa-star'></span>
-                <p>4.1 average based on 254 reviews.</p>
-            </div>
-            <div class='row'>
-                <div class='detail-row'>
-                    <div class='side'>
-                        <p>Vị trí</p>
-                    </div>
-                    <div class='middle'>
-                        <div class='bar-container'>
-                            <div class='bar-5' style='width: 80%;'></div>
-                        </div>
-                    </div>
-                    <div class='side right'>
-                        <p>8.5</p>
-                    </div>
-                </div>
-                <div class='detail-row'>
-                    <div class='side'>
-                        <p>Giá cả</p>
-                    </div>
-                    <div class='middle'>
-                        <div class='bar-container'>
-                            <div class='bar-4' style='width: 80%;'></div>
-                        </div>
-                    </div>
-                    <div class='side right'>
-                        <p>8.6</p>
-                    </div>
-                </div>
-                <div class='detail-row'>
-                    <div class='side'>
-                        <p>Chất lượng</p>
-                    </div>
-                    <div class='middle'>
-                        <div class='bar-container'>
-                            <div class='bar-3' style='width: 80%;'></div>
-                        </div>
-                    </div>
-                    <div class='side right'>
-                        <p>8.6</p>
-                    </div>
-                </div>
-                <div class='detail-row'>
-                    <div class='side'>
-                        <p>Phục vụ</p>
-                    </div>
-                    <div class='middle'>
-                        <div class='bar-container'>
-                            <div class='bar-2' style='width: 80%;'></div>
-                        </div>
-                    </div>
-                    <div class='side right'>
-                        <p>8.6</p>
-                    </div>
-                </div>
-                <div class='detail-row'>
-                    <div class='side'>
-                        <p>Không gian</p>
-                    </div>
-                    <div class='middle'>
-                        <div class='bar-container'>
-                            <div class='bar-1' style='width: 80%;'></div>
-                        </div>
-                    </div>
-                    <div class='side right'>
-                        <p>8.6</p>
-                    </div>
-                </div>
-            </div>
+         {{displayUiTotalRatingBranch branch.rates}}
         </div>
-
         <div class='rating-box'>
-            <b>8.1 điểm </b>
-            <p>-</p>
-            <p> Khá tốt</p>
+            {{displayTotalRating branch.rates}}
         </div>
         <button class='button-comment'>
             Bình luận

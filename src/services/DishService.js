@@ -14,6 +14,7 @@ class DishService {
         try {
             const { name, ...other } = await payload;
             const avatar = (await files) && files.avatar ? files.avatar[0].filename : {};
+            console.log(avatar);
             const [dish, created] = await db.Dishs.findOrCreate({
                 where: { name },
                 defaults: {
@@ -60,6 +61,8 @@ class DishService {
             message.type = await 'success';
             return message;
         } catch (error) {
+            const pathAvatar = (await files.avatar) ? files.avatar[0].path : {};
+            await fs.remove(pathAvatar);
             console.log(error);
             return message;
         }
