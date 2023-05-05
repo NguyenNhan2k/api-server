@@ -13,8 +13,8 @@ const dishRoute = require('./dish.js');
 function route(app) {
     // app.use(userName);
     app.use(sort);
-    app.use('/', homeRoute);
     app.use('/auth', authRoute);
+    app.use('/', homeRoute);
 
     /* Private Route */
     app.use(authAccessToken);

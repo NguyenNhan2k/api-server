@@ -106,22 +106,31 @@ function handleImage() {
     }
 }
 function getNameUser() {
-    let userName = document.cookie;
+    let userName = document.cookie.split(';');
     const userElement = document.querySelector('.signup__account');
-    if (userName && userElement) {
+    let isValid = false;
+    if (Array.isArray(userName)) {
+        isValid = userName.some((item) => {
+            const user = item.split('=');
+
+            const check = user.includes(' user');
+            return check;
+        });
+    }
+
+    if (isValid && userElement) {
         userElement.innerHTML = `
         <i class='fa-solid fa-user icon-user'></i>
-        <a class='my-account__title' href='#'>My account</a>
+        <a class='my-account__title' href='/customers/profile'>My account</a>
         <i class='fa-sharp fa-solid fa-caret-down'></i>
         <ul class='popup_account-list'>
-            <li class='popup_account-item'><a href='/customer/profile'>My profile</a></li>
-            <li class='popup_account-item'><a href='#'>Change password</a></li>
-            <li class='popup_account-item'><a href='/customer/logout'>Log out</a></li>
+            <li class='popup_account-item'><a href='/customers/profile'>My profile</a></li>
+            <li class='popup_account-item'><a href='/customers/changpwd'>Change password</a></li>
+            <li class='popup_account-item'><a href='/customers/logout'>Log out</a></li>
         </ul>`;
     } else {
         userElement.innerHTML = `
         <i class='fa-solid fa-user icon-user'></i>
         <a href='/auth/login'>Login</a>`;
     }
-    console.log(userName);
 }

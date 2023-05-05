@@ -6,16 +6,18 @@
         <div class='profile-nav__name'>{{customer.fullName}}</div>
     </div>
     <div class='form-ground__img'>
-        <input type='file' id='url_img' name='avatar_user' class='image' accept='png' />
+        <input type='file' id='url_img' name='url_img' class='image' accept='png' />
         <label for='url_img'>Upload
             <i class='fa-solid fa-upload'></i>
         </label>
     </div>
     <div class='profile-nav_category'>
         <ul>
-            <li>MOn an</li>
-            <li>MOn an</li>
-            <li>MOn an</li>
+            <li><a href='/customers/profile'><i class='fa-solid fa-circle-info'></i> <p>Thông tin cơ bản</p></a></li>
+            <li><a href='/customers/changepwd'><i class='fa-solid fa-user'></i> <p>Đổi mật khẩu</p></a></li>
+            <li><a href='/customers/logout'><i class='fa-solid fa-right-from-bracket' style='color:red'></i><p
+                        style='color:red'
+                    >Đăng xuất</p></a></li>
         </ul>
     </div>
 </div>

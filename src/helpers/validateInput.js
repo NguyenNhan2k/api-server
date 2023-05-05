@@ -64,6 +64,7 @@ const handelAction = joi.object({
     staffs,
     actions,
 });
+const changePwdJoi = joi.object({ password, confirmPwd });
 module.exports = {
     registerSchema,
     loginSchema,
@@ -78,4 +79,5 @@ module.exports = {
     categoryJoi,
     categoryUpdateJoi,
     dishJoi,
+    changePwdJoi,
 };

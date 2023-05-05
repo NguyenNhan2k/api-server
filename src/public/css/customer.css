@@ -6,16 +6,19 @@
 }
 .profile {
     width: 110rem;
-    margin-top: 5rem;
-    min-height: 60rem;
+    margin-top: 10rem;
+    padding: 2rem;
+    height: auto;
     border-radius: 0.5rem;
     display: flex;
-    background-color: #ffff;
+
+    background-color: #dbd8d8;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 .form-ground__img {
     width: 50%;
-    margin-left: 8rem;
+    margin-left: 6rem;
     cursor: pointer;
     border-radius: 0.5rem;
     height: 4rem;
@@ -33,22 +36,30 @@
 .form-ground__img > label {
     padding: 1.5rem;
     cursor: pointer;
-
     margin-left: 1.5rem;
     text-align: center;
     line-height: 4rem;
     font-size: 1.6rem;
 }
+
 .profile-nav {
-    height: 60rem;
+    height: 40rem;
     width: 35rem;
-    border-right: 0.05rem solid rgba(78, 76, 76, 0.205);
+    background-color: #ffff;
+    border: 0.05rem solid rgba(78, 76, 76, 0.205);
+}
+.profile-nav__avatar {
+    height: 11rem;
+    width: 11rem;
+    margin: 1rem 0;
+    margin-left: 1rem;
+    display: flex;
+    justify-items: center;
+    align-items: center;
 }
 .profile-nav img {
-    margin-top: 2.5rem;
-    margin-left: 5rem;
-    width: 11rem;
-    height: 11rem;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
 }
 .profile-nav_user {
@@ -60,19 +71,31 @@
     color: var(--profile-color);
     font-size: 2.2rem;
     font-weight: 500;
-    margin: 3rem 0;
+    margin-bottom: 1rem;
     text-align: center;
 }
 .profile-nav_category {
     margin-top: 3rem;
 }
-.profile-nav_category ul li {
+
+.profile-nav_category ul li a {
     width: 100%;
+    display: flex;
     height: 5rem;
+    cursor: pointer;
+    padding-left: 2rem;
     text-align: center;
     font-size: 1.8rem;
     border-top: 0.05rem solid rgba(78, 76, 76, 0.205);
     line-height: 5rem;
+}
+.profile-nav_category ul li:hover {
+    opacity: 0.7;
+}
+.profile-nav_category ul li i {
+    line-height: 5rem;
+    color: #3f3c3c;
+    margin-right: 0.5rem;
 }
 .upload_img > input {
     display: none;
@@ -86,15 +109,15 @@
 }
 
 .form-profile {
-    width: 90rem;
+    width: 70rem;
     height: 80;
     margin-left: 18rem;
 }
 .form-group {
-    width: 100%;
+    width: 40rem;
+    position: relative;
     height: 5rem;
     margin-top: 5rem;
-    position: relative;
 }
 .form-group > label {
     position: absolute;
@@ -111,7 +134,7 @@
     font-size: 1.4rem;
 }
 .form-group > input {
-    width: 45%;
+    width: 90%;
     padding-left: 2.5rem;
     height: 4.5rem;
     outline: none;
@@ -124,6 +147,7 @@
     outline: 0.1rem solid var(--outline-input);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 .active > span {
     color: red;
 }
@@ -132,6 +156,10 @@
 }
 .profile-info {
     width: 80rem;
+    background-color: #ffff;
+    padding-bottom: 2rem;
+    margin-left: 1.5rem;
+    border: 0.05rem solid rgba(78, 76, 76, 0.205);
 }
 .profile-info .title {
     width: 100%;
@@ -147,9 +175,10 @@
     margin-top: 2rem;
 }
 .buttons .form-ground__update {
-    width: 10rem;
+    width: 13rem;
     height: 4.5rem;
     color: var(--background);
+    padding: 0 1rem;
     line-height: 4rem;
     border-radius: 0.5rem;
     font-size: 1.6rem;
@@ -159,6 +188,13 @@
 }
 .form-ground__update:hover {
     background-color: blue;
+}
+.form-group i {
+    position: absolute;
+    color: #494949;
+    top: 1.2rem;
+    right: 5rem;
+    font-size: 2rem;
 }
 .buttons .form-ground__cancel {
     width: 10rem;

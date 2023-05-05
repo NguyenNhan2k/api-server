@@ -1,8 +1,7 @@
-const { request } = require('express');
-const { customerUpdateJoi, userJoi, customerJoi } = require('../helpers/validateInput');
+const { customerUpdateJoi, userJoi, customerJoi, changePwdJoi } = require('../helpers/validateInput');
 const customerService = require('../services/CustomerService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
-const { equal, defaults } = require('joi');
+const { removeAvatarForController } = require('../helpers/manage');
 
 class CustomerController {
     async index(req, res) {
@@ -52,9 +51,7 @@ class CustomerController {
                 const messageError = 'Yêu cầu thất bại!';
                 return badRequest(req, res, messageError);
             }
-
             const response = await customerService.getOne(idCustomer);
-
             if (response.err === 1 || response.type === 'warning') {
                 const messageError = 'Yêu cầu thất bại!';
                 req.flash('message', messageError);
@@ -116,10 +113,30 @@ class CustomerController {
             const { error, value } = await customerUpdateJoi.validate(req.body);
             const imgUpload = await req.file;
             if (error) {
+                if (imgUpload) {
+                    await removeAvatarForController(imgUpload.url_img[0]);
+                }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await customerService.update({ id, value }, imgUpload);
+            const response = await customerService.update({ id, ...value }, imgUpload);
+            req.flash('message', response);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+    async changePwd(req, res) {
+        try {
+            const { id } = await req.user;
+            console.log(req.body);
+            const { error, value } = await changePwdJoi.validate(req.body);
+            if (error) {
+                const messageError = await error.details[0].message;
+                return badRequest(req, res, messageError);
+            }
+            const response = await customerService.changePwd(id, value);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {
@@ -154,6 +171,23 @@ class CustomerController {
             const response = await customerService.create(value, img);
             req.flash('message', response);
             return res.status(200).redirect('back');
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
+        }
+    }
+
+    async indexChangePwd(req, res) {
+        try {
+            const { id } = await req.user;
+            const response = await customerService.getOne(id);
+            const message = await req.flash('message')[0];
+            return res.render('customer/changePwd', {
+                layout: 'main',
+                active: 'customers',
+                customer: response.customer,
+                message,
+            });
         } catch (error) {
             console.log(error);
             return internalServer(req, res);

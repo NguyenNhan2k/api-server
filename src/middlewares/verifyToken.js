@@ -37,6 +37,7 @@ const authAccessToken = async (req, res, next) => {
                 return unauthorized(req, res, 'Vui lòng đăng nhập để tiếp tục!');
             }
             req.user = await decode;
+            res.locals.user = decode;
             return next();
         });
     } catch (error) {

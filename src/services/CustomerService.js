@@ -14,20 +14,48 @@ class CustomerService {
             };
             if (file) {
                 const getImgUser = await db.Customers.findByPk(id);
-                const pathUrlImg = await `${file.destination}/${getImgUser.dataValues.url_img}`;
-                await fs.remove(pathUrlImg);
+                if (getImgUser.dataValues.url_img != 'user.png') {
+                    const pathUrlImg = await `${file.destination}/${getImgUser.dataValues.url_img}`;
+                    await fs.remove(pathUrlImg);
+                }
             }
-            const userUpdate = await db.Customers.update(user, { where: { id }, returning: true });
-            console.log(userUpdate);
+            const userUpdate = await db.Customers.update(user, { where: { id }, raw: true });
+            console.log(user);
+
             return (message = {
                 err: 0,
                 type: 'success',
-                message: 'Update user successfully!',
+                mes: 'Update user successfully!',
             });
         } catch (error) {
             console.log(error);
             return (message = {
                 err: 1,
+                type: 'warning',
+            });
+        }
+    }
+    async changePwd(id, { password }) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            const user = await db.Customers.update({ password: hashPassword(password) }, { where: { id }, raw: true });
+            if (!user) {
+                return message;
+            }
+            return (message = {
+                err: 0,
+                type: 'success',
+                mes: 'Update password successfully!',
+            });
+        } catch (error) {
+            console.log(error);
+            return (message = {
+                err: 1,
+                mes: 'Update password fail !',
                 type: 'warning',
             });
         }

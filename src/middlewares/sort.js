@@ -7,6 +7,10 @@ module.exports = function SortMiddleWare(req, res, next) {
         enable: false,
         index: 1,
     };
+    res.locals._user = {
+        enable: false,
+        index: 1,
+    };
     if (req.query.hasOwnProperty('page')) {
         Object.assign(res.locals._page, {
             enable: true,

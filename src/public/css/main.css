@@ -38,6 +38,9 @@ html {
 /* ------------ Start Header ------------------ */
 header {
     display: flex;
+    position: fixed;
+    z-index: 10000;
+
     width: 100%;
     height: 8rem;
     line-height: 8rem;

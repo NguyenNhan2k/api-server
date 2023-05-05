@@ -1,0 +1,28 @@
+<form action='/customers/changepwd?_method=PATCH' method='post' id="form-changepwd" class='profile form-update'  enctype="multipart/form-data">
+   {{> nav.user}}
+    <div class='profile-info' style="height:40rem">
+        <h2 class='title'>Đổi mật khẩu</h2>
+        <div class='form-profile'>
+            <div class='form-group'>
+                <input type='password' id='password' name='password' rules='require'  />
+                <label for='phone'>Mật khẩu mới</label>
+                <i class="fa-solid fa-lock"></i>
+                <span class='span-message'></span>
+            </div>
+            <div class='form-group'>
+                <input type='password' id='confirmPwd' name='confirmPwd' rules='require|isConfirmed'  />
+                <label for='address'>Xác nhận mật khẩu</label>
+                <i class="fa-solid fa-lock"></i>
+                <span class='span-message'></span>
+            </div>
+            <div class='buttons'>
+                <button class='form-ground__update' type='submit'>Đổi mật khẩu</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src='/js/main.js'></script>
+<script src='/js/validate.js'></script>
+<script>handleImage(); 
+    validator('#form-changepwd');
+</script>
