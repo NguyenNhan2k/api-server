@@ -1,11 +1,11 @@
-<form action='/customers/update?_method=PATCH' method='post' class='profile form-update' enctype="multipart/form-data">
+<div class="container">
+    <form action='/customers/update?_method=PATCH' method='post' class='profile form-update' enctype="multipart/form-data">
    {{> nav.user}}
     <div class='profile-info'>
         <h2 class='title'>Account Setting</h2>
         <div class='form-profile'>
             <div class='form-group'>
                 <input type='text' id='fullName' name='fullName' value='{{customer.fullName}}' rules='require' />
-               
                 <label for='fullName'>Full Name</label>
                 <span class='span-message'></span>
             </div>
@@ -31,6 +31,8 @@
         </div>
     </div>
 </form>
+
+</div>
 <script src='/js/main.js'></script>
 <script src='/js/validate.js'></script>
 <script>handleImage(); 

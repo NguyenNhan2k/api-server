@@ -24,6 +24,25 @@ class CustomerController {
             internalServer(req, res);
         }
     }
+    async indexHistory(req, res) {
+        try {
+            const { id } = await req.user;
+            const mes = await req.flash('message')[0];
+            const getOneCustomer = await customerService.getOne(id);
+            const { type, err, customer } = await getOneCustomer;
+            if (type === 'waring' && err === 1) {
+                req.flash('message', getOneCustomer);
+                return res.redirect('back');
+            }
+            return res.status(200).render('customer/history', {
+                layout: 'main',
+                message: mes,
+                customer,
+            });
+        } catch (error) {
+            internalServer(req, res);
+        }
+    }
     async indexAccount(req, res) {
         try {
             return res.render('customer/account');
@@ -31,6 +50,7 @@ class CustomerController {
             internalServer(req, res);
         }
     }
+
     async indexCreate(req, res) {
         try {
             const message = await req.flash('message')[0];
@@ -69,6 +89,7 @@ class CustomerController {
             return internalServer(req, res);
         }
     }
+
     async indexTrash(req, res) {
         try {
             const { type, column, page } = await req.query;

@@ -19,6 +19,7 @@ router.get('/logout', customerController.logOut);
 router.get('/changepwd', customerController.indexChangePwd);
 router.get('/profile', customerController.index);
 router.get('/account', customerController.indexAccount);
+router.get('/history', customerController.indexHistory);
 
 router.get('/create', authStaff, customerController.indexCreate);
 router.get('/trash', authStaff, customerController.indexTrash);

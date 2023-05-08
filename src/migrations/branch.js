@@ -30,6 +30,13 @@ module.exports = {
                 type: Sequelize.STRING,
                 require: true,
             },
+            slug: {
+                type: Sequelize.STRING,
+                require: true,
+            },
+            id_category: {
+                type: Sequelize.STRING,
+            },
             link: {
                 type: Sequelize.STRING(1234),
             },

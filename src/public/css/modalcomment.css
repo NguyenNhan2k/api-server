@@ -3,7 +3,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 1001;
+    z-index: 1001100;
     display: none;
     justify-content: center;
     align-items: center;
@@ -68,10 +68,9 @@
     height: 4rem;
     padding: 0 2rem;
 }
-/* .rows .row {
-    display: flex;
-    align-items: center;
-} */
+.rating-parameter {
+    padding-top: 2rem;
+}
 .detail-row {
     display: flex;
     width: 100%;

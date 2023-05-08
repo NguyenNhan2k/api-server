@@ -1,9 +1,9 @@
+@import './manage.css';
 #contain-branch {
     width: 100%;
     height: auto;
     background-color: var(--grey);
     /* padding: 0 2rem; */
-    margin-top: 2rem;
     border-radius: 0.5rem;
 }
 #contain-branch .branch {
@@ -12,12 +12,13 @@
 }
 
 #contain-branch .branch-avatar img {
-    width: 45rem;
+    width: 50rem;
     height: 30rem;
 }
 
 #contain-branch .branch-content {
-    padding: 2rem 2rem;
+    padding: 2rem 0;
+    padding-left: 3rem;
 }
 .branch-content .group-address {
     margin-bottom: 1rem;
@@ -65,24 +66,30 @@
     font-size: 2rem;
 }
 .branch-content .list-rate li p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 .branch-content .list-rate .total {
     margin-right: 1rem;
     width: 5rem;
     height: 100%;
     border-radius: 50%;
+
     background-color: var(--blue);
 }
 .branch-content .list-rate .total p {
     line-height: 5rem;
     color: var(--light);
     text-align: center;
+    font-size: 1.8rem;
 }
 
 .detail-address i {
     font-size: 1.5rem;
+    color: #746c6c;
     margin-right: 0.5rem;
+}
+.detail-address i a {
+    color: #746c6c;
 }
 .detail-address:hover {
     text-decoration: underline;
@@ -95,9 +102,11 @@
 .activities i {
     font-size: 1.5rem;
     margin-right: 0.5rem;
+    color: #746c6c;
 }
 .activities p {
     margin-right: 1rem;
+    color: #746c6c;
 }
 .activities .open {
     color: var(--color--success);
@@ -108,6 +117,7 @@
 .price i {
     font-size: 1.5rem;
     margin-right: 0.5rem;
+    color: #746c6c;
 }
 .activities,
 .detail-address {
@@ -134,7 +144,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    padding: 0 2rem;
+    padding: 1.5rem 2rem;
     border: 0.1rem solid #bebcbc;
     justify-content: center;
     align-items: center;

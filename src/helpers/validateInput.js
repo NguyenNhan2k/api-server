@@ -12,6 +12,13 @@ const email = joi
     .string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required();
+const slug = joi.string();
+const title = joi.string().required();
+const content = joi.string().required();
+const space = joi.number().required();
+const quality = joi.number().required();
+const location = joi.number().required();
+const servi = joi.number().required();
 const confirmPwd = joi.ref('password');
 const province = joi.string().required();
 const districts = joi.string().required();
@@ -23,7 +30,7 @@ const price = joi.number().required();
 const sale = joi.number();
 const link = joi.string();
 const description = joi.string();
-const id_category = joi.string().required();
+const id_category = joi.string();
 const id_branch = joi.string().required();
 const endTime = joi.string().required();
 const registerSchema = joi.object({
@@ -53,7 +60,18 @@ const userJoi = joi.object({
 });
 const customerJoi = joi.object({ password, phone, fullName, address, email, confirmPwd });
 const storeJoi = joi.object({ phone, name, email });
-const baranchJoi = joi.object({ province, districts, wards, street, id_store, name, startTime, endTime, link });
+const baranchJoi = joi.object({
+    districts,
+    wards,
+    street,
+    id_store,
+    name,
+    startTime,
+    endTime,
+    link,
+    slug,
+    id_category,
+});
 const branchUpdateJoi = joi.object({ province, districts, wards, street, id_store, name, startTime, endTime, id });
 const storeUpdateJoi = joi.object({ phone, name, email });
 const customerUpdateJoi = joi.object({ phone, fullName, address, email });
@@ -64,6 +82,7 @@ const handelAction = joi.object({
     staffs,
     actions,
 });
+const rateJoi = joi.object({ title, content, price, space, servi, location, quality });
 const changePwdJoi = joi.object({ password, confirmPwd });
 module.exports = {
     registerSchema,
@@ -80,4 +99,5 @@ module.exports = {
     categoryUpdateJoi,
     dishJoi,
     changePwdJoi,
+    rateJoi,
 };

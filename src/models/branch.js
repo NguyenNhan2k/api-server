@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Branch.belongsTo(models.Stores, { foreignKey: 'id_store', targetKey: 'id', as: 'store' });
+            Branch.belongsTo(models.StoreCategories, { foreignKey: 'id_category', targetKey: 'id', as: 'category' });
             Branch.hasMany(models.Rates, { foreignKey: 'id_branch', as: 'rates' });
             Branch.hasMany(models.Dishs, { foreignKey: 'id_branch', as: 'dishs' });
         }
@@ -26,6 +27,8 @@ module.exports = (sequelize, DataTypes) => {
             startTime: DataTypes.STRING,
             endTime: DataTypes.STRING,
             avatar: DataTypes.STRING,
+            slug: DataTypes.STRING,
+            id_category: DataTypes.STRING,
             id_store: DataTypes.STRING,
             link: DataTypes.STRING(1234),
         },

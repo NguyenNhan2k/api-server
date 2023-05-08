@@ -1,0 +1,279 @@
+/*About*/
+
+.about {
+    padding-top: 5rem;
+    width: 100%;
+    height: 100vh;
+}
+
+.about .about_main {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-around;
+}
+
+.about .about_main .image img {
+    width: 70rem;
+    position: relative;
+    top: 60px;
+}
+
+.about .about_main .about_text h1 span {
+    color: #fac031;
+    margin-right: 15px;
+    font-family: mv boli;
+}
+
+.about .about_main .about_text h1 {
+    font-size: 55px;
+    position: relative;
+    bottom: 50px;
+}
+
+.about .about_main .about_text h3 {
+    font-size: 30px;
+    margin: 0 0 50px 0;
+}
+
+.about .about_main .about_text p {
+    width: 650px;
+    text-align: justify;
+    margin-right: 30px;
+    line-height: 22px;
+}
+
+.about .about_btn {
+    background: #fac031;
+    padding: 12px 25px;
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    left: 55%;
+    bottom: 30px;
+}
+
+/*Menu*/
+
+.menu {
+    width: 100%;
+    padding: 70px 0;
+}
+.menu .wrap_filter {
+    background-color: #ece7e2;
+    height: 7rem;
+    width: 95%;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu .wrap_filter .menu_status,
+.menu_selects {
+    display: flex;
+    align-items: center;
+    color: #313030;
+    padding: 2rem;
+}
+.menu .wrap_filter .menu_status .active a {
+    color: #f14815;
+    border-bottom: 0.1rem solid #f14815;
+}
+.menu .wrap_filter .menu_status .menu_title img {
+    height: 5rem;
+    width: 7rem;
+    margin-right: 1rem;
+}
+.menu .wrap_filter .menu_status .menu_title p {
+    line-height: 5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.menu .wrap_filter .menu_status li,
+.menu_selects li {
+    display: flex;
+    align-self: center;
+    margin-left: 1.5rem;
+}
+.menu .wrap_filter .menu_status li p {
+    text-align: center;
+    line-height: 100%;
+}
+.menu .wrap_filter .menu_status li a {
+    color: #313030;
+}
+.menu .wrap_filter .menu_status {
+    justify-content: flex-start;
+}
+.menu .wrap_filter .menu_selects {
+    justify-content: flex-end;
+}
+.menu .wrap_filter .menu_selects li select {
+    padding: 0.6rem;
+    cursor: pointer;
+}
+.menu h1 {
+    font-size: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.menu h1 span {
+    color: #fac031;
+    margin-left: 15px;
+    font-family: mv boli;
+}
+
+.menu h1 span::after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #fac031;
+    display: block;
+    position: relative;
+    bottom: 15px;
+}
+
+.menu .pagination {
+    width: 100%;
+    margin-top: 3rem;
+    position: absolute;
+    left: 40%;
+}
+
+.menu .pagination a {
+    color: white;
+    font-size: 1.4rem;
+    margin-left: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    padding: 8px 16px;
+    background-color: #313030;
+    text-decoration: none;
+}
+.menu .pagination a:hover {
+    opacity: 0.8;
+}
+.menu .pagination .active {
+    background-color: #fac031;
+}
+.menu .menu_box {
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 15px;
+    padding: 2rem 2rem;
+}
+.menu .menu_box .menu_card {
+    width: 28rem;
+    height: 460px;
+    padding-top: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu .menu_box .menu_card .menu_image {
+    width: 28rem;
+    height: 245px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.menu .menu_box .menu_card .menu_image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: 0.3s;
+}
+
+.menu .menu_box .menu_card .menu_image:hover img {
+    transform: scale(1.1);
+}
+
+.menu .menu_box .menu_card .small_card {
+    width: 45px;
+    height: 45px;
+    float: right;
+    position: relative;
+    top: -240px;
+    right: -8px;
+    opacity: 0;
+    border-radius: 7px;
+    transition: 0.3s;
+}
+
+.menu .menu_box .menu_card:hover .small_card {
+    position: relative;
+    top: -240px;
+    right: 20px;
+    opacity: 1;
+}
+
+.menu .menu_box .menu_card .small_card i {
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 50px;
+    color: #000;
+    cursor: pointer;
+    text-shadow: 0 0 6px #000;
+    transition: 0.2s;
+}
+
+.menu .menu_box .menu_card .small_card i:hover {
+    color: #fac031;
+}
+
+.menu .menu_box .menu_card .menu_info h2 {
+    width: 60%;
+    height: 4.6rem;
+    text-align: center;
+    margin: 10px auto 10px auto;
+    font-size: 2rem;
+    color: #fac031;
+}
+
+.menu .menu_box .menu_card .menu_info p {
+    text-align: center;
+    margin-top: 8px;
+    padding-left: 1.5rem;
+    line-height: 21px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.menu .menu_box .menu_card .menu_info h3 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #f14815;
+    margin-top: 10px;
+}
+.menu .menu_box .menu_card .menu_info h3 i {
+    font-size: 1.8rem;
+    margin-right: 1rem;
+}
+.menu .menu_box .menu_card .menu_info .menu_icon {
+    color: #fac031;
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 10px 0 10px 0;
+}
+
+.menu .menu_box .menu_card .menu_info .menu_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    background: #000;
+    padding: 8px 10px;
+    margin: 0 80px;
+    transition: 0.3s;
+}

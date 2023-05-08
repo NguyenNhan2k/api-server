@@ -1,0 +1,32 @@
+<div class='menu' id='Menu'>
+    <h1>Our<span>Menu</span></h1>
+    <div class='menu_box' style='background-color: white;'>
+        {{#if dishs}}
+            {{#each dishs}}
+                <div class='menu_card'>
+                    <div class='menu_image'>
+                        <img src='/img/dish/{{this.avatar}}' />
+                    </div>
+
+                    <div class='small_card'>
+                        <i class='fa-solid fa-heart'></i>
+                    </div>
+                    <div class='menu_info'>
+                        <h2>{{this.name}}</h2>
+                        <p>
+                            {{this.description}}
+                        </p>
+                        <h3>{{convertToVND this.price}}</h3>
+                        <a href='#' class='menu_btn' style='margin-top: 1.5rem;'>Add to Cart</a>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+    </div>
+    <div class='pagination'>
+        <a href='?page=1'>«</a>
+        <a class='active' href='?page=1'>1</a><a class='' href='?page=2'>2</a>
+        <a href='?page=2'>»</a>
+    </div>
+</div>
+<link rel='stylesheet' href='/css/listBranch.css' />

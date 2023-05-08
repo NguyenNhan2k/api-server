@@ -14,46 +14,48 @@ let files = [],
 select = document.querySelector('.drag-area .select');
 container = document.querySelector('.container');
 function handleMutipleImage() {
-    select.addEventListener('click', () => input.click());
-    input.addEventListener('change', () => {
-        let file = input.files;
-        // if user select no image
-        if (file.length == 0) return;
+    if (select && input) {
+        select.addEventListener('click', () => input.click());
+        input.addEventListener('change', () => {
+            let file = input.files;
+            // if user select no image
+            if (file.length == 0) return;
 
-        for (let i = 0; i < file.length; i++) {
-            if (file[i].type.split('/')[0] != 'image') continue;
-            if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
-        }
+            for (let i = 0; i < file.length; i++) {
+                if (file[i].type.split('/')[0] != 'image') continue;
+                if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
+            }
 
-        input.files = null;
-        showImages();
-    });
-    /* DRAG & DROP */
-    dragArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dragArea.classList.add('dragover');
-    });
+            input.files = null;
+            showImages();
+        });
+        /* DRAG & DROP */
+        dragArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragArea.classList.add('dragover');
+        });
 
-    /* DRAG LEAVE */
-    dragArea.addEventListener('dragleave', (e) => {
-        e.preventDefault();
-        dragArea.classList.remove('dragover');
-    });
+        /* DRAG LEAVE */
+        dragArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dragArea.classList.remove('dragover');
+        });
 
-    /* DROP EVENT */
-    dragArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dragArea.classList.remove('dragover');
+        /* DROP EVENT */
+        dragArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragArea.classList.remove('dragover');
 
-        let file = e.dataTransfer.files;
-        for (let i = 0; i < file.length; i++) {
-            /** Check selected file is image */
-            if (file[i].type.split('/')[0] != 'image') continue;
+            let file = e.dataTransfer.files;
+            for (let i = 0; i < file.length; i++) {
+                /** Check selected file is image */
+                if (file[i].type.split('/')[0] != 'image') continue;
 
-            if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
-        }
-        showImages();
-    });
+                if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
+            }
+            showImages();
+        });
+    }
 }
 function showImages() {
     let images = files.reduce(function (prev, file, index) {
@@ -73,7 +75,6 @@ function delImage(index) {
 function slideImg() {
     const allHoverImages = document.querySelectorAll('.hover-container div img');
     const imgContainer = document.querySelector('.img-container');
-
     window.addEventListener('DOMContentLoaded', () => {
         allHoverImages[0].parentElement.classList.add('active');
     });
@@ -113,11 +114,10 @@ function getNameUser() {
         isValid = userName.some((item) => {
             const user = item.split('=');
 
-            const check = user.includes(' user');
+            const check = user.includes('user');
             return check;
         });
     }
-
     if (isValid && userElement) {
         userElement.innerHTML = `
         <i class='fa-solid fa-user icon-user'></i>

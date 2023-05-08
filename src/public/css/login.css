@@ -11,6 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 10rem 0;
 }
 .form-login,
 .form-register {

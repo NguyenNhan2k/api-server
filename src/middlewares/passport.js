@@ -12,7 +12,7 @@ passport.use(
         async function (accessToken, refreshToken, profile, cb) {
             try {
                 const { id, displayName, emails, provider } = await profile;
-                const [user, created] = await db.Users.findOrCreate({
+                const [user, created] = await db.Customers.findOrCreate({
                     where: { email: emails[0].value },
                     defaults: {
                         fullName: displayName,

@@ -63,7 +63,6 @@ const handlebar = {
         return formated;
     },
     defaultSelect: (firt, second) => {
-        console.log(firt, second);
         return firt == second ? 'selected="selected"' : '';
     },
     count: (payload) => {
@@ -71,7 +70,6 @@ const handlebar = {
     },
     countTwoArr: (payloads) => {
         if (payloads) {
-            console.log(payloads);
             const quantity = payloads.reduce((acc, cur) => {
                 return acc + cur.rates.length;
             }, 0);
@@ -120,7 +118,6 @@ const handlebar = {
         }
     },
     displayUiTotalBranch: (rates) => {
-        console.log(rates);
         const objRate = handlebar.getTotalRate(rates);
 
         const output = `<li class='total'>
@@ -170,7 +167,7 @@ const handlebar = {
         for (let i = 1; i <= countStartChecked; i++) {
             elementStart += `<span class='fa fa-star'></span>`;
         }
-        console.log(elementStart);
+
         const output = `   <div class='user-raing'>
         <span class='heading'>User Rating</span>
        ${elementStart}
@@ -245,7 +242,35 @@ const handlebar = {
     </div>`;
         return new Handlebars.SafeString(output);
     },
-
+    displayUiTotalRatingBranchMain: (rates) => {
+        const objRate = handlebar.getTotalRate(rates);
+        let countStart = Math.ceil(objRate.totalRate / 2);
+        const startHalf = objRate.totalRate % 2;
+        let countStartChecked = 5 - countStart;
+        let elementStart = '';
+        // <i class='fa-solid fa-star-half-stroke'></i>
+        for (let i = 1; i <= countStart; i++) {
+            elementStart += ` <i class='fa-solid fa-star'></i>`;
+        }
+        if (startHalf > 0) {
+            countStartChecked--;
+            elementStart += ` <i class='fa-solid fa-star-half-stroke'></i>`;
+        }
+        for (let i = 1; i <= countStartChecked; i++) {
+            elementStart += `<i class="fa-regular fa-star"></i>`;
+        }
+        if (!countStart) {
+            elementStart += `<i class="fa-regular fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+            <i class="fa-regular fa-star"></i>`;
+        }
+        const output = `  
+       ${elementStart}
+    `;
+        return new Handlebars.SafeString(output);
+    },
     getCountComment: (rates) => {
         if (rates) {
             const { countComment } = handlebar.getTotalRate(rates);

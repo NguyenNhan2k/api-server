@@ -32,6 +32,7 @@ class BranchController {
                 message,
                 active: 'branchs',
                 stores: response.stores,
+                category: response.category,
             });
         } catch (error) {
             console.log(error);
@@ -61,6 +62,7 @@ class BranchController {
     async indexInfoBranch(req, res) {
         try {
             const idBranch = await req.params.id;
+
             if (!idBranch) {
                 const messageError = 'Yêu cầu thất bại!';
                 return badRequest(req, res, messageError);
@@ -72,6 +74,7 @@ class BranchController {
                 branch: response.err !== 1 ? response.branch : {},
                 active: 'branchs',
                 message,
+
                 stores: response.stores,
                 categories: response.categories,
                 price: response.price,

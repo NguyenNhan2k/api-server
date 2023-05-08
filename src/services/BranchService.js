@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+var slug = require('slug');
 const Sequelize = require('sequelize');
 const op = Sequelize.Op;
 const db = require('../models');
@@ -15,7 +16,9 @@ class BranchService {
             const stores = await db.Stores.findAll({
                 raw: true,
             });
-            console.log(stores);
+            const category = await db.StoreCategories.findAll({
+                raw: true,
+            });
             if (!stores) {
                 return message;
             }
@@ -24,6 +27,7 @@ class BranchService {
                 mes: 'Hành động thành công!',
                 type: 'success',
                 stores,
+                category,
             });
         } catch (error) {
             console.log(error);
@@ -37,11 +41,13 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const { districts: district, wards: ward, name, ...other } = await payload;
+            let { wards: ward, name, ...other } = await payload;
+            other.slug = slug(name);
+            console.log(other.slug);
             const [user, created] = await db.Branchs.findOrCreate({
                 where: { name },
                 defaults: {
-                    district,
+                    district: 'Thành phố Cần Thơ',
                     ward,
                     avatar: avatar ? avatar.filename : '',
                     id_store: other.store,
@@ -102,6 +108,11 @@ class BranchService {
                             },
                         },
                     },
+                    {
+                        model: db.StoreCategories,
+                        as: 'category',
+                        raw: true,
+                    },
                 ],
                 raw: false,
                 nest: true,
@@ -123,65 +134,117 @@ class BranchService {
             return false;
         }
     }
-    async getOne(id) {
-        let message = {
-            err: 1,
-            mes: 'Hành động thất bại!',
-            type: 'warning',
-        };
+    async findOneBySlug(slug, deleted = true) {
         try {
-            if (!id) {
-                return message;
-            }
-            const branch = await this.findOne(id);
+            const queries = await {
+                where: { slug },
+                include: [
+                    {
+                        model: db.Stores,
+                        as: 'store',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Dishs,
+                        as: 'dishs',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Categories,
+                            as: 'category',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.Rates,
+                        as: 'rates',
 
-            const stores = await db.Stores.findAll({
-                raw: true,
+                        include: {
+                            model: db.Customers,
+                            as: 'customer',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.StoreCategories,
+                        as: 'category',
+                        raw: true,
+                    },
+                ],
+                raw: false,
                 nest: true,
-            });
-            if (branch) {
-                const price = await db.Dishs.findAll({
-                    where: { id_branch: id },
-                    attributes: [
-                        [Sequelize.fn('max', Sequelize.col('price')), 'maxPrice'],
-                        [Sequelize.fn('min', Sequelize.col('price')), 'minPrice'],
-                    ],
-                    raw: true,
-                });
-                return (message = {
-                    err: 0,
-                    mes: 'Hành động thành công!',
-                    type: 'success',
-                    branch,
-                    stores,
-                    price,
-                });
+            };
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
             }
-            return message;
+            const dish = await db.Branchs.findOne({
+                ...queries,
+            });
+            return dish.toJSON();
         } catch (error) {
             console.log(error);
-            return message;
+            return false;
         }
     }
-    async getAll({ page, order, deleted = true }) {
-        let message = {
-            err: 1,
-            mes: 'Hành động thất bại!',
-            type: 'warning',
-        };
+    async findAll({ page, order, deleted = true }) {
         try {
             const offset = (await !page) || +page < 1 ? 0 : +page - 1;
             const limit = await process.env.QUERY_LIMIT;
             const queries = await {
-                include: {
-                    model: db.Stores,
-                    as: 'store',
-                    raw: true,
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt'],
+                include: [
+                    {
+                        model: db.Stores,
+                        as: 'store',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
                     },
-                },
-                raw: true,
+                    {
+                        model: db.Dishs,
+                        as: 'dishs',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Categories,
+                            as: 'category',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.Rates,
+                        as: 'rates',
+                        include: {
+                            model: db.Customers,
+                            as: 'customer',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.StoreCategories,
+                        as: 'category',
+                        raw: true,
+                    },
+                ],
+                raw: false,
                 nest: true,
             };
             if (order.length > 0) {
@@ -200,6 +263,118 @@ class BranchService {
             const { count, rows } = await db.Branchs.findAndCountAll({
                 ...queries,
             });
+            const convertRows = await rows.map((item) => {
+                return item.toJSON();
+            });
+            return { count, convertRows };
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+    async getOne(id) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            if (!id) {
+                return message;
+            }
+            const branch = await this.findOne(id);
+            const stores = await db.Stores.findAll({
+                raw: true,
+                nest: true,
+            });
+            if (branch) {
+                const price = await db.Dishs.findAll({
+                    where: { id_branch: id },
+                    attributes: [
+                        [Sequelize.fn('max', Sequelize.col('price')), 'maxPrice'],
+                        [Sequelize.fn('min', Sequelize.col('price')), 'minPrice'],
+                    ],
+                    raw: true,
+                });
+                let categories = [];
+                await branch.dishs.forEach((item) => {
+                    if (!categories.includes(item.category.name)) {
+                        categories.push(item.category.name);
+                    }
+                });
+
+                return (message = {
+                    err: 0,
+                    mes: 'Hành động thành công!',
+                    type: 'success',
+                    branch,
+                    stores,
+                    price,
+                    categories,
+                });
+            }
+            return message;
+        } catch (error) {
+            console.log(error);
+            return message;
+        }
+    }
+    async getOneBySlug(slug) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            if (!slug) {
+                return message;
+            }
+            const branch = await this.findOneBySlug(slug);
+            const stores = await db.Stores.findAll({
+                raw: true,
+                nest: true,
+            });
+            if (branch) {
+                const price = await db.Dishs.findAll({
+                    where: { id_branch: branch.id },
+                    attributes: [
+                        [Sequelize.fn('max', Sequelize.col('price')), 'maxPrice'],
+                        [Sequelize.fn('min', Sequelize.col('price')), 'minPrice'],
+                    ],
+                    raw: true,
+                });
+                let categories = [];
+                await branch.dishs.forEach((item) => {
+                    if (!categories.includes(item.category.name)) {
+                        categories.push(item.category.name);
+                    }
+                });
+
+                return (message = {
+                    err: 0,
+                    mes: 'Hành động thành công!',
+                    type: 'success',
+                    branch,
+                    stores,
+                    price,
+                    categories,
+                });
+            }
+            return message;
+        } catch (error) {
+            console.log(error);
+            return message;
+        }
+    }
+    async getAll({ page, order, deleted = true }) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            const limit = await process.env.QUERY_LIMIT;
+            const { count, convertRows } = await this.findAll({ page, order, deleted });
             const countDeleted = await db.Branchs.findAndCountAll({
                 where: {
                     destroyTime: {
@@ -210,12 +385,12 @@ class BranchService {
                 raw: true,
             });
             const countPage = count / limit;
-            if (rows) {
+            if (convertRows) {
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    branchs: rows,
+                    branchs: convertRows,
                     countPage,
                     countDeleted: countDeleted.count,
                 });

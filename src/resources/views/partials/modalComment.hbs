@@ -1,33 +1,41 @@
-<div class='modal-comment' id='modal-comment' role='dialog'>
+<form
+    class='modal-comment'
+    id='modal-comment'
+    role='dialog'
+    action='/rates/create/{{branch.id}}'
+    method='POST'
+    enctype='multipart/form-data'
+>
     <div class='modal-content'>
         <div class='modal-header'>
             <p class='modal-title'>Viết bình luận</p>
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-                <span aria-hidden='true'>&times;</span>
+                <span
+                    aria-hidden='true'
+                    class='close-modal_commment'
+                    onclick='closeModalComment(".close-modal_commment","#modal-comment")'
+                >&times;</span>
             </button>
         </div>
         <div class='modal-body'>
             <div class='info-branch'>
                 <div class='detail-branch'>
-                    <img src='/img/store/store.png' alt='' />
+                    <img src='/img/branch/{{branch.avatar}}' alt='' />
                     <div class='wrap-detail'>
                         <div class='total'>
-                            7.6
+                            {{getTotalRates branch.rates}}
                         </div>
                         <div class='detail-content'>
                             <div class='name'>
-                                <h3>Pizza Hut - Big C Cần Thơ</h3>
+                                <h3>{{branch.name}}</h3>
                             </div>
                             <div class='address'>
-                                <p>Lô 1 KDC Hưng Phú 1, P. Hưng Phú, Quận Cá</p>
+                                <p>{{branch.street}}, {{branch.ward}}, {{branch.district}}, {{branch.province}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class='rating'>
-                    <h3 class='total-conment'>
-                        175 bình luận đã chia sẻ
-                    </h3>
                     <div class='rating-parameter'>
                         <div class='row'>
                             <div class='detail-row'>
@@ -36,11 +44,18 @@
                                 </div>
                                 <div class='middle'>
                                     <div class='bar-container'>
-                                        <input type='range' />
+                                        <input
+                                            type='range'
+                                            name='location'
+                                            min='1'
+                                            max='10'
+                                            id='location'
+                                            class='input-range'
+                                        />
                                     </div>
                                 </div>
                                 <div class='side right'>
-                                    <p>8.5</p>
+                                    <p class='value-range'>8.5</p>
                                 </div>
                             </div>
                             <div class='detail-row'>
@@ -49,11 +64,18 @@
                                 </div>
                                 <div class='middle'>
                                     <div class='bar-container'>
-                                        <input type='range' />
+                                        <input
+                                            type='range'
+                                            name='price'
+                                            min='1'
+                                            max='10'
+                                            id='price'
+                                            class='input-range'
+                                        />
                                     </div>
                                 </div>
                                 <div class='side right'>
-                                    <p>8.6</p>
+                                    <p class='value-range'>8.5</p>
                                 </div>
                             </div>
                             <div class='detail-row'>
@@ -62,11 +84,18 @@
                                 </div>
                                 <div class='middle'>
                                     <div class='bar-container'>
-                                        <input type='range' />
+                                        <input
+                                            type='range'
+                                            name='quality'
+                                            min='1'
+                                            max='10'
+                                            id='quality'
+                                            class='input-range'
+                                        />
                                     </div>
                                 </div>
                                 <div class='side right'>
-                                    <p>8.6</p>
+                                    <p class='value-range'>8.5</p>
                                 </div>
                             </div>
                             <div class='detail-row'>
@@ -75,11 +104,18 @@
                                 </div>
                                 <div class='middle'>
                                     <div class='bar-container'>
-                                        <input type='range' />
+                                        <input
+                                            type='range'
+                                            name='servi'
+                                            min='1'
+                                            max='10'
+                                            id='servi'
+                                            class='input-range'
+                                        />
                                     </div>
                                 </div>
                                 <div class='side right'>
-                                    <p>8.6</p>
+                                    <p class='value-range'>8.5</p>
                                 </div>
                             </div>
                             <div class='detail-row'>
@@ -88,11 +124,18 @@
                                 </div>
                                 <div class='middle'>
                                     <div class='bar-container'>
-                                        <input type='range' value='50' />
+                                        <input
+                                            type='range'
+                                            min='1'
+                                            max='10'
+                                            name='space'
+                                            id='space'
+                                            class='input-range'
+                                        />
                                     </div>
                                 </div>
                                 <div class='side right'>
-                                    <p>8.6</p>
+                                    <p class='value-range'>5</p>
                                 </div>
                             </div>
                         </div>
@@ -139,11 +182,11 @@
                     </ul>
                     <button type='submit' class='submmit-comment'>Hoàn tất</button>
                 </div>
-
             </div>
         </div>
 
     </div>
-</div>
-
+</form>
 <link rel='stylesheet' href='/css/modalcomment.css' />
+<script src='/js/manage.js'></script>
+<script>handleInputRates('.input-range');</script>

@@ -1,0 +1,38 @@
+<div class="container">
+    <form action='/customers/update?_method=PATCH' method='post' class='profile form-update' enctype="multipart/form-data">
+   {{> nav.user}}
+    <div class='profile-info'>
+        <h2 class='title'>Lịch sử đặt hàng</h2>
+        <div class='form-profile'>
+            <table>
+                <tr>
+                  
+                    <th>STT</th>
+                    <th>Mã đơn hàng {{{sortable 'name' _sort _page}}}</th>
+                    <th>Nơi đặt{{{sortable 'startTime' _sort _page}}}</th>
+                    <th>Nơi giao hàng{{{sortable 'endTime' _sort _page}}}</th>
+                    <th>Tổng tiền {{{sortable 'id_store' _sort _page}}}</th>
+                    <th>Trạng thái{{{sortable 'address' _sort _page}}}</th>
+                    <th>Xem chi tiết</th>
+                </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>MD1</td>
+                        <td>Pizza hut</td>
+                        <td>Quan ninh kieu can tho</td>
+                        <td>350000</td>
+                        <td>dang giao</td>
+                        
+                    </tr>
+                    
+                    {{!-- <td colspan='10'>Bạn chưa có khách nào?</tr> --}}
+               
+            </table>
+        </div>
+    </div>
+</form>
+<script src='/js/main.js'></script>
+<script src='/js/validate.js'></script>
+<script>handleImage(); 
+</script>
+</div>

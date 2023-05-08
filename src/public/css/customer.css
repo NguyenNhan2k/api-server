@@ -1,8 +1,9 @@
 @import './main.css';
 .container {
-    display: grid;
+    display: flex;
     justify-content: center;
     align-items: center;
+    padding: 2rem 0;
 }
 .profile {
     width: 110rem;
@@ -11,7 +12,6 @@
     height: auto;
     border-radius: 0.5rem;
     display: flex;
-
     background-color: #dbd8d8;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -43,7 +43,7 @@
 }
 
 .profile-nav {
-    height: 40rem;
+    height: 44rem;
     width: 35rem;
     background-color: #ffff;
     border: 0.05rem solid rgba(78, 76, 76, 0.205);

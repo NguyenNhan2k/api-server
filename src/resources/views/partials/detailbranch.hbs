@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/detailbranch.css">
 <div class='branch'>
     <div class='branch-avatar'>
         <img src='/img/branch/{{branch.avatar}}' alt='Loading...' />
@@ -15,10 +16,10 @@
                 {{#each categories}}
                 <a href=''>{{this}} </a>-
                 {{/each}}
-                {{else}}
+            {{else}}
              <a href=''>Trống!</a>
              {{/if}}
-            <a href='' class='branchs'>Chi nhanh</a>
+            <a href='/stores/{{branch.id_store}}' class='branchs'>Chi nhánh</a>
         </div>
         <ul class='list-rate'>
             {{displayUiTotalBranch branch.rates}}
@@ -38,6 +39,7 @@
         </div>
     </div>
 </div>
+{{> listDish}}
 <div class='nav'>
     <ul>
         <li>
@@ -137,7 +139,7 @@
         <div class='rating-box'>
             {{displayTotalRating branch.rates}}
         </div>
-        <button class='button-comment'>
+        <button class='button-comment' onclick='requiedLogin("{{isUser}}")' >
             Bình luận
         </button>
     </div>
@@ -145,11 +147,3 @@
 <div class="wrap-map">
     {{> map}}
 </div>
-<script>
-    const addComment = document.querySelector('.button-comment');
-    const modalComment = document.querySelector('.modal-comment');
-    addComment.addEventListener('click',() => {
-        modalComment.style.display = 'flex';
-    });
-    console.log(addComment,modalComment);
-</script>

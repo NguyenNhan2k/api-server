@@ -14,9 +14,11 @@ const handleClickSidebar = () => {
 const toggleMenu = () => {
     const sidebar = document.querySelector('#sidebar');
     const menu = document.querySelector('#content nav i');
-    menu.addEventListener('click', () => {
-        sidebar.classList.toggle('hidden');
-    });
+    if (menu) {
+        menu.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    }
 };
 var eleModal = document.querySelector('#modal');
 const closeModal = (close, btnClose, active, modalTitle, modalText) => {
@@ -187,6 +189,7 @@ function handleImgComment() {
             if (!files.some((e) => e.name == file[i].name)) files.push(file[i]);
         }
         input.files = null;
+        console.log('oday');
         showImgcomment(files, container);
     });
 }
@@ -203,4 +206,26 @@ function delImg(index) {
     let container = document.querySelector('.list-img');
     files.splice(index, 1);
     showImgcomment(files, container);
+}
+
+function getParent(element, selector) {
+    while (element.parentElement) {
+        if (element.parentElement.matches(selector)) {
+            return element.parentElement;
+        }
+        element = element.parentElement;
+    }
+}
+function handleInputRates(selectRange) {
+    const rangeElements = document.querySelectorAll(selectRange);
+    if (rangeElements) {
+        rangeElements.forEach((range) => {
+            range.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const parentForm = getParent(range, '.detail-row');
+                const textRange = parentForm.querySelector('.value-range');
+                textRange.innerHTML = value;
+            });
+        });
+    }
 }

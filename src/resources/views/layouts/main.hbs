@@ -9,20 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
 </head>
 <body>
+    {{> modalComment}}
     <div class="app">
-       
         <header>
             {{> header}}
         </header>
          {{> message}}
-        <div class="container">
             {{{body}}}
-        </div>
-        <footer>
             {{> footer}}
-        </footer>
     </div>
+     
+
 </body>
-<script src="/js/main.js"></script>
-<script>turnOffMessage();getNameUser()</script>
+<script src="/js/displayModalComment.js"></script>
+
 </html>

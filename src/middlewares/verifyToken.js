@@ -19,27 +19,29 @@ const authAccessToken = async (req, res, next) => {
     try {
         const token = await req.cookies.accessToken;
         const newToken = (await token) ? token.split(' ')[1] : undefined;
-        if (!newToken) return res.redirect('back');
-        jwt.verify(newToken, process.env.KEY_ACCESS_TOKEN, async (err, decode) => {
-            // if (err.name === 'TokenExpiredError' && err.message === 'jwt expired') {
-            //     console.log('token het han');
-            //     const body = { refreshToken: newRefreshToken };
-            //     const response = await fetch('http://localhost:8000/auth/v1/refresh-token', {
-            //         method: 'post',
-            //         body: JSON.stringify(body),
-            //         headers: { 'Content-Type': 'application/json' },
-            //     });
-            //     const data = await response.json();
-            //     console.log(data);
-            // }
-
-            if (err) {
-                return unauthorized(req, res, 'Vui lòng đăng nhập để tiếp tục!');
-            }
-            req.user = await decode;
-            res.locals.user = decode;
+        if (newToken) {
+            jwt.verify(newToken, process.env.KEY_ACCESS_TOKEN, async (err, decode) => {
+                // if (err.name === 'TokenExpiredError' && err.message === 'jwt expired') {
+                //     console.log('token het han');
+                //     const body = { refreshToken: newRefreshToken };
+                //     const response = await fetch('http://localhost:8000/auth/v1/refresh-token', {
+                //         method: 'post',
+                //         body: JSON.stringify(body),
+                //         headers: { 'Content-Type': 'application/json' },
+                //     });
+                //     const data = await response.json();
+                //     console.log(data);
+                // }
+                if (err) {
+                    return unauthorized(req, res, 'Vui lòng đăng nhập để tiếp tục!');
+                }
+                req.user = await decode;
+                res.locals.user = decode;
+                return next();
+            });
+        } else {
             return next();
-        });
+        }
     } catch (error) {
         return internalServer(req, res);
     }
