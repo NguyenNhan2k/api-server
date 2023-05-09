@@ -91,11 +91,9 @@ const handelSelectWard = (district) => {
     const wardsEle = document.querySelector('#wards');
     districtEle.addEventListener('change', (event) => {
         const valueDistrict = event.target.value;
-
         for (let i = 0; i < wardsEle.length; i++) {
             wardsEle.remove(i);
         }
-
         const indexDistrict = district.filter((item) => {
             return item.name == valueDistrict;
         });
@@ -106,6 +104,34 @@ const handelSelectWard = (district) => {
             wardsEle.add(option);
         });
     });
+};
+const handleSelectFilter = (districts, eleSelect) => {
+    if (districts) {
+        districts.forEach((district) => {
+            const option = document.createElement('option');
+            option.value = district;
+            option.innerText = district;
+            eleSelect.add(option);
+        });
+    }
+};
+const getDistricts = async (select) => {
+    try {
+        const eleSelect = await document.querySelector('#district');
+        const response = await fetch('https://provinces.open-api.vn/api/?depth=3');
+        const jsonData = await response.json();
+        const tinhCanTho = await jsonData.filter((item) => {
+            if (item.code == 92) {
+                return item;
+            }
+        });
+        const districts = tinhCanTho[0].districts.map((item) => {
+            return item.name;
+        });
+        handleSelectFilter(districts, eleSelect);
+    } catch (error) {
+        return 0;
+    }
 };
 const getAddress = async () => {
     try {
@@ -126,6 +152,7 @@ const getAddress = async () => {
                 wards,
             };
         });
+
         addDistricts(districts);
         handelSelectWard(districts);
         console.log(districts);

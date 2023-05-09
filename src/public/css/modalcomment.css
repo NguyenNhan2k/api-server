@@ -168,6 +168,8 @@
 #modal-comment .content-comment textarea {
     outline: none;
     border: none;
+    font-size: 1.6rem;
+    padding: 2rem;
     height: 30rem;
 }
 #modal-comment .content-comment .image-comment {

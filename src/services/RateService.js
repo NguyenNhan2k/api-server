@@ -26,7 +26,6 @@ class RateService {
         try {
             const { id_customer, id_branch, ...other } = await payload;
             const branch = await db.Branchs.findOne({ where: { id: id_branch }, raw: true });
-
             if (!branch) {
                 return message;
             }
@@ -63,6 +62,7 @@ class RateService {
                 err: 0,
                 mes: 'Bình luận thành công',
                 type: 'success',
+                branch,
             });
         } catch (error) {
             const pathAvatar = (await files.avatar) ? files.avatar[0].path : {};

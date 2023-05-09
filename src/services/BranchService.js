@@ -198,7 +198,7 @@ class BranchService {
             return false;
         }
     }
-    async findAll({ page, order, deleted = true }) {
+    async findAll({ page, order, deleted = true }, queriesFilter) {
         try {
             const offset = (await !page) || +page < 1 ? 0 : +page - 1;
             const limit = await process.env.QUERY_LIMIT;
@@ -246,6 +246,9 @@ class BranchService {
                 raw: false,
                 nest: true,
             };
+            if (queriesFilter) {
+                queries.where = await queriesFilter;
+            }
             if (order.length > 0) {
                 queries.order = await [order];
             }
@@ -433,7 +436,7 @@ class BranchService {
             return message;
         }
     }
-    async getAll({ page, order, deleted = true }) {
+    async getAll({ page, order, deleted = true }, queries) {
         let message = {
             err: 1,
             mes: 'Hành động thất bại!',
@@ -441,7 +444,7 @@ class BranchService {
         };
         try {
             const limit = 10;
-            const { count, convertRows } = await this.findAll({ page, order, deleted });
+            const { count, convertRows } = await this.findAll({ page, order, deleted }, queries);
             const countDeleted = await db.Branchs.findAndCountAll({
                 where: {
                     destroyTime: {
@@ -453,6 +456,7 @@ class BranchService {
             });
 
             const countPage = convertRows.length / limit;
+            const categories = await db.StoreCategories.findAll({ raw: true });
             if (convertRows) {
                 return (message = {
                     err: 0,
@@ -461,6 +465,7 @@ class BranchService {
                     branchs: convertRows,
                     countPage,
                     countDeleted: countDeleted.count,
+                    categories,
                 });
             }
             return message;

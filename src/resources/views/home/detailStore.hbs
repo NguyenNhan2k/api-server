@@ -25,7 +25,7 @@
 
 <div class='menu' id='Menu'>
     <h1>Our<span>Menu</span></h1>
-    <div class='wrap_filter'>
+    <form method='get' class='wrap_filter'>
         <ul class='menu_status'>
             <li class='menu_title'>
                 <img src='/image/giaohang.png' alt='' />
@@ -43,23 +43,26 @@
         </ul>
         <ul class='menu_selects'>
             <li class='menu_title'>
-                <select name='' id=''>
-                    <option value=''>-Danh mục-</option>
-                </select>
-            </li>
-            <li class='menu_title'>
-                <select name='' id=''>
+                <select name='id_category' id='id_category'>
                     <option value=''>-Ẩm thực-</option>
+                    {{#if categories}}
+                        {{#each categories}}
+                            <option value='{{this.id}}'>{{this.name}}</option>
+                        {{/each}}
+                    {{/if}}
                 </select>
             </li>
             <li class='menu_title'>
-                <select name='' id=''>
+                <select name='district' id='district'>
                     <option value=''>-Quận/Huyện-</option>
                 </select>
+            </li>.
+            <li class='menu_title'>
+                <button type='submit'>Lọc</button>
             </li>
-
         </ul>
-    </div>
+        <script>getDistricts()</script>
+    </form>
     <div class='menu_box'>
         {{#if branchs}}
             {{#each branchs}}
@@ -76,7 +79,6 @@
                             {{this.street}},
                             {{this.ward}},
                             {{this.district}},
-
                         </p>
                         <h3><i class='fa-solid fa-tag'></i>{{this.category.name}}</h3>
                         <div class='menu_icon'>
@@ -86,10 +88,16 @@
                     </div>
                 </div>
             {{/each}}
+        {{else}}
+            <p class='not-found'>Không tìm thấy cửa hàng nào !</p>
         {{/if}}
     </div>
+
     <div class='pagination'>
-        {{pageView _page countPage}}
+        {{#if branchs}}
+            {{pageView _page countPage}}
+        {{/if}}
     </div>
+
 </div>
 <link rel='stylesheet' href='/css/listBranch.css' />

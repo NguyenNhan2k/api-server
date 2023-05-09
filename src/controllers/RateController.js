@@ -24,7 +24,7 @@ class RateController {
 
             const response = await rateService.create(value, files, id);
             req.flash('message', response);
-            return res.status(200).redirect('back');
+            returnres.redirect(`/branchs/${response.branch.slug}`);
         } catch (error) {
             console.log(error);
             return internalServer(req, res);
@@ -48,7 +48,7 @@ class RateController {
             }
             const response = await rateService.update(idRate, value, user, files);
             req.flash('message', response);
-            res.redirect(`/branch/${response.branch.slug}`);
+            res.redirect(`/branchs/${response.branch.slug}`);
         } catch (error) {
             console.log(error);
             await removeArrImgForController(files.images);
@@ -64,7 +64,7 @@ class RateController {
             }
             const response = await rateService.force(idRate, user);
             req.flash('message', response);
-            res.redirect(`/branch/${response.branch.slug}`);
+            res.redirect(`/branchs/${response.branch.slug}`);
         } catch (error) {
             console.log(error);
             return internalServer(req, res);

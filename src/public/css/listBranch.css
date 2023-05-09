@@ -84,6 +84,10 @@
     width: 7rem;
     margin-right: 1rem;
 }
+.menu .wrap_filter .menu_status .menu_title select {
+    cursor: pointer;
+    text-align: center;
+}
 .menu .wrap_filter .menu_status .menu_title p {
     line-height: 5rem;
     font-size: 2rem;
@@ -92,7 +96,10 @@
 .menu .wrap_filter .menu_status li,
 .menu_selects li {
     display: flex;
+    cursor: pointer;
     align-self: center;
+    text-align: center;
+
     margin-left: 1.5rem;
 }
 .menu .wrap_filter .menu_status li p {
@@ -111,6 +118,22 @@
 .menu .wrap_filter .menu_selects li select {
     padding: 0.6rem;
     cursor: pointer;
+    text-align: center;
+}
+.menu .wrap_filter .menu_selects li {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.menu .wrap_filter .menu_selects li button {
+    background-color: #fac031;
+    width: 100%;
+    color: var(--light);
+    padding: 1rem 2.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.menu .wrap_filter .menu_selects li button:hover {
+    opacity: 0.8;
 }
 .menu h1 {
     font-size: 55px;
@@ -166,6 +189,15 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 15px;
     padding: 2rem 2rem;
+}
+.menu .menu_box .not-found {
+    display: flex;
+    width: 40rem;
+    margin-left: 40rem;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 2rem;
 }
 .menu .menu_box .menu_card {
     width: 28rem;

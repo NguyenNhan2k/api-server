@@ -12,14 +12,23 @@ class HomeController {
     }
     async indexListBranch(req, res) {
         try {
-            const { type, column, page } = await req.query;
-            const order = type && column ? [column, type] : [];
-            const response = await branchService.getAll({ page, order });
+            const { type, column, page, id_category, district } = await req.query;
+            let queries = await {};
+            console.log(id_category, district);
+            const order = (await type) && column ? [column, type] : [];
+            if (id_category) {
+                queries.id_category = await id_category;
+            }
+            if (district) {
+                queries.district = await district;
+            }
+            const response = await branchService.getAll({ page, order }, queries);
             const message = await req.flash('message')[0];
             return res.render('home/detailStore', {
                 layout: 'main',
                 branchs: response.branchs,
                 countPage: response.countPage,
+                categories: response.categories,
                 message,
             });
         } catch (error) {
@@ -39,7 +48,6 @@ class HomeController {
             if (req.user) {
                 isUser = req.user.id;
             }
-
             if (idUpdate) {
                 if (!isUser) {
                     return badRequest(req, res, 'Vui lòng đăng nhập tài khoản!');
