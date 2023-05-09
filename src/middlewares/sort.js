@@ -6,6 +6,7 @@ module.exports = function SortMiddleWare(req, res, next) {
     res.locals._page = {
         enable: false,
         index: 1,
+        indexComment: 2,
     };
     res.locals._user = {
         enable: false,
@@ -15,6 +16,8 @@ module.exports = function SortMiddleWare(req, res, next) {
         Object.assign(res.locals._page, {
             enable: true,
             index: req.query.page,
+            table: req.query.table,
+            indexComment: +req.query.page + 1,
         });
         console.log(req.query.page);
         Object.assign(res.locals._sort, {

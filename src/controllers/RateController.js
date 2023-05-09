@@ -31,25 +31,27 @@ class RateController {
         }
     }
     async update(req, res) {
+        const files = await req.files;
         try {
-            const id = await req.params.id;
-            const files = await req.files;
-            const { error, value } = await dishJoi.validate(req.body);
+            const idRate = await req.params.idRate;
+            const user = await req.user;
+            if (!user) {
+                return badRequest(req, res, messageError);
+            }
+            const { error, value } = await rateJoi.validate(req.body);
             if (error) {
-                if (files.avatar) {
-                    await removeAvatarForController(files.avatar[0]);
-                }
                 if (files.images) {
                     await removeArrImgForController(files.images);
                 }
                 const messageError = await error.details[0].message;
                 return badRequest(req, res, messageError);
             }
-            const response = await rateService.update(id, value, files);
+            const response = await rateService.update(idRate, value, user, files);
             req.flash('message', response);
-            res.redirect('back');
+            res.redirect(`/branch/${response.branch.slug}`);
         } catch (error) {
             console.log(error);
+            await removeArrImgForController(files.images);
             return internalServer(req, res);
         }
     }
@@ -57,28 +59,7 @@ class RateController {
         const message = {};
         try {
             const storeId = await req.params.id;
-
             const response = await rateService.destroy(storeId);
-            req.flash('message', response);
-            res.redirect('back');
-        } catch (error) {
-            console.log(error);
-            return internalServer(req, res);
-        }
-    }
-    async force(req, res) {
-        const message = {
-            err: 1,
-            mes: 'Yêu cầu thất bại!',
-            type: 'warning',
-        };
-        try {
-            const dishsId = await req.params.id;
-            const files = await req.files;
-            if (!dishsId) {
-                return message;
-            }
-            const response = await rateService.force(dishsId);
             req.flash('message', response);
             res.redirect('back');
         } catch (error) {

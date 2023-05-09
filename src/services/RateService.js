@@ -351,66 +351,93 @@ class RateService {
             return message;
         }
     }
-    async update(id, payload, files) {
-        let imagesNew = [];
-        let imagesOld = [];
+    async update(id, payload, user = '', files) {
         let message = {
             err: 1,
             type: 'warning',
-            mes: 'Update store fail !',
+            mes: 'Update comment fail !',
+            displayModal: 'none',
         };
         try {
-            const dish = await db.Dishs.findOne({
-                where: { id },
-                include: {
-                    model: db.Images,
-                    as: 'image',
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt'],
-                    },
-                },
-            });
-            if (files && files.avatar) {
-                const pathAvatar = (await files.avatar) ? `${files.avatar[0].destination}/${dish.id}` : {};
-                await fs.remove(pathAvatar);
-            }
-            if (files && files.images) {
-                // Xóa hình ảnh trong thực đơn ở folder Dish
-                dish.image.forEach((img) => {
-                    const pathIg = `${process.env.PATH_DISH}/${img.image}`;
-                    fs.remove(pathIg);
-                    imagesOld.push(img.id);
-                });
+            //1. Kiểm tra role người dùng
 
-                // Array hình ảnh mới được update
-                imagesNew = files.images.map((img) => {
+            const rate = await db.Rates.findOne({
+                where: { id },
+                raw: false,
+                nest: true,
+                include: [
+                    {
+                        model: db.RateImgs,
+                        as: 'images',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Branchs,
+                        as: 'branch',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+            }).then((result) => {
+                return result.toJSON();
+            });
+            message.branch = await rate.branch;
+            if (user.id_role === 'R3') {
+                const isCustomer = await db.Customers.findOne({ where: { id: user.id }, raw: true });
+                if (!isCustomer) {
+                    message.mes = 'Vui Lòng đăng nhập để tiếp tục!';
+                    return message;
+                }
+                if (isCustomer.id !== rate.id_customer) {
+                    message.mes = await 'Bạn không được phép chỉnh sửa!';
+                    return message;
+                }
+            }
+            if (!rate) {
+                message.mes = 'Hành động thất bại!';
+                return message;
+            }
+
+            //2. Update thông tin đã khách hàng submit
+            const updateRate = await db.Rates.update(payload, { where: { id }, raw: true });
+            if (!updateRate) {
+                return message;
+            }
+            //3. Xử lý ảnh của comment
+            if (files && files.length > 0) {
+                const getNameImgs = await files.map((img) => {
                     return {
-                        id_dish: dish.id,
                         image: img.filename,
+                        id_rate: id,
                     };
                 });
-            }
-            const userUpdate = await db.Dishs.update(
-                {
-                    ...payload,
-                    ...(files.avatar ? { avatar: files.avatar[0].filename } : {}),
-                },
-                { where: { id }, returning: true },
-            );
-
-            await db.Images.destroy({ where: { id: imagesOld }, force: true });
-            await db.Images.bulkCreate(imagesNew, {
-                returning: true,
-                validate: true,
-                individualHooks: true,
-            });
-            if (!userUpdate) {
-                return message;
+                console.log('o day', files);
+                //3.1 Xóa ảnh của commment trong db
+                const forceImgs = await db.RateImgs.destroy({
+                    where: { id_rate: id },
+                    force: true,
+                });
+                //3.2 Tạo ảnh của commment trong db
+                await db.RateImgs.bulkCreate(getNameImgs, {
+                    returning: true,
+                    validate: true,
+                    individualHooks: true,
+                });
+                // 3.3 Xóa ảnh trong folder
+                if (rate.images && rate.images.length > 0) {
+                    await removeArrImgInFolder(rate.images, process.env.PATH_RATE_IMG);
+                }
             }
             return (message = {
                 err: 0,
                 type: 'success',
-                mes: 'Update store successfully!',
+                mes: 'Update comment successfully !',
+                branch: rate.branch,
             });
         } catch (error) {
             console.log(error);

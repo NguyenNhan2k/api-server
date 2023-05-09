@@ -164,7 +164,6 @@ class BranchService {
                     {
                         model: db.Rates,
                         as: 'rates',
-
                         include: {
                             model: db.Customers,
                             as: 'customer',
@@ -319,7 +318,7 @@ class BranchService {
             return message;
         }
     }
-    async getOneBySlug(slug) {
+    async getOneBySlug(slug, { page = 1, order, table }, idRate = '', idUpdate = '') {
         let message = {
             err: 1,
             mes: 'Hành động thất bại!',
@@ -329,6 +328,7 @@ class BranchService {
             if (!slug) {
                 return message;
             }
+            var comment;
             const branch = await this.findOneBySlug(slug);
             const stores = await db.Stores.findAll({
                 raw: true,
@@ -338,11 +338,72 @@ class BranchService {
                 const price = await db.Dishs.findAll({
                     where: { id_branch: branch.id },
                     attributes: [
+                        // ['name', 'price', 'avatar', 'sale', 'description'],
                         [Sequelize.fn('max', Sequelize.col('price')), 'maxPrice'],
                         [Sequelize.fn('min', Sequelize.col('price')), 'minPrice'],
                     ],
                     raw: true,
                 });
+
+                const offset = (await !page) || +page < 1 ? 0 : +page - 1;
+                const limit = await 10;
+                const limitComment = await 5;
+                let queriesDish = await { where: { id_branch: branch.id }, raw: true, limit };
+                let queriesComments = await {
+                    where: { id_branch: branch.id },
+                    nest: true,
+                    offset: 0,
+                    limit: limitComment,
+                    include: [
+                        {
+                            model: db.Customers,
+                            as: 'customer',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                        {
+                            model: db.RateImgs,
+                            as: 'images',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    ],
+                };
+
+                if (order.length > 0) {
+                    queries.order = await [order];
+                }
+                if (table == 'dishs') {
+                    queriesDish.offset = (await offset) * limit;
+                    queriesDish.limit = await +limit;
+                }
+                if (table == 'comment') {
+                    queriesComments.limit = (await limitComment) * +page;
+                    console.log('limit', queriesComments);
+                }
+                if (idRate) {
+                    queriesComments.where = { id: idRate };
+                }
+                const { count, rows: dishs } = await await db.Dishs.findAndCountAll({ ...queriesDish });
+                const { countComment, rows } = await await db.Rates.findAndCountAll({
+                    ...queriesComments,
+                });
+                const commments = await rows.map((row) => {
+                    return row.toJSON();
+                });
+                if (idUpdate) {
+                    queriesComments.where = await {
+                        id: idUpdate,
+                    };
+
+                    const commentFind = await db.Rates.findOne({
+                        ...queriesComments,
+                    });
+                    comment = await commentFind.toJSON();
+                }
+                const countPageDish = Math.ceil(count / limit);
                 let categories = [];
                 await branch.dishs.forEach((item) => {
                     if (!categories.includes(item.category.name)) {
@@ -357,7 +418,13 @@ class BranchService {
                     branch,
                     stores,
                     price,
+                    commments,
                     categories,
+                    countPageDish,
+                    countComment,
+                    comment,
+                    dishs,
+                    displayModalCommet: comment ? 'flex' : 'none',
                 });
             }
             return message;
@@ -373,7 +440,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const limit = await process.env.QUERY_LIMIT;
+            const limit = 10;
             const { count, convertRows } = await this.findAll({ page, order, deleted });
             const countDeleted = await db.Branchs.findAndCountAll({
                 where: {
@@ -384,7 +451,8 @@ class BranchService {
                 paranoid: false,
                 raw: true,
             });
-            const countPage = count / limit;
+
+            const countPage = convertRows.length / limit;
             if (convertRows) {
                 return (message = {
                     err: 0,
@@ -401,6 +469,7 @@ class BranchService {
             return message;
         }
     }
+
     async destroy(id) {
         const message = {
             err: 1,

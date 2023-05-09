@@ -195,6 +195,7 @@ function handleImgComment() {
 }
 function showImgcomment(files, container) {
     let images = files.reduce(function (prev, file, index) {
+        console.log(URL.createObjectURL(file));
         return (prev += `<div class='detail-img'>
             <img src='${URL.createObjectURL(file)}' alt='' />
             <span onclick="delImg(${index})" aria-hidden='true'>&times;</span>
@@ -202,6 +203,7 @@ function showImgcomment(files, container) {
     }, '');
     container.innerHTML = images;
 }
+
 function delImg(index) {
     let container = document.querySelector('.list-img');
     files.splice(index, 1);

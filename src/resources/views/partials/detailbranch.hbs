@@ -84,10 +84,10 @@
             </div>
         </div>
         <div class='list-comment'>
-            {{#if branch.rates}}
-            {{#each branch.rates}}
+            {{#if commments}}
+            {{#each commments}}
             <div class='detail'>
-                <div class='infomation'>
+                <a href="?idRate={{this.id}}" class='infomation'>
                     <div class='infomation-customer'>
                         <img src='/img/user/{{this.customer.url_img}}' alt='Loading' />
                         <div class='customer-detail'>
@@ -96,14 +96,21 @@
                         </div>
                     </div>
                     <div class='total-rate'>{{getTotalOneRate this}}</div>
-                </div>
+                </a>
                 <div class='wrap-content'>
                     <h3 class='title'>
                        {{this.title}}
                     </h3>
                     <p class='content'>
-                            {{this.content}}
+                        {{this.content}}
                     </p>
+                    <div class="image-comment">
+                        {{#if this.images }}
+                        {{#each this.images}}
+                            <img src="/img/imgRates/{{this.image}}" alt="">
+                        {{/each}}
+                        {{/if}}
+                    </div>
                 </div>
                 <ul class='like'>
                     <li>
@@ -118,6 +125,12 @@
                         <i class='fa-solid fa-triangle-exclamation'></i>
                         <p>Cảnh báo</p>
                     </li>
+                     <li>
+                        <a href="">Xóa</a>
+                    </li>
+                     <li>
+                        <a href="?idUpdate={{this.id}}">Chỉnh sửa</a>
+                    </li>
                 </ul>
             </div>
             {{/each}}
@@ -126,7 +139,7 @@
              {{/if}}
         </div>
         <div class='load-more'>
-            <a href=''>Xem Thêm bình luận</a>
+            <a href='?page={{_page.indexComment}}&table=comment'>Xem Thêm bình luận</a>
         </div>
     </div>
     <div class='parameter-rate'>

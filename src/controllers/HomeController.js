@@ -19,6 +19,7 @@ class HomeController {
             return res.render('home/detailStore', {
                 layout: 'main',
                 branchs: response.branchs,
+                countPage: response.countPage,
                 message,
             });
         } catch (error) {
@@ -29,18 +30,37 @@ class HomeController {
     async indexDetailBranch(req, res) {
         try {
             const slug = await req.params.slug;
+
+            const idRate = await req.query.idRate;
+            // id comment khi user chỉnh sửa bình luận
+            const idUpdate = await req.query.idUpdate;
+            var actionForm;
             var isUser;
             if (req.user) {
                 isUser = req.user.id;
             }
-            const response = await branchService.getOneBySlug(slug);
+
+            if (idUpdate) {
+                if (!isUser) {
+                    return badRequest(req, res, 'Vui lòng đăng nhập tài khoản!');
+                }
+                actionForm = `/rates/update/${idUpdate}?_method=PATCH`;
+            }
+            const { type, column, page, table } = await req.query;
+            const order = type && column ? [column, type] : [];
+            const response = await branchService.getOneBySlug(slug, { page, order, table }, idRate, idUpdate);
             const message = await req.flash('message')[0];
             return res.render('home/detailBranch', {
                 layout: 'main',
-                branch: response.branch,
-                categories: response.categories,
                 price: response.price,
-                dishs: response.branch.dishs,
+                dishs: response.dishs,
+                branch: response.branch,
+                comment: response.comment,
+                categories: response.categories,
+                commments: response.commments,
+                countPageDish: response.countPageDish,
+                displayModalCommet: response.displayModalCommet,
+                actionForm,
                 message,
                 isUser,
             });

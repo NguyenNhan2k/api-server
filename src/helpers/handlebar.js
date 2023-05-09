@@ -28,8 +28,29 @@ const handlebar = {
             <a href="${href}"><i class="${icon}"></i> </a>`;
         return new Handlebars.SafeString(output);
     },
-    pageView: (page, countPage) => {
+    pageView: (page, countPage, table = '') => {
         const indexPage = [];
+        for (let i = 1; i < countPage + 1; i++) {
+            indexPage.push(
+                `<a class =${page.index == i ? '"active"' : '""'} href='?page=${i}&table=${table}'>${i}</a>`,
+            );
+        }
+        const prePage = page.index === 1 ? page.index : page.index - 1;
+        const nextPage = page.index === countPage ? 1 : page.index + 1;
+        const newOutput = `
+                <a href='?page=${prePage}&table=${table}'>&laquo;</a>
+                ${indexPage.join('')}
+                <a href='?page=${nextPage}&table=${table}'>&raquo;</a>
+        `;
+        return new Handlebars.SafeString(newOutput);
+        // const output = index + 1 === page.pageIndex ? 'paging_ground' + page.select : 'paging_ground';
+    },
+    pageViewForDish: (page, dishs) => {
+        const indexPage = [];
+        let countPage = 0;
+        if (dishs) {
+            countPage = Math.ceil(dishs.length / 3);
+        }
         for (let i = 1; i < countPage + 1; i++) {
             indexPage.push(`<a class =${page.index == i ? '"active"' : '""'} href='?page=${i}'>${i}</a>`);
         }
@@ -40,7 +61,7 @@ const handlebar = {
                 ${indexPage.join('')}
                 <a href='?page=${nextPage}'>&raquo;</a>
         `;
-        return newOutput;
+        return new Handlebars.SafeString(newOutput);
         // const output = index + 1 === page.pageIndex ? 'paging_ground' + page.select : 'paging_ground';
     },
     autoIncrement: (preIndex, index) => {
