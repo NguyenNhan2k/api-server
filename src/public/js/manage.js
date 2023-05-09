@@ -21,12 +21,15 @@ const toggleMenu = () => {
     }
 };
 var eleModal = document.querySelector('#modal');
+// closeModal('.close','.btn-secondary','#delete-branchs','Xóa chi nhánh','Bạn có chắc chắn muốn xóa trường này?');
 const closeModal = (close, btnClose, active, modalTitle, modalText) => {
+    console.log(eleModal);
     const modalTextEle = document.querySelector('.modal-body__text');
     const modalTitleEle = document.querySelector('.modal-title');
     const eleClose = document.querySelector(close);
     const buttonClose = document.querySelector(btnClose);
     const eleActives = document.querySelectorAll(active);
+    console.log(eleActives);
     if (eleClose && eleActives) {
         eleActives.forEach((item) => {
             const dataId = item.getAttribute('data-id');

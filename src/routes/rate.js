@@ -15,6 +15,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 router.post('/create/:id', upload.array('image'), rateController.create);
 router.patch('/update/:idRate', upload.array('image'), rateController.update);
-router.delete('/destroy/:id', rateController.destroy);
+router.delete('/force/:idRate', rateController.force);
 
 module.exports = router;

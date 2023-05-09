@@ -17,7 +17,7 @@ class RateService {
     //         return message
     //     }
     // }
-    async create(payload, files) {
+    async create(payload, files, id) {
         var message = {
             err: 1,
             mes: 'Hành động thất bại!',
@@ -26,13 +26,13 @@ class RateService {
         try {
             const { id_customer, id_branch, ...other } = await payload;
             const branch = await db.Branchs.findOne({ where: { id: id_branch }, raw: true });
-            const customer = await db.Customers.findOne({ where: { id: id_customer }, raw: true });
-            if (!branch || !customer) {
+
+            if (!branch) {
                 return message;
             }
             const [rate, created] = await db.Rates.findOrCreate({
                 raw: true,
-                where: { id_customer },
+                where: { id_customer: id },
                 defaults: {
                     ...payload,
                 },
@@ -471,155 +471,84 @@ class RateService {
             return message;
         }
     }
-    async force(id) {
-        const message = {
+    async force(idRate, user) {
+        let message = {
             err: 1,
             mes: 'Hành động thất bại!',
             type: 'warning',
         };
         try {
-            const delelted = await false;
-            const dish = await this.findOne(id, delelted);
-            const forceImg = await db.Images.destroy({ where: { id_dish: id }, force: true, raw: true, nest: true });
-            const force = await db.Dishs.destroy({
-                where: {
-                    id,
-                },
-                force: true,
-                raw: true,
+            //1. Kiểm tra quyền khách hàng.
+            const rate = await db.Rates.findOne({
+                where: { id: idRate },
+                raw: false,
                 nest: true,
+                include: [
+                    {
+                        model: db.RateImgs,
+                        as: 'images',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                    {
+                        model: db.Branchs,
+                        as: 'branch',
+                        raw: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+            }).then((result) => {
+                return result.toJSON();
             });
-            if (!force || !forceImg || !dish) {
+            message.branch = await rate.branch;
+            if (!rate) {
                 return message;
             }
-            const removeAvatar = await removeAvatarInFolder(dish.avatar, process.env.PATH_DISH);
-            const removeArrImg = await removeArrImgInFolder(dish.image, process.env.PATH_DISH);
+            console.log('O day 1');
+            if (user.id_role === 'R3') {
+                const isCustomer = await db.Customers.findOne({ where: { id: user.id }, raw: true });
+                if (!isCustomer) {
+                    console.log('O day khong co user');
+                    message.mes = 'Vui Lòng đăng nhập để tiếp tục!';
+                    return message;
+                }
+                if (isCustomer.id !== rate.id_customer) {
+                    console.log('O day khong duoc phep');
+                    message.mes = await 'Bạn không được phép xóa!';
+                    return message;
+                }
+            }
+            //2. Xóa hình ảnh comment trong db.
 
-            message.errr = await 0;
-            message.mes = await 'Xóa thành công!';
-            message.type = await 'success';
-            return message;
-        } catch (error) {
-            console.log(error);
-            return message;
-        }
-    }
-    async destroyMutiple(arrId) {
-        const message = {
-            err: 1,
-            mes: 'Hành động thất bại!',
-            type: 'warning',
-        };
-        try {
-            const deleted = await db.Dishs.destroy({
-                where: {
-                    id: arrId,
-                },
-                raw: true,
-                nest: true,
-            });
-            if (!deleted) {
+            if (rate.images && rate.images.length > 0) {
+                const arrIdImgs = await rate.images.map((img) => {
+                    return img.id;
+                });
+                const forceImgs = await db.RateImgs.destroy({ where: { id: arrIdImgs }, raw: true, force: true });
+                if (!forceImgs) {
+                    console.log('O day xoa', forceImgs);
+                    return message;
+                }
+            }
+
+            //3. Xóa hình ảnh trong folder
+
+            //4. Xoa comment
+            const forceComment = await db.Rates.destroy({ where: { id: idRate }, force: true });
+            if (!forceComment) {
                 return message;
             }
-            message.errr = await 0;
-            message.mes = await 'Xóa thành công!';
-            message.type = await 'success';
-            return message;
-        } catch (error) {
-            console.log(error);
-            return message;
-        }
-    }
-    async forceDestroy(arrId, deleted = true) {
-        try {
-            const queries = await {
-                where: {
-                    id: arrId,
-                },
-                force: true,
-                raw: true,
-                nest: true,
-            };
-
-            const dishs = await db.Dishs.destroy({
-                ...queries,
+            await removeArrImgInFolder(rate.images, process.env.PATH_RATE_IMG);
+            return (message = {
+                err: 0,
+                type: 'success',
+                mes: 'Deleted comment successfully !',
+                branch: rate.branch,
             });
-
-            return dishs;
-        } catch (error) {
-            return false;
-        }
-    }
-    async forceImageForDish(arrId) {
-        try {
-            const queries = await {
-                where: {
-                    id: arrId,
-                },
-                force: true,
-                raw: true,
-                nest: true,
-            };
-
-            const dishs = await db.Images.destroy({
-                ...queries,
-            });
-
-            return dishs;
-        } catch (error) {
-            return false;
-        }
-    }
-    async forceMutiple(arrId) {
-        const message = {
-            err: 1,
-            mes: 'Hành động thất bại!',
-            type: 'warning',
-        };
-        try {
-            const deleted = await false;
-            const dishArr = await this.findAll(arrId, deleted);
-            const images = dishArr.reduce((acc, cur) => {
-                return [...acc, ...cur.image];
-            }, []);
-
-            const forcedDishs = await this.forceDestroy(arrId);
-            const forcedImages = await this.forceImageForDish(arrId);
-            await removeArrImgInFolder(images, process.env.PATH_DISH);
-
-            if (!forcedDishs && !forcedImages) {
-                return message;
-            }
-            message.errr = await 0;
-            message.mes = await 'Xóa thành công!';
-            message.type = await 'success';
-            return message;
-        } catch (error) {
-            console.log(error);
-            return message;
-        }
-    }
-    async restoreMutiple(arrId) {
-        const message = {
-            err: 1,
-            mes: 'Hành động thất bại!',
-            type: 'warning',
-        };
-        try {
-            const restored = await db.Dishs.restore({
-                where: {
-                    id: arrId,
-                },
-                raw: true,
-                nest: true,
-            });
-            if (!restored) {
-                return message;
-            }
-            message.err = await 0;
-            message.mes = await 'Khôi phục thành công!';
-            message.type = await 'success';
-            return message;
         } catch (error) {
             console.log(error);
             return message;

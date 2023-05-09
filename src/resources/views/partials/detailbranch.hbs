@@ -126,7 +126,7 @@
                         <p>Cảnh báo</p>
                     </li>
                      <li>
-                        <a href="">Xóa</a>
+                        <button id='delete-comment' data-table = 'rates' data-actions="force" data-id='{{this.id}}' >Xóa</button>
                     </li>
                      <li>
                         <a href="?idUpdate={{this.id}}">Chỉnh sửa</a>
@@ -160,3 +160,7 @@
 <div class="wrap-map">
     {{> map}}
 </div>
+<form id="deleteOne" method="post"></form>               
+<script>
+    closeModal('.close','.btn-secondary','#delete-comment','Xóa bình luận','Bạn có chắc chắn muốn xóa bình luận này?');
+</script>

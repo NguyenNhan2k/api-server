@@ -22,7 +22,7 @@ class RateController {
             value.id_branch = await idBranch;
             value.id_customer = await id;
 
-            const response = await rateService.create(value, files);
+            const response = await rateService.create(value, files, id);
             req.flash('message', response);
             return res.status(200).redirect('back');
         } catch (error) {
@@ -55,13 +55,16 @@ class RateController {
             return internalServer(req, res);
         }
     }
-    async destroy(req, res) {
-        const message = {};
+    async force(req, res) {
         try {
-            const storeId = await req.params.id;
-            const response = await rateService.destroy(storeId);
+            const idRate = await req.params.idRate;
+            const user = await req.user;
+            if (!user || !idRate) {
+                return badRequest(req, res, 'Hành động thất bại!');
+            }
+            const response = await rateService.force(idRate, user);
             req.flash('message', response);
-            res.redirect('back');
+            res.redirect(`/branch/${response.branch.slug}`);
         } catch (error) {
             console.log(error);
             return internalServer(req, res);

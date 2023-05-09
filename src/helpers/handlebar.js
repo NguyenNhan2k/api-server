@@ -142,27 +142,27 @@ const handlebar = {
         const objRate = handlebar.getTotalRate(rates);
 
         const output = `<li class='total'>
-            <p>${objRate.totalRate}</p>
+            <p>${objRate.totalRate.toFixed(1)}</p>
         </li>
         <li>
-            <h3>${objRate.location}</h3>
+            <h3>${objRate.location.toFixed(1)}</h3>
             <p>Vị trí</p>
         </li>
 
         <li>
-            <h3>${objRate.price}</h3>
+            <h3>${objRate.price.toFixed(1)}</h3>
             <p>Giá cả</p>
         </li>
         <li>
-            <h3>${objRate.quality}</h3>
+            <h3>${objRate.quality.toFixed(1)}</h3>
             <p>Chất lượng</p>
         </li>
         <li>
-            <h3>${objRate.servi}</h3>
+            <h3>${objRate.servi.toFixed(1)}</h3>
             <p>Phục vụ</p>
         </li>
         <li>
-            <h3>${objRate.space}</h3>
+            <h3>${objRate.space.toFixed(1)}</h3>
             <p>Không gian</p>
         </li>
         <li class='total-comment'>
@@ -192,7 +192,7 @@ const handlebar = {
         const output = `   <div class='user-raing'>
         <span class='heading'>User Rating</span>
        ${elementStart}
-        <p>${objRate.totalRate} average based on ${objRate.countComment} reviews.</p>
+        <p>${objRate.totalRate.toFixed(1)} average based on ${objRate.countComment} reviews.</p>
     </div>
     <div class='row'>
         <div class='detail-row'>
@@ -205,7 +205,7 @@ const handlebar = {
                 </div>
             </div>
             <div class='side right'>
-                <p>${objRate.location}</p>
+                <p>${objRate.location.toFixed(1)}</p>
             </div>
         </div>
         <div class='detail-row'>
@@ -218,7 +218,7 @@ const handlebar = {
                 </div>
             </div>
             <div class='side right'>
-                <p>${objRate.price}</p>
+                <p>${objRate.price.toFixed(1)}</p>
             </div>
         </div>
         <div class='detail-row'>
@@ -231,7 +231,7 @@ const handlebar = {
                 </div>
             </div>
             <div class='side right'>
-                <p>${objRate.quality}</p>
+                <p>${objRate.quality.toFixed(1)}</p>
             </div>
         </div>
         <div class='detail-row'>
@@ -244,7 +244,7 @@ const handlebar = {
                 </div>
             </div>
             <div class='side right'>
-                <p> ${objRate.servi}</p>
+                <p> ${objRate.servi.toFixed(1)}</p>
             </div>
         </div>
         <div class='detail-row'>
@@ -257,7 +257,7 @@ const handlebar = {
                 </div>
             </div>
             <div class='side right'>
-                <p>${objRate.space}</p>
+                <p>${objRate.space.toFixed(1)}</p>
             </div>
         </div>
     </div>`;
@@ -292,9 +292,11 @@ const handlebar = {
     `;
         return new Handlebars.SafeString(output);
     },
+
     getCountComment: (rates) => {
         if (rates) {
             const { countComment } = handlebar.getTotalRate(rates);
+
             return countComment;
         }
     },
@@ -313,7 +315,7 @@ const handlebar = {
         if (totalRate > 7.5) {
             statusRate += 'Rất tốt';
         }
-        const output = ` <b>${totalRate} điểm </b>
+        const output = ` <b>${totalRate.toFixed(1)} điểm </b>
         <p>-</p>
         <p> ${statusRate}</p>`;
         return new Handlebars.SafeString(output);
@@ -404,7 +406,7 @@ const handlebar = {
         if (rate) {
             const { location, price, quality, space, servi } = rate;
             const totalRate = (location + price + quality + space + servi) / 5.0;
-            return totalRate;
+            return totalRate.toFixed(1);
         }
         return 0;
     },
