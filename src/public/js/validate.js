@@ -1,4 +1,4 @@
-function validator(formSelector) {
+function validator(formSelector, formGround = '.form-group') {
     function getParent(element, selector) {
         while (element.parentElement) {
             if (element.parentElement.matches(selector)) {
@@ -77,7 +77,7 @@ function validator(formSelector) {
             }
             // Nếu có lỗi thì hiển thi ra UI
             if (errMsg) {
-                const formGroup = getParent(event.target, '.form-group');
+                const formGroup = getParent(event.target, formGround);
                 if (formGroup) {
                     const spanMsg = formGroup.querySelector('.span-message');
                     if (spanMsg) {

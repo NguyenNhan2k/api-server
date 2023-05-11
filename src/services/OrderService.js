@@ -1,11 +1,9 @@
 const fs = require('fs-extra');
-var slug = require('slug');
+
 const Sequelize = require('sequelize');
 const op = Sequelize.Op;
 const db = require('../models');
-const { hashPassword } = require('../helpers/hashPwd');
-const { object } = require('joi');
-class BranchService {
+class OrderService {
     async indexCreate() {
         var message = {
             err: 1,
@@ -203,46 +201,22 @@ class BranchService {
             const offset = (await !page) || +page < 1 ? 0 : +page - 1;
             const limit = await process.env.QUERY_LIMIT;
             const queries = await {
-                include: [
-                    {
-                        model: db.Stores,
-                        as: 'store',
-                        raw: true,
-                        attributes: {
-                            exclude: ['createdAt', 'updatedAt'],
-                        },
+                include: {
+                    model: db.OrderDetails,
+                    raw: true,
+                    as: 'orderDetrails',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt'],
                     },
-                    {
+                    include: {
                         model: db.Dishs,
-                        as: 'dishs',
+                        raw: true,
+                        as: 'dish',
                         attributes: {
                             exclude: ['createdAt', 'updatedAt'],
                         },
-                        include: {
-                            model: db.Categories,
-                            as: 'category',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt'],
-                            },
-                        },
                     },
-                    {
-                        model: db.Rates,
-                        as: 'rates',
-                        include: {
-                            model: db.Customers,
-                            as: 'customer',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt'],
-                            },
-                        },
-                    },
-                    {
-                        model: db.StoreCategories,
-                        as: 'category',
-                        raw: true,
-                    },
-                ],
+                },
                 raw: false,
                 nest: true,
             };
@@ -260,15 +234,16 @@ class BranchService {
                 }),
                     (queries.paranoid = deleted);
             }
+
             queries.offset = (await offset) * limit;
             queries.limit = await +limit;
-            const { count, rows } = await db.Branchs.findAndCountAll({
+            const { count, rows } = await db.Orders.findAndCountAll({
                 ...queries,
             });
-            const convertRows = await rows.map((item) => {
-                return item.toJSON();
-            });
-            return { count, convertRows };
+
+            const convertOrder = (await rows) && rows.map((order) => order.toJSON());
+
+            return { count: convertOrder && convertOrder.length, convertOrder };
         } catch (error) {
             console.log(error);
             return false;
@@ -436,16 +411,60 @@ class BranchService {
             return message;
         }
     }
-    async getAll({ page, order, deleted = true }, queries) {
+    async getAll({ page, order, deleted = true }) {
         let message = {
             err: 1,
             mes: 'Hành động thất bại!',
             type: 'warning',
         };
         try {
-            const limit = 10;
-            const { count, convertRows } = await this.findAll({ page, order, deleted }, queries);
-            const countDeleted = await db.Branchs.findAndCountAll({
+            const offset = (await !page) || +page < 1 ? 0 : +page - 1;
+            const limit = await process.env.QUERY_LIMIT;
+            const queries = await {
+                raw: false,
+                nest: true,
+                include: {
+                    model: db.OrderDetails,
+                    raw: true,
+                    as: 'orderDetrails',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt'],
+                    },
+                    include: {
+                        model: db.Dishs,
+                        raw: true,
+                        as: 'dish',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                },
+            };
+
+            if (order.length > 0) {
+                queries.order = await [order];
+            }
+            if (!deleted) {
+                (queries.where = await {
+                    destroyTime: {
+                        [op.not]: null,
+                    },
+                }),
+                    (queries.paranoid = deleted);
+            }
+            queries.offset = (await offset) * limit;
+            queries.limit = await +limit;
+            const orders = await db.Orders.findAll({
+                ...queries,
+            });
+            const countOrders = await db.Orders.findAll({ raw: true });
+            const convertOrder =
+                (await orders) &&
+                orders.map((order) => {
+                    return order.toJSON();
+                });
+
+            const countDeleted = await db.Orders.findAndCountAll({
                 where: {
                     destroyTime: {
                         [op.not]: null,
@@ -454,18 +473,16 @@ class BranchService {
                 paranoid: false,
                 raw: true,
             });
-
-            const countPage = convertRows.length / limit;
-            const categories = await db.StoreCategories.findAll({ raw: true });
-            if (convertRows) {
+            const countPage = Math.ceil(countOrders.length / limit);
+            console.log(countPage, orders);
+            if (convertOrder) {
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
-                    branchs: convertRows,
+                    orders: convertOrder,
                     countPage,
                     countDeleted: countDeleted.count,
-                    categories,
                 });
             }
             return message;
@@ -474,7 +491,6 @@ class BranchService {
             return message;
         }
     }
-
     async destroy(id) {
         const message = {
             err: 1,
@@ -482,7 +498,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Branchs.destroy({
+            const deleted = await db.Orders.destroy({
                 where: {
                     id,
                 },
@@ -542,7 +558,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const restore = await db.Branchs.restore({
+            const restore = await db.Orders.restore({
                 where: {
                     id,
                 },
@@ -595,7 +611,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const deleted = await db.Branchs.destroy({
+            const deleted = await db.Orders.destroy({
                 where: {
                     id: arrId,
                 },
@@ -621,7 +637,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const destroy = await db.Branchs.destroy({
+            const destroy = await db.Orders.destroy({
                 where: {
                     id: arrId,
                 },
@@ -648,7 +664,7 @@ class BranchService {
             type: 'warning',
         };
         try {
-            const restored = await db.Branchs.restore({
+            const restored = await db.Orders.restore({
                 where: {
                     id: arrId,
                 },
@@ -669,4 +685,4 @@ class BranchService {
     }
 }
 
-module.exports = new BranchService();
+module.exports = new OrderService();

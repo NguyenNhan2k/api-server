@@ -1,0 +1,58 @@
+<div class="container">
+    <form action='/carts/update/{{cart.id}}?_method=PATCH' id="form-update__cart" method='post' class='profile form-update'>
+        {{> nav.user}}
+        <div class='profile-info'>
+            <h2 class='title'>Giỏ hàng</h2>
+            <div class="table">
+                <div class="table-header">
+                    <div class="header__item"><h4>STT</h4></div>
+                    <div class="header__item dish"><h4>Món ăn</h4></div>
+                    <div class="header__item"><h4>Số lượng</h4></div>
+                    <div class="header__item"> <h4>Tổng</h4></div>
+                </div>
+                <div class="table-content">	
+                    {{#if cart}}
+                    {{#each cart.detailCart}}
+                    <div class="table-row">		
+                        <div class="table-stt"> 
+                        <p>{{autoIncrement @index 1}}</p>
+                        </div>
+                        <div class="table-dish"> 
+                            <div class="dish-image">
+                                <img src="/img/dish/{{this.dish.avatar}}" alt="">
+                            </div>
+                            <div class="dish-content">
+                                <p class="dish-name">{{this.dish.name}}</p>
+                                <input type="text" name="id_dish[]" value="{{this.dish.id}}" hidden>
+                                <p class="dish-price">Gia: {{this.dish.price}}</p>
+                                <p class="remove-dish">Remove</p>
+                            </div>
+                        </div>
+                   
+                        <div class="table-number">
+                                <span class='minus'>-</span>
+                                <input type='text'  name='quanlity[]' id='quanlity' value='{{this.quanlity}}' />
+                                <span class='plus'>+</span>
+                        </div>
+                        <div class="table-total">
+                            <h3>{{convertToVND this.total}}</h3>
+                        </div>
+                    </div>
+                     {{/each}}
+                    {{else}}
+                        <h3 style="text-align: center; padding:2rem">Giỏ hàng trống!</h3>
+                    {{/if}}
+                {{#if cart}}
+                <div class="table-subtotal">
+                    <h4 class="table-subtotal_total">Total: {{convertToVND cart.total}}</h4>
+                    <button class="update-cart" type="submit" >Cập nhật</button>
+                     <button  class="oder-cart"><a href="/customers/order">Đặt hàng</a></button>
+                </div>
+                {{/if}}
+                </div>	
+            </div>
+        </div>
+    </form>
+</div>
+<link rel="stylesheet" href="/css/customer.css">
+<script> increaseQuanlity('.table-number');removeElement('.remove-dish','.table-row')</script>

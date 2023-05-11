@@ -11,20 +11,25 @@ const branchRoute = require('./branch.js');
 const categoryRoute = require('./category.js');
 const dishRoute = require('./dish.js');
 const rateRoute = require('./rate.js');
+const cartRoute = require('./cart.js');
+const orderRoute = require('./order.js');
 function route(app) {
     // app.use(userName);
     app.use(sort);
     app.use('/auth', authRoute);
+    app.use('/carts', authAccessToken, cartRoute);
     app.use('/rates', authAccessToken, rateRoute);
     app.use('/', authAccessToken, homeRoute);
+    app.use('/branchs', authStaff, branchRoute);
     /* Private Route */
     app.use('/customers', customerRoute);
     app.use('/manage', authStaff, manageRoute);
     app.use('/staffs', authStaff, staffRoute);
     app.use('/stores', authStaff, storeRoute);
-    app.use('/branchs', authStaff, branchRoute);
     app.use('/categories', authStaff, categoryRoute);
     app.use('/dishs', authStaff, dishRoute);
+    app.use('/orders', authStaff, orderRoute);
+
     //  app.use('/customer', authStaff, customerRoute);
     app.use(notFound);
 }

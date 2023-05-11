@@ -8,6 +8,12 @@ const handlebar = {
         }
         return 0;
     },
+    countArray: (payload = []) => {
+        if (payload) {
+            return payload.length;
+        }
+        return 0;
+    },
     sortable: (field, sort, page) => {
         const isType = ['asc', 'desc'];
         const sortType = field === sort.column && isType.includes(sort.type) ? sort.type : 'default';
@@ -140,7 +146,6 @@ const handlebar = {
     },
     displayUiTotalBranch: (rates) => {
         const objRate = handlebar.getTotalRate(rates);
-
         const output = `<li class='total'>
             <p>${objRate.totalRate.toFixed(1)}</p>
         </li>
@@ -177,6 +182,7 @@ const handlebar = {
             return totalRate;
         }
     },
+
     displayUiTotalRatingBranch: (rates) => {
         const objRate = handlebar.getTotalRate(rates);
         const countStart = Math.ceil(objRate.totalRate / 2);

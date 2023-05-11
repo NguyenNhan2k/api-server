@@ -8,14 +8,28 @@
     <div class='form-ground__img'>
         <input type='file' id='url_img' name='url_img' class='image' accept='png' />
         <label for='url_img'>Upload
-            <i class='fa-solid fa-upload'></i>
+
         </label>
+        <i class='fa-solid fa-upload'></i>
     </div>
     <div class='profile-nav_category'>
         <ul>
-            <li><a href='/customers/profile'><i class='fa-solid fa-circle-info'></i> <p>Thông tin cơ bản</p></a></li>
-            <li><a href='/customers/history'><i class='fa-solid fa-circle-info'></i> <p>Lịch sử đặt hàng</p></a></li>
-            <li><a href='/customers/changepwd'><i class='fa-solid fa-user'></i> <p>Đổi mật khẩu</p></a></li>
+            <li class='{{activeSidebar "profile" active}}'><a href='/customers/profile'><i
+                        class='fa-solid fa-circle-info'
+                    ></i>
+                    <p>Thông tin cơ bản</p></a>
+            </li>
+            <li class='{{activeSidebar "history" active}}'><a href='/customers/history'>
+                    <i class='fa-solid fa-table'></i>
+                    <p>Lịch sử đặt hàng</p></a></li>
+            <li class='{{activeSidebar "cart" active}}'><a href='/customers/cart'><i
+                        class='fa-solid fa-cart-shopping'
+                    ></i>
+                    <p>Giỏ hàng</p></a></li>
+            <li class='{{activeSidebar "changePwd" active}}'><a href='/customers/changepwd'><i
+                        class='fa-solid fa-user'
+                    ></i>
+                    <p>Đổi mật khẩu</p></a></li>
             <li><a href='/customers/logout'><i class='fa-solid fa-right-from-bracket' style='color:red'></i><p
                         style='color:red'
                     >Đăng xuất</p></a></li>

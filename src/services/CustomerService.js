@@ -3,7 +3,8 @@ const Sequelize = require('sequelize');
 const op = Sequelize.Op;
 const db = require('../models');
 const { hashPassword } = require('../helpers/hashPwd');
-const { object } = require('joi');
+var paypal = require('paypal-rest-sdk');
+const { indexHistory } = require('../controllers/CustomerController');
 class CustomerService {
     async update({ id, ...body }, file) {
         let message;
@@ -35,6 +36,155 @@ class CustomerService {
             });
         }
     }
+    async indexHistory(user) {
+        let message = {
+            err: 1,
+            type: 'warning',
+            mes: 'Create order failed!',
+        };
+        try {
+            const { id } = await user;
+            const customer = await db.Customers.findOne({ where: { id } }).then((result) =>
+                result ? result.toJSON() : null,
+            );
+            if (!customer) {
+                return message;
+            }
+            const cart = await db.Carts.findOne({
+                nest: true,
+                where: { id_customer: id },
+                include: {
+                    model: db.CartDetails,
+                    as: 'detailCart',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt'],
+                    },
+                },
+            });
+            const orders = await db.Orders.findAll({
+                where: { id_customer: customer.id },
+                include: {
+                    model: db.OrderDetails,
+                    raw: true,
+                    as: 'orderDetrails',
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt'],
+                    },
+                    include: {
+                        model: db.Dishs,
+                        raw: true,
+                        as: 'dish',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                },
+                raw: false,
+                nest: true,
+            });
+            const convertOrder = (await orders) && orders.map((order) => order.toJSON());
+            const convertCart = (await cart) ? cart.toJSON() : null;
+            return (message = {
+                err: 0,
+                type: 'success',
+                mes: 'Update user successfully!',
+                customer,
+                ...(convertOrder ? { order: convertOrder } : { order: {} }),
+                ...(convertCart ? { cart: convertCart.detailCart } : { cart: {} }),
+            });
+        } catch (error) {
+            console.log(error);
+            return (message = {
+                err: 1,
+                type: 'warning',
+            });
+        }
+    }
+    async createOrderForCustomer(idCart, user, payload) {
+        let message = {
+            err: 1,
+            type: 'warning',
+            mes: 'Create order failed!',
+        };
+        try {
+            const { id } = await user;
+            const customer = await db.Customers.findOne({ where: { id }, raw: true });
+            const cart = await db.Carts.findOne({
+                nest: true,
+                where: { id_customer: id },
+                include: [
+                    {
+                        model: db.CartDetails,
+                        as: 'detailCart',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Dishs,
+                            as: 'dish',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.Customers,
+                        as: 'customer',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+            });
+            const convertCart = (await cart) ? cart.toJSON() : null;
+            if (!convertCart) {
+                return message;
+            }
+            //Tao order
+            const createOrder = await db.Orders.create({
+                id_customer: id,
+                ...payload,
+            }).then((result) => (result ? result.toJSON() : null));
+            if (!createOrder) {
+                return message;
+            }
+            let totalOrder = await 0;
+            let orderDetail = await convertCart.detailCart.map((item) => {
+                totalOrder += item.total;
+                return {
+                    id_dish: item.id_dish,
+                    id_order: createOrder.id,
+                    total: item.total,
+                    quanlity: item.quanlity,
+                    price: item.dish.price,
+                };
+            });
+            const updateOrder = await db.Orders.update({ total: totalOrder }, { where: { id: createOrder.id } });
+            const createOrderDetail = await db.OrderDetails.bulkCreate(orderDetail, {
+                returning: true,
+                validate: true,
+                individualHooks: true,
+            });
+            if (createOrderDetail) {
+                const removeCart = await db.Carts.destroy({ where: { id: idCart }, force: true });
+                const removeCartDetail = await db.CartDetails.destroy({ where: { id_cart: idCart }, force: true });
+            }
+
+            return (message = {
+                err: 0,
+                type: 'success',
+                mes: 'Đặt hàng thành công!',
+                cart: convertCart.detailCart,
+            });
+        } catch (error) {
+            console.log(error);
+            return (message = {
+                err: 1,
+                type: 'warning',
+            });
+        }
+    }
+
     async changePwd(id, { password }) {
         let message = {
             err: 1,
@@ -87,6 +237,55 @@ class CustomerService {
             });
         }
     }
+    async indexCart(user) {
+        let message = {
+            err: 1,
+            mes: 'Hành động thất bại!',
+            type: 'warning',
+        };
+        try {
+            const { id } = await user;
+            const customer = await db.Customers.findOne({ where: { id }, raw: true });
+            const cart = await db.Carts.findOne({
+                nest: true,
+                where: { id_customer: id },
+                include: [
+                    {
+                        model: db.CartDetails,
+                        as: 'detailCart',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                        include: {
+                            model: db.Dishs,
+                            as: 'dish',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    },
+                    {
+                        model: db.Customers,
+                        as: 'customer',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt'],
+                        },
+                    },
+                ],
+            });
+            let newCart = (await cart) ? cart.toJSON() : null;
+            return (message = {
+                err: 0,
+                mes: 'Hành động thành công!',
+                type: 'success',
+                customer,
+                cart: newCart,
+            });
+        } catch (error) {
+            console.log(error);
+            return message;
+        }
+    }
     async logout(id) {
         let message = {
             err: 1,
@@ -135,10 +334,39 @@ class CustomerService {
                 nest: true,
             });
             if (findCustomer) {
+                const cart = await db.Carts.findOne({
+                    nest: true,
+                    where: { id_customer: id },
+                    include: [
+                        {
+                            model: db.CartDetails,
+                            as: 'detailCart',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                            include: {
+                                model: db.Dishs,
+                                as: 'dish',
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt'],
+                                },
+                            },
+                        },
+                        {
+                            model: db.Customers,
+                            as: 'customer',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
+                            },
+                        },
+                    ],
+                });
+                let newCart = (await cart) ? cart.toJSON() : null;
                 return (message = {
                     err: 0,
                     mes: 'Hành động thành công!',
                     type: 'success',
+                    cart: newCart,
                     customer: findCustomer,
                 });
             }
@@ -147,6 +375,7 @@ class CustomerService {
             return message;
         }
     }
+
     async getAll({ page, order, deleted = true }) {
         let message = {
             err: 1,

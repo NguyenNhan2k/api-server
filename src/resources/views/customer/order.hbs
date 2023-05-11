@@ -1,0 +1,59 @@
+<div class='container'>
+    <div class='container-checkout'>
+        <form action='/customers/create-order/{{cart.id}}' method="POST" id="form-create_oder">
+            <div class='row'>
+                <div class='col-50'>
+                    <h3>Checkout</h3>
+                    <div class="item-order" >
+                        <label for='fname'><i class='fa fa-user'></i> Full Name</label>
+                        
+                        <input type='text' id='fname' rules="require" name='fullName' value="{{customer.fullName}}" />
+                        <span class='span-message'></span>
+                    </div>
+                    <label for='email'><i class='fa fa-envelope'></i> Email</label>
+                    <input type='text' id='email' name='email' value="{{customer.fullName}}" />
+                    <label for='phone'><i class="fa-solid fa-phone"></i></i> Phone</label>
+                    <input type='text' id='phone' name='phone'  value="{{customer.phone}}" />
+                    <label for='adr'><i class="fa-solid fa-address-card"></i> Address</label>
+                    <input type='text' id='adr' name='address'  value="{{customer.address}}" />
+                </div>
+                <div class='col-50'>
+                    <h3>Cart</h3>
+                    <div class='table-content'>
+                        {{#if cart.detailCart}}
+                        {{#each cart.detailCart}}
+                        <div class='table-row'>
+                            <div class='table-dish'>
+                                <div class='dish-image'>
+                                    <img src='/img/dish/{{this.dish.avatar}}' alt='Loading...' />
+                                </div>
+                                <div class='dish-content'>
+                                    <h2 class='dish-name'>{{this.dish.name}}</h2>
+                            
+                                    <p class='dish-price'>Price: {{convertToVND this.dish.price}}</p>
+                                </div>
+                            </div>
+                            <div class='table-number'>
+                                <p>{{this.quanlity}}</p>
+                            </div>
+                            <div class='table-total'>
+                                <h3>{{convertToVND this.total}}</h3>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    <div class='table-subtotal'>
+                        <h4 class='table-subtotal_total'>Total: {{convertToVND cart.total}}</h4>
+                        <button class='oder-cart' type="submit">Thanh Toán</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script src="/js/validate.js"></script>
+<script> validator('#form-create_oder','.item-order')</script>
+<link rel='stylesheet' href='/css/customer.css' />

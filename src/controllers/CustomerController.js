@@ -1,4 +1,10 @@
-const { customerUpdateJoi, userJoi, customerJoi, changePwdJoi } = require('../helpers/validateInput');
+const {
+    customerUpdateJoi,
+    userJoi,
+    customerJoi,
+    changePwdJoi,
+    orderForCustomerJoi,
+} = require('../helpers/validateInput');
 const customerService = require('../services/CustomerService');
 const { internalServer, badRequest } = require('../middlewares/handleError');
 const { removeAvatarForController } = require('../helpers/manage');
@@ -10,7 +16,6 @@ class CustomerController {
             const mes = await req.flash('message')[0];
             const getOneCustomer = await customerService.getOne(id);
             const { type, err, customer } = await getOneCustomer;
-
             if (type === 'waring' && err === 1) {
                 req.flash('message', getOneCustomer);
                 return res.redirect('back');
@@ -18,6 +23,7 @@ class CustomerController {
             return res.status(200).render('customer/profile', {
                 layout: 'main',
                 message: mes,
+                active: 'profile',
                 customer,
             });
         } catch (error) {
@@ -26,18 +32,20 @@ class CustomerController {
     }
     async indexHistory(req, res) {
         try {
-            const { id } = await req.user;
-            const mes = await req.flash('message')[0];
-            const getOneCustomer = await customerService.getOne(id);
-            const { type, err, customer } = await getOneCustomer;
-            if (type === 'waring' && err === 1) {
-                req.flash('message', getOneCustomer);
-                return res.redirect('back');
+            const user = await req.user;
+            if (!user) {
+                badRequest(req, res, 'Vui lòng đăng nhập để tiếp tục!');
             }
+            const mes = await req.flash('message')[0];
+            const response = await customerService.indexHistory(user);
+            console.log(response.order);
             return res.status(200).render('customer/history', {
                 layout: 'main',
                 message: mes,
-                customer,
+                customer: response.customer,
+                cart: response.cart,
+                order: response.order,
+                active: 'history',
             });
         } catch (error) {
             internalServer(req, res);
@@ -45,12 +53,71 @@ class CustomerController {
     }
     async indexAccount(req, res) {
         try {
-            return res.render('customer/account');
+            return res.render('customer/account', {});
         } catch (error) {
             internalServer(req, res);
         }
     }
+    async indexOrder(req, res) {
+        try {
+            const user = await req.user;
+            if (!user) {
+                return badRequest(req, res, 'Vui lòng đăng nhập!');
+            }
+            const mes = await req.flash('message')[0];
+            const response = await customerService.indexCart(user);
+            req.flash('message', response);
+            return res.status(200).render('customer/order', {
+                layout: 'main',
+                message: mes,
+                cart: response.cart,
+                customer: response.customer,
+            });
+        } catch (error) {
+            console.log(error);
+            internalServer(req, res);
+        }
+    }
+    async createOrderForCustomer(req, res) {
+        try {
+            const idCart = await req.params.idCart;
+            const user = await req.user;
+            if (!user) {
+                return badRequest(req, res, 'Vui lòng đăng nhập!');
+            }
+            const { error, value } = await orderForCustomerJoi.validate(req.body);
+            console.log(value);
+            const mes = await req.flash('message')[0];
+            const response = await customerService.createOrderForCustomer(idCart, user, value);
+            req.flash('message', response);
+            res.redirect('/cantho');
+        } catch (error) {
+            console.log(error);
+            internalServer(req, res);
+        }
+    }
 
+    async indexCart(req, res) {
+        try {
+            const user = await req.user;
+            if (!user) {
+                return badRequest(req, res, 'Vui lòng đăng nhập!');
+            }
+            const mes = await req.flash('message')[0];
+            const response = await customerService.indexCart(user);
+            req.flash('message', response);
+            return res.status(200).render('customer/cart', {
+                layout: 'main',
+                message: mes,
+                cart: response.cart,
+                customer: response.customer,
+                active: 'cart',
+            });
+        } catch (error) {
+            console.log(error);
+            internalServer(req, res);
+        }
+    }
     async indexCreate(req, res) {
         try {
             const message = await req.flash('message')[0];
@@ -62,6 +129,23 @@ class CustomerController {
         } catch (error) {
             console.log(error);
             internalServer(req, res);
+        }
+    }
+    async indexChangePwd(req, res) {
+        try {
+            const { id } = await req.user;
+            const response = await customerService.getOne(id);
+            const message = await req.flash('message')[0];
+            return res.render('customer/changePwd', {
+                layout: 'main',
+                active: 'customers',
+                customer: response.customer,
+                message,
+                active: 'changePwd',
+            });
+        } catch (error) {
+            console.log(error);
+            return internalServer(req, res);
         }
     }
     async indexInfoCustomer(req, res) {
@@ -89,7 +173,6 @@ class CustomerController {
             return internalServer(req, res);
         }
     }
-
     async indexTrash(req, res) {
         try {
             const { type, column, page } = await req.query;
@@ -198,22 +281,6 @@ class CustomerController {
         }
     }
 
-    async indexChangePwd(req, res) {
-        try {
-            const { id } = await req.user;
-            const response = await customerService.getOne(id);
-            const message = await req.flash('message')[0];
-            return res.render('customer/changePwd', {
-                layout: 'main',
-                active: 'customers',
-                customer: response.customer,
-                message,
-            });
-        } catch (error) {
-            console.log(error);
-            return internalServer(req, res);
-        }
-    }
     async logOut(req, res) {
         try {
             const { id } = await req.user;

@@ -61,7 +61,7 @@
                 <button type='submit'>Lọc</button>
             </li>
         </ul>
-        <script>getDistricts()</script>
+
     </form>
     <div class='menu_box'>
         {{#if branchs}}
@@ -84,7 +84,7 @@
                         <div class='menu_icon'>
                             {{displayUiTotalRatingBranchMain this.rates}}
                         </div>
-                        <a href='/branchs/{{this.slug}}' class='menu_btn'>Xem chi tiết</a>
+                        <a href='/amthuc/{{this.slug}}' class='menu_btn'>Xem chi tiết</a>
                     </div>
                 </div>
             {{/each}}
@@ -101,3 +101,4 @@
 
 </div>
 <link rel='stylesheet' href='/css/listBranch.css' />
+<script>getDistricts()</script>

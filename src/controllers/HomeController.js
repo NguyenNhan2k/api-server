@@ -4,6 +4,7 @@ const branchService = require('../services/BranchService');
 class HomeController {
     async index(req, res, next) {
         const message = await req.flash('message')[0];
+
         console.log(message);
         res.render('home/home', {
             layout: 'main',
@@ -14,7 +15,6 @@ class HomeController {
         try {
             const { type, column, page, id_category, district } = await req.query;
             let queries = await {};
-            console.log(id_category, district);
             const order = (await type) && column ? [column, type] : [];
             if (id_category) {
                 queries.id_category = await id_category;

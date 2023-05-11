@@ -14,6 +14,9 @@ const email = joi
     .required();
 const slug = joi.string();
 const title = joi.string().required();
+const id_dish = joi.string().required();
+const id_customer = joi.string().required();
+const quanlity = joi.number().required();
 const content = joi.string().required();
 const space = joi.number().required();
 const quality = joi.number().required();
@@ -23,6 +26,7 @@ const confirmPwd = joi.ref('password');
 const province = joi.string().required();
 const districts = joi.string().required();
 const wards = joi.string().required();
+const pay = joi.string().required();
 const street = joi.string().required();
 const id_store = joi.string().required();
 const startTime = joi.string().required();
@@ -58,6 +62,12 @@ const userJoi = joi.object({
     email,
     id,
 });
+const orderForCustomerJoi = joi.object({
+    fullName,
+    address,
+    phone,
+    email,
+});
 const customerJoi = joi.object({ password, phone, fullName, address, email, confirmPwd });
 const storeJoi = joi.object({ phone, name, email });
 const baranchJoi = joi.object({
@@ -76,6 +86,7 @@ const branchUpdateJoi = joi.object({ province, districts, wards, street, id_stor
 const storeUpdateJoi = joi.object({ phone, name, email });
 const customerUpdateJoi = joi.object({ phone, fullName, address, email });
 const categoryJoi = joi.object({ name });
+const cartJoi = joi.object({ id_dish, id_customer, quanlity });
 const dishJoi = joi.object({ name, price, sale, description, id_category, id_branch });
 const categoryUpdateJoi = joi.object({ name, id });
 const handelAction = joi.object({
@@ -100,4 +111,6 @@ module.exports = {
     dishJoi,
     changePwdJoi,
     rateJoi,
+    orderForCustomerJoi,
+    cartJoi,
 };

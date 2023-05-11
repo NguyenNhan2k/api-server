@@ -201,7 +201,7 @@
 }
 .menu .menu_box .menu_card {
     width: 28rem;
-    height: 460px;
+    height: 50rem;
     padding-top: 10px;
     cursor: pointer;
     margin-bottom: 20px;
@@ -280,32 +280,84 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
-
-.menu .menu_box .menu_card .menu_info h3 {
+.menu .menu_box .menu_card .menu_info .price-old {
+    color: #4b4a4a;
+    font-style: italic;
+    font-size: 1.5rem;
+    text-decoration: line-through;
+}
+.menu .menu_box .menu_card .menu_info .number {
+    width: 100%;
+    display: flex;
+    margin-top: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+.menu .menu_box .menu_card .menu_info .minus,
+.plus {
+    width: 3rem;
+    height: 3rem;
+    background: #f2f2f2;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 1.4rem;
+    line-height: 3rem;
+}
+.menu .menu_box .menu_card input {
+    height: 30px;
+    width: 5rem;
+    font-size: 1.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 0.5rem;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+.menu .menu_box .menu_card .menu_info .number span {
+    cursor: pointer;
+}
+.menu .menu_box .menu_card .menu_info .price-new {
     text-align: center;
     font-size: 1.6rem;
     color: #f14815;
     margin-top: 10px;
 }
+.menu .menu_box .menu_card .menu_info {
+    position: relative;
+}
 .menu .menu_box .menu_card .menu_info h3 i {
     font-size: 1.8rem;
     margin-right: 1rem;
 }
+
 .menu .menu_box .menu_card .menu_info .menu_icon {
     color: #fac031;
     text-align: center;
     font-size: 1.4rem;
     margin: 10px 0 10px 0;
 }
-
+.menu .menu_box .menu_card .menu_info .menu_btn > p {
+    line-height: 4rem;
+    text-align: center;
+}
 .menu .menu_box .menu_card .menu_info .menu_btn {
     display: flex;
+    height: 4rem;
+    width: 13.4rem;
+    cursor: pointer;
     align-items: center;
+    border-radius: 0.5rem;
+    padding: 0 2rem;
     justify-content: center;
     text-decoration: none;
     color: white;
     background: #000;
-    padding: 8px 10px;
+    font-size: 1.4rem;
     margin: 0 80px;
     transition: 0.3s;
+}
+.menu .menu_box .menu_card .menu_info .menu_btn:hover {
+    opacity: 0.8;
 }

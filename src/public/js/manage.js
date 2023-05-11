@@ -115,6 +115,39 @@ const handleSelectFilter = (districts, eleSelect) => {
         });
     }
 };
+const increaseQuanlity = (parentSelect) => {
+    const minus = document.querySelectorAll('.minus');
+    const plus = document.querySelectorAll('.plus');
+    if (plus && minus) {
+        minus.forEach((item) => {
+            item.addEventListener('click', () => {
+                const parent = getParent(item, parentSelect);
+                const input = parent.querySelector('#quanlity');
+                const value = parseInt(input.value) - 1;
+                input.value = value >= 1 ? value : 1;
+            });
+        });
+        plus.forEach((item) => {
+            item.addEventListener('click', () => {
+                const parent = getParent(item, parentSelect);
+                const input = parent.querySelector('#quanlity');
+                const value = parseInt(input.value) + 1;
+                input.value = value;
+            });
+        });
+    }
+};
+const removeElement = (elementRemove, parentElement) => {
+    const remove = document.querySelectorAll(elementRemove);
+    if (remove) {
+        remove.forEach((item) => {
+            item.addEventListener('click', () => {
+                const parent = getParent(item, parentElement);
+                parent.remove();
+            });
+        });
+    }
+};
 const getDistricts = async (select) => {
     try {
         const eleSelect = await document.querySelector('#district');
@@ -128,6 +161,7 @@ const getDistricts = async (select) => {
         const districts = tinhCanTho[0].districts.map((item) => {
             return item.name;
         });
+        console.log(districts);
         handleSelectFilter(districts, eleSelect);
     } catch (error) {
         return 0;

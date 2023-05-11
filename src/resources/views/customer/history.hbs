@@ -3,36 +3,47 @@
    {{> nav.user}}
     <div class='profile-info'>
         <h2 class='title'>Lịch sử đặt hàng</h2>
-        <div class='form-profile'>
+        <div class="table">
+<form method="post" action="/branchs/handel-form-actions" >
             <table>
                 <tr>
-                  
                     <th>STT</th>
-                    <th>Mã đơn hàng {{{sortable 'name' _sort _page}}}</th>
-                    <th>Nơi đặt{{{sortable 'startTime' _sort _page}}}</th>
-                    <th>Nơi giao hàng{{{sortable 'endTime' _sort _page}}}</th>
-                    <th>Tổng tiền {{{sortable 'id_store' _sort _page}}}</th>
-                    <th>Trạng thái{{{sortable 'address' _sort _page}}}</th>
-                    <th>Xem chi tiết</th>
+                    <th>Name {{{sortable 'fullName' _sort _page}}}</th>
+                    <th>Địa chỉ{{{sortable 'startTime' _sort _page}}}</th>
+                    <th>Tổng tiền{{{sortable 'endTime' _sort _page}}}</th>
+                    <th>Trạng thái {{{sortable 'id_store' _sort _page}}}</th>
+                    <th>Xem</th>
+                    <th>Xóa</th>
                 </tr>
+                 {{#if order}}
+                    {{#each order}} 
                     <tr>
-                        <td>1</td>
-                        <td>MD1</td>
-                        <td>Pizza hut</td>
-                        <td>Quan ninh kieu can tho</td>
-                        <td>350000</td>
-                        <td>dang giao</td>
-                        
+                         <td>{{autoIncrement @index 1}}</td>
+                        <td>{{this.fullName}}</td>
+                        <td>{{this.address}}</td>
+                        <td>{{this.total}}</td>
+                        <td>{{this.statusOrder}}</td>
+                        <td>
+                            <a href='/branchs/{{this.slug}}'><i class='fa-solid fa-eye'></i></a>
+                        </td>
+                       <td>
+                            <button id='delete-order' style="background-color:#E2E1E1 ;" data-table = 'orders' data-actions="force" data-id='{{this.id}}'><i class='fa-solid fa-trash remove'></i></button>
+                        </td>
                     </tr>
-                    
-                    {{!-- <td colspan='10'>Bạn chưa có khách nào?</tr> --}}
-               
+                    {{/each}}
+                {{else}}
+                    <td colspan='10'>Bạn chưa có đơn hàng nào?</tr>
+                {{/if}}
             </table>
+             {{#if branchs}}
+            <div class='pagination'>    
+                {{{pageView _page countPage}}}
+            </div>  
+            {{/if}}     
+        </form>
         </div>
+        
     </div>
 </form>
-<script src='/js/main.js'></script>
-<script src='/js/validate.js'></script>
-<script>handleImage(); 
-</script>
+<link rel="stylesheet" href="/css/manage.css">
 </div>
